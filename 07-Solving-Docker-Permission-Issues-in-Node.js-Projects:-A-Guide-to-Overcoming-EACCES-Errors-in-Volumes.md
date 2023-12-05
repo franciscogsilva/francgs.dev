@@ -6,8 +6,8 @@ When working with Docker in Node.js projects, encountering permission errors, es
 
 ```
 [Error: EACCES: permission denied, scandir '/home/username/Development/project/postgres-test']
+[Error: EACCES: permission denied, scandir '/home/username/Development/project/mongo-test']
 ```
-
 
 This tutorial will explain how to resolve this permissions issue, ensuring that Docker volumes are not created with root permissions.
 
@@ -19,45 +19,58 @@ The `EACCES` error occurs when attempting to access a directory or file for whic
 
 ### Step 1: Preparation
 
-Ensure you have Docker and Node.js installed. You should have a `docker-compose.yml` file for your project.
+Ensure you have Docker and Node.js installed
 
-### Step 2: Obtain UID and GID
+```bash
+docker --version
+node --version
+```
 
-Identify your UID (user identifier) and GID (group identifier) on your system:
+You should have a `docker-compose.yml` file for your project.
 
-- Open a terminal.
-- Run `id -u` to get your UID.
-- Run `id -g` to get your GID.
-- Note these numbers for later use.
+### Step 2: Adjust the docker-compose.test.yml File
 
-### Step 3: Modify Docker Compose
-
-Update your `docker-compose.yml` to use the `user` option, specifying your UID and GID.
+We'll modify the `docker-compose.test.yml` file to use named volumes, which will avoid permission issues.
 
 ```yaml
 version: '3.8'
+
 services:
   mongo-db:
-    image: mongo:latest
-    user: "<your_uid>:<your_gid>"
+    image: mongo:6.0.6
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_USER}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_PASS}
     volumes:
-      - ./mongo-data:/data/db
+      - mongo-test:/data/db
+    ports:
+      - 27019:27017
+
   postgres-db:
-    image: postgres:latest
-    user: "<your_uid>:<your_gid>"
+    image: postgres:15.3
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASS}
     volumes:
-      - ./postgres-data:/var/lib/postgresql/data
+      - postgres-test:/var/lib/postgresql/data
+    ports:
+      - 5435:5432
+
+volumes:
+  mongo-test:
+  postgres-test:
 ```
 
-Replace `<your_uid>` and `<your_gid>` with your UID and GID values.
-
-### Step 4: Rebuild and Run Containers
+### Step 3: Run Docker Compose
 
 - Run `docker compose down` to stop and remove the current containers.
 - Run `docker compose up` -d to start the containers with the updated configuration.
 
 ### Step 5: Verification
-Check that the `mongo-data` and `postgres-data` directories on your host have the correct permissions and that the `EACCES` error has been resolved.
+Check that the `mongo-test` and `postgres-test` directories on your host have the correct permissions and that the `EACCES` error has been resolved.
 
 ## Conclusion
 By following these steps, you can effectively resolve Docker permission problems in Node.js projects, preventing errors like `EACCES` when accessing database volumes and enhancing security in your development environment.
