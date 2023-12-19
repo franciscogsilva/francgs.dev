@@ -14,6 +14,8 @@ You cant test and run it: [Example](https://jsfiddle.net/geocodezip/sdwb3agy/2/)
 
 ## Step-by-Step Guide
 
+📍[Google documentation](https://developers.google.com/maps/documentation/javascript/reference/places-autocomplete-service#ComponentRestrictions)
+
 ### 1. HTML Setup
 First, we need an input field in our HTML where users can type their search queries.
 
