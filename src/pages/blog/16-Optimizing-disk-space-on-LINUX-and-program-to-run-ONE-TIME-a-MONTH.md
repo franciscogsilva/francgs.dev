@@ -6,7 +6,7 @@
   image:
     url: 'https://docs.astro.build/assets/full-logo-light.png'
     alt: 'The full Astro logo.'
-  tags: ["javascript", 'google-maps']
+  tags: ["docker", 'linux']
   layout: ./../../layouts/MarkdownPostLayout.astro
 ---
 
