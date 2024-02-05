@@ -1,6 +1,5 @@
 ---
-import Footer from "../components/Footer.astro";
-import Navigation from "../components/Navigation.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
 
 const title = "About Me";
 const identity = {
@@ -14,22 +13,10 @@ const skills = ["HTML", "CSS", "JavaScript", "React", "Astro", "Laravel"];
 const happy = true;
 const finished = false;
 const goal = 3;
-
-const skillColor = "navy";
-const fontWeight = "bold";
-const textCase = "uppercase";
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>{title}</title>
-  </head>
-  <body>
-    <Navigation />
-
-    <h1>{title}</h1>
+<BaseLayout title={title}>
+  <div>
     <h2>... and my new Astro site!</h2>
 
     <p>Here are a few facts about me:</p>
@@ -62,6 +49,5 @@ const textCase = "uppercase";
         <p>My goal is not 3 days.</p>
       )
     }
-  </body>
-  <Footer />
-</html>
+  </div>
+</BaseLayout>

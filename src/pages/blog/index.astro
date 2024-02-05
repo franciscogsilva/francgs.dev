@@ -1,34 +1,22 @@
 ---
-import Footer from "../../components/Footer.astro";
-import Navigation from "../../components/Navigation.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
 
 const title = "Francgs Personal blog";
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width" />
-    <title>{title}</title>
-  </head>
-  <body>
-    <Navigation />
-
-    <h1>My Astro Learning Blog</h1>
-    <p>This is where I will post about my journey learning Astro.</p>
-    <ul>
-      <li><a href="/blog/01-test">Test Blog</a></li>
-      <li>
-        <a href="/blog/02-configurar-nuevo-sitio-web-en-nginx"
-          >Configurar un nuevo sitio web en NGINX</a
-        >
-      </li>
-      <li>
-        <a href="/blog/03-configurar-ssl-gratis-linux-nginx-cerbot"
-          >Configurar SSL gratis linux nginx cerbot</a
-        >
-      </li>
-    </ul>
-    <Footer />
-  </body>
-</html>
+<BaseLayout title={title}>
+  <p>This is where I will post about my journey learning Astro.</p>
+  <ul>
+    <li><a href="/blog/01-test">Test Blog</a></li>
+    <li>
+      <a href="/blog/02-configurar-nuevo-sitio-web-en-nginx"
+        >Configurar un nuevo sitio web en NGINX</a
+      >
+    </li>
+    <li>
+      <a href="/blog/03-configurar-ssl-gratis-linux-nginx-cerbot"
+        >Configurar SSL gratis linux nginx cerbot</a
+      >
+    </li>
+  </ul>
+</BaseLayout>

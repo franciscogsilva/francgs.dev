@@ -1,33 +1,9 @@
 ---
-import Navigation from "../components/Navigation.astro";
-import Footer from "../components/Footer.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
 
 const title = "Francisco Gonzalez Silva - Personal blog";
 ---
 
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
-  </head>
-  <body>
-    <Navigation />
-
-    <h1>francgs.dev</h1>
-    <h2>... and my new Astro site! Updated for netlify dev site</h2>
-
-    <p>
-      I am working through Astro's introductory tutorial. This is the second
-      page on my website, and it's the first one I built myself!
-    </p>
-
-    <p>
-      This site will update as I complete more of the tutorial, so keep checking
-      back and see how my journey is going!
-    </p>
-    <Footer />
-  </body>
-</html>
+<BaseLayout title={title}>
+  <h2>My awesome blog subtitle</h2>
+</BaseLayout>
