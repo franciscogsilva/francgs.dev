@@ -1,22 +1,18 @@
 ---
+import BlogPost from "../../components/BlogPost.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
+const posts = await Astro.glob("../../pages/blog/*.md");
 const title = "Francgs Personal blog";
 ---
 
 <BaseLayout title={title}>
   <p>This is where I will post about my journey learning Astro.</p>
   <ul>
-    <li><a href="/blog/01-test">Test Blog</a></li>
-    <li>
-      <a href="/blog/02-configurar-nuevo-sitio-web-en-nginx"
-        >Configurar un nuevo sitio web en NGINX</a
-      >
-    </li>
-    <li>
-      <a href="/blog/03-configurar-ssl-gratis-linux-nginx-cerbot"
-        >Configurar SSL gratis linux nginx cerbot</a
-      >
-    </li>
+    {
+      posts.map((post) => (
+        <BlogPost url={post.url} title={post.frontmatter.title} />
+      ))
+    }
   </ul>
 </BaseLayout>

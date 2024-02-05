@@ -1,8 +1,16 @@
-
 ---
+  title: "How to add MULTIPLE GIT remotes repositories to my CODE"
+  author: 'Francisco Gonzalez'
+  description: 'A complete guide for multiples git remotes'
+  pubDate: 2024-02-05
+  image:
+    url: 'https://docs.astro.build/assets/full-logo-light.png'
+    alt: 'The full Astro logo.'
+  tags: ["git"]
+  layout: ./../../layouts/MarkdownPostLayout.astro
 ---
 
-# How to add MULTIPLE GIT remotes repositories to my CODE
+<!-- # How to add MULTIPLE GIT remotes repositories to my CODE -->
 
 ## Introduction
 This guide provides step-by-step instructions on how to add and manage two different remote repositories in a single local Git project. This is particularly useful when you want to synchronize your codebase across different platforms like GitHub and Bitbucket.

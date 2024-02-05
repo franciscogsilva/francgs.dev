@@ -1,8 +1,16 @@
-
 ---
+  title: "How to setup multiple GIT accounts with SSH"
+  author: 'Francisco Gonzalez'
+  description: 'A complete guide for multiples git accounts'
+  pubDate: 2024-02-05
+  image:
+    url: 'https://docs.astro.build/assets/full-logo-light.png'
+    alt: 'The full Astro logo.'
+  tags: ["git", 'ssh']
+  layout: ./../../layouts/MarkdownPostLayout.astro
 ---
 
-# How to setup multiple GIT accounts with SSH
+<!-- # How to setup multiple GIT accounts with SSH -->
 
 When working with multiple Git accounts, like a personal and a work account on GitHub and GitLab, it can be challenging to manage different SSH keys for each account. This tutorial will guide you through the process of setting up your SSH configuration to easily handle multiple Git accounts.
 

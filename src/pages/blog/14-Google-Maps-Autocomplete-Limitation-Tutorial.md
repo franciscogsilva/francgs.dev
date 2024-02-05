@@ -1,8 +1,16 @@
-
 ---
+  title: "Limiting Google Maps Autocomplete API Results to a Specific Area"
+  author: 'Francisco Gonzalez'
+  description: 'A javascript guide'
+  pubDate: 2024-02-05
+  image:
+    url: 'https://docs.astro.build/assets/full-logo-light.png'
+    alt: 'The full Astro logo.'
+  tags: ["javascript", 'google-maps']
+  layout: ./../../layouts/MarkdownPostLayout.astro
 ---
 
-# Limiting Google Maps Autocomplete API Results to a Specific Area
+<!-- # Limiting Google Maps Autocomplete API Results to a Specific Area -->
 
 ## Introduction
 In this tutorial, we'll learn how to restrict the Google Maps Autocomplete API results to a specific area. This is particularly useful when you want to narrow down search results to a specific region or locality. We'll use the example of limiting searches to only include results from Coogee in New South Wales (NSW), Australia.
