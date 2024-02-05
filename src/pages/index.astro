@@ -1,5 +1,8 @@
 ---
+import Navigation from "../components/Navigation.astro";
+import Footer from "../components/Footer.astro";
 
+const title = "Francisco Gonzalez Silva - Personal blog";
 ---
 
 <html lang="en">
@@ -8,12 +11,10 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <title>Francisco Gonzalez Silva - Personal blog</title>
+    <title>{title}</title>
   </head>
   <body>
-    <a href="/">Home</a>
-    <a href="/about/">About</a>
-    <a href="/blog/">Blog</a>
+    <Navigation />
 
     <h1>francgs.dev</h1>
     <h2>... and my new Astro site! Updated for netlify dev site</h2>
@@ -27,5 +28,6 @@
       This site will update as I complete more of the tutorial, so keep checking
       back and see how my journey is going!
     </p>
+    <Footer />
   </body>
 </html>
