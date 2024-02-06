@@ -1,10 +1,13 @@
 ---
+import PageTitle from "../components/PageTitle.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const title = "Francisco Gonzalez Silva - Personal blog";
 ---
 
 <BaseLayout title={title}>
-  <h1>{title}</h1>
-  <h2>My awesome blog subtitle</h2>
+  <PageTitle
+    title={title}
+    description="A blog created with Astro and Tailwind.css"
+  />
 </BaseLayout>
