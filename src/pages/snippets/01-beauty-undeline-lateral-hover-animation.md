@@ -10,7 +10,7 @@
   layout: ./../../layouts/MarkdownPostLayout.astro
 ---
 
-# Beauty underline lateral hover animation
+<!-- # Beauty underline lateral hover animation -->
 
 `class:"hover-underline-animation"`
 
