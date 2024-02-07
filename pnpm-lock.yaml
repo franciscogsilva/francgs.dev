@@ -14,9 +14,9 @@ dependencies:
   '@astrojs/tailwind':
     specifier: ^5.1.0
     version: 5.1.0(astro@4.3.2)(tailwindcss@3.4.1)
-  '@fontsource-variable/quicksand':
-    specifier: ^5.0.16
-    version: 5.0.16
+  '@fontsource-variable/onest':
+    specifier: ^5.0.2
+    version: 5.0.2
   astro:
     specifier: ^4.3.2
     version: 4.3.2(typescript@5.3.3)
@@ -616,8 +616,8 @@ packages:
     dev: false
     optional: true
 
-  /@fontsource-variable/quicksand@5.0.16:
-    resolution: {integrity: sha512-I8QmSpiukev1QRNE9eimA+r7SLbYlNGi1iOZrLKdm6bXN1nSHFU98PlWIK1K/VRjR2MqNeStaVaIzwi4pnuDOA==}
+  /@fontsource-variable/onest@5.0.2:
+    resolution: {integrity: sha512-XsH6q+/OyO0Oba4OB/NkiQu3ON93U2Kx+1YxKpNZMuS+a+WvxipwhO8Und2CC0mLI33xOZzTWUk4wtnsUJzjCQ==}
     dev: false
 
   /@isaacs/cliui@8.0.2:
