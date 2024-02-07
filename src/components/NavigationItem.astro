@@ -1,0 +1,9 @@
+---
+const { url } = Astro.props;
+
+const style = "flex items-center text-sm font-semibold leading-6 ";
+---
+
+<a href={url} class={style}>
+  <slot />
+</a>
