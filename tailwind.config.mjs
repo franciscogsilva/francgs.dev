@@ -4,7 +4,7 @@ export default {
   darkMode: "class",
   theme: {
     colors: {
-      primary: "#00a4fb",
+      primary: "#00fff7",
       secondary: "#c291ff",
     },
   },
