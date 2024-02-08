@@ -1,57 +1,16 @@
 ---
-import PageTitle from "../components/PageTitle.astro";
+import PageHeader from "../components/PageHeader.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
-
-const title = "About Me";
-const description = "About me";
-
-const identity = {
-  name: "Francisco",
-  country: "Colombia",
-  occupation: "Tech Lead & Sr. Software Developer",
-  hobbies: ["photography", "coffee", "trekking", "workout"],
-};
-
-const skills = ["HTML", "CSS", "JavaScript", "React", "Astro", "Laravel"];
-const happy = true;
-const finished = false;
-const goal = 3;
+const title: string =
+  "Francisco Gonzalez - Tech Lead and Senior Software Developer with 8 years of experience.";
+const description: string = "";
 ---
 
 <BaseLayout title={title} description={description}>
-  <PageTitle title={title} />
-  <div>
-    <h2>... and my new Astro site!</h2>
-
-    <p>Here are a few facts about me:</p>
-    <ul>
-      <li>My name is {identity.name}.</li>
-      <li>
-        I live in {identity.country} and I work as a {identity.occupation}.
-      </li>
-      {
-        identity.hobbies.length >= 2 && (
-          <li>
-            Two of my hobbies are: {identity.hobbies[0]} and{" "}
-            {identity.hobbies[1]}
-          </li>
-        )
-      }
-    </ul>
-    <p>My skills are:</p>
-    <ul>
-      {skills.map((skill) => <li>{skill}</li>)}
-    </ul>
-    {happy && <p>I am happy to be learning Astro!</p>}
-
-    {finished && <p>I finished this tutorial!</p>}
-
-    {
-      goal === 3 ? (
-        <p>My goal is to finish in 3 days.</p>
-      ) : (
-        <p>My goal is not 3 days.</p>
-      )
-    }
-  </div>
+  <PageHeader title="Hello" emoji="☕️" />
+  <section
+    class="divide-y divide-gray-200 dark:divide-gray-700 items-start space-y-2 xl:grid xl:grid-cols-3 xl:gap-x-8 xl:space-y-0"
+  >
+    <h2>Hola</h2>
+  </section>
 </BaseLayout>

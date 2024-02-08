@@ -1,6 +1,6 @@
 ---
 import BlogPost from "../../components/BlogPost.astro";
-import PageTitle from "../../components/PageTitle.astro";
+import PageHeader from "../../components/PageHeader.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 const posts = await Astro.glob("../../pages/blog/*.md");
@@ -10,7 +10,7 @@ const description = "Francgs Personal blog";
 ---
 
 <BaseLayout title={title} description={description}>
-  <PageTitle
+  <PageHeader
     title={title}
     description="This is where I will post about my journey learning Astro."
   />
