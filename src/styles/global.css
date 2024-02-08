@@ -1,13 +1,14 @@
 :root {
   color-scheme: light dark;
+  --primary-color: #00a4fb;
+  /* --secondary-color: #aa3cff; */
 }
 
 html {
   font-family: "Onest Variable", system-ui, sans-serif;
 }
 
-body {
-  /* background-color: #050505; */
+.main-section {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
@@ -30,7 +31,7 @@ body {
   height: 2px;
   bottom: 0;
   left: 0;
-  background-color: #f65252;
+  background-color: var(--primary-color);
   transform-origin: bottom right;
   transition: transform 0.15s ease-out;
 }
