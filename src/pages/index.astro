@@ -5,12 +5,29 @@ const title = "Francisco Gonzalez Silva - Personal blog";
 ---
 
 <BaseLayout title={title}>
-  <h1>
-    Hey, I'm <a class="hover-underline-animation text-accent" href="/about">
-      Francisco
-    </a>
-    <span class="wave" role="img" aria-label="Hello">👋🏾</span>
-  </h1>
-  I write code. For the web. And mobile. Also sometimes for the toaster. I'm also
-  on that bird app.
+  <section class="pt-6 pb-8 space-y-2 sm:space-y-5 md:space-y-4 md:w-[500px]">
+    <h1
+      class="text-4xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:leading-10 md:leading-14"
+    >
+      Hey, I'm <a class="hover-underline-animation text-accent" href="/about">
+        Francisco
+      </a>
+      <span class="wave" role="img" aria-label="Hello"> 👋🏽</span>
+    </h1>
+    <h2 class="text-lg tracking-tighter text-gray-600 dark:text-gray-400">
+      I solve problems, sometimes with code, always with coffee ☕️. Tech Lead &
+      Sr. Software Developer with <strong>+8 years of experience</strong>.
+    </h2>
+    <p class="font-light tracking-tighter text-gray-600 dark:text-gray-400">
+      I'm also on
+      <a
+        target="_blank"
+        rel="noopener noreferrer"
+        href="https://www.linkedin.com/in/franciscogonzalezsilva/"
+        class="icon-link hover-underline-animation font-medium inline-flex flex-row items-center gap-2"
+      >
+        that profesional app.
+      </a>
+    </p>
+  </section>
 </BaseLayout>

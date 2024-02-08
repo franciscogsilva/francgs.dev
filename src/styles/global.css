@@ -7,9 +7,9 @@ html {
 }
 
 body {
-  background-color: #050505;
+  /* background-color: #050505; */
   display: flex;
-  justify-content: center;
+  flex-direction: column;
   min-height: 100vh;
 }
 
