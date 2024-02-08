@@ -2,9 +2,11 @@
 import "@fontsource-variable/onest";
 
 import { ViewTransitions } from "astro:transitions";
+import Background from "../components/Background.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
-import "../styles/global.css"; // Supports weights 300-700
+
+import "../styles/global.css";
 
 const { title } = Astro.props;
 ---
@@ -23,13 +25,18 @@ const { title } = Astro.props;
     <ViewTransitions />
   </head>
   <!-- #1A1B26 -->
-  <body
-    class="antialiased dark:bg-gray-950 dark:text-white mx-auto max-w-3xl px-4 sm:px-6 xl:max-w-5xl xl:px-0"
-  >
-    <Header />
-    <main class="mb-auto">
-      <slot />
-    </main>
-    <Footer />
+  <body>
+    <!-- dark:bg-gray-950 -->
+    <Background>
+      <section
+        class="main-section dark:text-white mx-auto max-w-3xl px-4 sm:px-6 xl:max-w-5xl xl:px-0"
+      >
+        <Header />
+        <main class="mb-auto">
+          <slot />
+        </main>
+        <Footer />
+      </section>
+    </Background>
   </body>
 </html>
