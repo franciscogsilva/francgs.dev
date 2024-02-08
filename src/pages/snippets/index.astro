@@ -4,10 +4,12 @@ import PageTitle from "../../components/PageTitle.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 const snippets = await Astro.glob("../../pages/snippets/*.md");
+
 const title = "Snippets";
+const description = "Snippets";
 ---
 
-<BaseLayout title={title}>
+<BaseLayout title={title} description={description}>
   <PageTitle title={title} description="Snippets for u <3." />
   <ul>
     {

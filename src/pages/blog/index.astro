@@ -4,10 +4,12 @@ import PageTitle from "../../components/PageTitle.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 const posts = await Astro.glob("../../pages/blog/*.md");
+
 const title = "Francgs Personal blog";
+const description = "Francgs Personal blog";
 ---
 
-<BaseLayout title={title}>
+<BaseLayout title={title} description={description}>
   <PageTitle
     title={title}
     description="This is where I will post about my journey learning Astro."

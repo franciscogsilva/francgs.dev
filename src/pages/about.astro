@@ -3,6 +3,8 @@ import PageTitle from "../components/PageTitle.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const title = "About Me";
+const description = "About me";
+
 const identity = {
   name: "Francisco",
   country: "Colombia",
@@ -16,7 +18,7 @@ const finished = false;
 const goal = 3;
 ---
 
-<BaseLayout title={title}>
+<BaseLayout title={title} description={description}>
   <PageTitle title={title} />
   <div>
     <h2>... and my new Astro site!</h2>
