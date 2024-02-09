@@ -122,3 +122,15 @@ p {
     );
   }
 }
+
+.s-marker :where(ul li):not(:where([class~="not-s-marker"] *))::marker {
+  all: unset;
+  font-weight: 600;
+  color: var(--secondary-color);
+  content: "❯";
+  padding: 0.5rem;
+}
+
+.s-marker :where(ul > li):not(:where([class~="not-s-marker"] *)) {
+  padding-left: 0.375em;
+}

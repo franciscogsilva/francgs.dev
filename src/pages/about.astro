@@ -1,18 +1,152 @@
 ---
 import PageHeader from "../components/PageHeader.astro";
 import SocialLinksPanel from "../components/SocialLinksPanel.astro";
+import Subtitle from "../components/Subtitle.astro";
+import Tag from "../components/Tag.astro";
+import WorkExperience from "../components/WorkExperience.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
+
 const title: string =
   "Francisco Gonzalez - Tech Lead and Senior Software Developer with 8 years of experience.";
 const description: string = "";
+
+const jobActivities = [
+  {
+    startDate: "Jan 2020",
+    urlCompany: "https://www.linkedin.com/company/aiaticom/",
+    company: "A&A Soluctiones TIC",
+    job: "Tech Lead & Senior Software Developer",
+    jobActivities: [
+      "I developed a white-label application for the financial sector based on Clean Architecture using Flutter. I started the project from scratch, implemented a continuous delivery system, and managed deployment to Google and Apple stores via Fastlane.",
+      "I obtained the certification as a CMMI Team Member, playing a key role in achieving CMMI level 3 certification for the company.",
+      "I collaborated with more than 25 startups from the Appsco program of the Ministry of ICT of Colombia, designing software architectures using the C4 and Arc42 models for documentation. I performed the modeling of relational and non-relational databases, in addition to developing GPT API integrations with Laravel and creating mobile applications using Flutter.",
+      "I developed a Multi-tenant database system with Laravel for retail-focused systems.",
+      "I contributed to DevOps consultancies for clients, applying my experience in design, construction, maintenance, and deployment of microservices. I used Docker, Kubernetes, and GitLab Runner for continuous integration and delivery (CI/CD).",
+      "As a technical lead in a Health Tech project, I directed the design of a microservices architecture on GCP using GKE, Docker for containerization, and Kubernetes for orchestration. I implemented queue management with RabbitMQ, developed user stories, and an API gateway. I supervised CI/CD with GitLab, unit testing with Jest, and the development of a mobile app in Flutter, including its deployment and continuous delivery with Firebase Distribution and FastLane for stores. Additionally, I managed the deployment of the Frontend system in Angular, setting up Linux servers and virtual hosts on Nginx. I integrated automated testing and code quality analysis with SonarQube at each DevOps stage.",
+      "I won the 🏆 CPaaS (Cloud Platform as a Service) Hackathon organized by Avaya and iNNpulsa Colombia in January 2021, collaborating with A&A SOLUCIONES TIC. Over two intense days, we developed a mobile prototype noted for its innovation, teamwork, adaptability, and effective use of Avaya's CPaaS platform. This achievement underscores my ability to innovate and execute under pressure.",
+      "As a technical leader and mobile developer, I worked on a financial project for Financiera Comultrasan. My contribution included the development of new functionalities and the refactoring of a mobile application for Android and iOS, using Typescript and JavaScript with the NativeScript and Angular framework. I applied unit testing with Jasmine and adopted design patterns such as Clean Architecture and the adapter pattern, which are crucial for financial applications. I implemented encryption in all API Rest communications to reinforce security. Additionally, I led the integration of DevOps for CI/CD in GitLab, using Fastlane for automated deployment to Google Play Store and App Store.",
+    ],
+  },
+  {
+    startDate: "Jan 2019",
+    endDate: "Jan 2020",
+    urlCompany: "https://www.linkedin.com/company/nrs-group/",
+    company: "NRS-GROUP",
+    job: "Senior Full Stack Developer",
+    jobActivities: [
+      "I was responsible for the development and maintenance of platforms designed for mass sending services to thousands of clients worldwide, in addition to other services like HLR, MNP, 2WAYS, Text2speech, Mailing, and PushApp and PushWeb notifications using AngularJS, JavaScript, and PHP with Laravel, with a particular focus on efficient queue programming and management.",
+    ],
+  },
+  {
+    startDate: "Feb 2018",
+    endDate: "Jul 2018",
+    urlCompany: "https://www.linkedin.com/company/appsolution-sas/",
+    company: "Appsolution S.A.S.",
+    job: "Senior Full Stack Developer",
+    jobActivities: [
+      "I actively participated in the full development cycle of projects for various clients, from requirements analysis to implementation. I specialized in Laravel for backend development, complemented with Angular and Vue.js for frontend. I carried out deployments on Linux servers, using Nginx and Apache for the configuration of virtual hosts, and managed services on AWS. Additionally, I have experience in integrating payment gateways, such as PayPal, using PHP.",
+      "I won a 🏆 virtual Hackathon of sixty-four (64) continuous hours of programming. Once the time was up, a functional prototype of the innovative and technological solution was presented to address the issue of animal abandonment in the Capital District.",
+    ],
+  },
+  {
+    startDate: "Dec 2017",
+    endDate: "Jan 2019",
+    urlCompany:
+      "https://www.linkedin.com/school/fundaci%C3%B3n-universitaria-juan-de-castellanos/",
+    company: "Fundación Universitaria Juan de Castellanos",
+    job: "Academic monitor",
+    jobActivities: [
+      "I provided specialized assistance to students in programming complex data structures in Java, including lists, trees, and graphs. I significantly contributed to the development of their technical skills and to the improvement of their theoretical and practical understanding, ensuring practical and effective learning.",
+    ],
+  },
+  {
+    startDate: "Ene 2016",
+    endDate: "Dec 2017",
+    urlCompany: "https://www.linkedin.com/company/leroom",
+    company: "Leroom",
+    job: "Full Stack Developer",
+    jobActivities: [
+      "I participated in the call for the selection and support of entrepreneurial projects from the AppsCo program of MinTIC, where as a leading entrepreneur and developer I built MVPs in the Business Discovery program using PHP, Laravel, and MySQL database.",
+    ],
+  },
+];
+
+const tags = [
+  "Java",
+  "C++",
+  "PHP",
+  "Javascript",
+  "Typescript",
+  "Dart",
+  "Go",
+  "SQL",
+  "HTML",
+  "CSS",
+  "Windows",
+  "Linux",
+  "React",
+  "Angular",
+  "Vue",
+  "NextJs",
+  "NestJS",
+  "Nativescript",
+  "Flutter",
+  "Laravel",
+  "NodeJS",
+  "Tailwind CSS",
+  "Svelte",
+  "Astro",
+  "Wordpress",
+  "MySQL",
+  "PostgreSQL",
+  "MongoDB",
+  "Firebase",
+  "MultiTenant",
+  "Redis",
+  "AWS",
+  "GCP",
+  "Docker",
+  "Kubernetes",
+  "RabbitMQ",
+  "Kong",
+  "estructuras de datos",
+  "programación orientada a objetos",
+  "programación funcional",
+  "patrones de diseño",
+  "arquitectura de software",
+  "Jest",
+  "Jasmine",
+  "pruebas funcionales",
+  "pruebas de integración",
+  "pruebas de API REST",
+  "Newman",
+  "Postman",
+  "SonarQube",
+  "CI/CD",
+  "Compodoc",
+  "Swagger",
+  "Read the Docs",
+  "Gitlab",
+  "Github Actions",
+  "Fastlane",
+  "Markdown",
+  "Confluence",
+  "JIRA",
+  "automatización de incidencias",
+  "APIs de modelos de IA GPT",
+  "Express.js",
+  "Prometheus",
+  "Grafana",
+  "Selenium",
+];
 ---
 
 <BaseLayout title={title} description={description}>
   <PageHeader title="Hello" emoji="☕️" />
   <section
-    class="items-start space-y-2 xl:grid xl:grid-cols-3 xl:gap-x-8 xl:space-y-0"
+    class="items-start space-y-2 xl:grid xl:grid-cols-3 xl:gap-x-8 xl:space-y-0 divide-y divide-gray-200 dark:divide-gray-700"
   >
-    <section class="flex flex-col items-center pt-8 space-x-2">
+    <section class="flex flex-col items-center py-8 space-x-2">
       <div class="animated-container">
         <div class="animated-shape">
           <img class="size-40 rounded-full" src="/profile.webp" alt="avatar" />
@@ -21,7 +155,7 @@ const description: string = "";
       <h3 class="pt-4 pb-2 text-2xl font-bold leading-8 tracking-tight">
         Francisco González
       </h3>
-      <div class="text-center font-extralight text-gray-700 dark:text-gray-300">
+      <div class="text-center font-extralight text-gray-800 dark:text-gray-200">
         🚀 First, solve the problem. Then, write the code. 🧑🏽‍💻 Tech Leader &
         Senior Software Developer
       </div>
@@ -30,7 +164,7 @@ const description: string = "";
       </div>
     </section>
     <section
-      class="pt-8 pb-8 prose dark:prose-dark max-w-none xl:col-span-2 [&>p]:my-5 [&>p]:font-normal [&>p]:text-gray [&>p]:font-sans"
+      class="pt-4 pb-6 lg:border-hidden text-base max-w-none xl:col-span-2 [&>p]:my-5 [&>p]:font-light [&>p]:font-sans"
     >
       <h1 id="me" class="text-4xl font-medium my-5">
         <a href="#me">About Me</a>
@@ -105,6 +239,31 @@ const description: string = "";
         > if you want to talk about work, technology or just geek out in general
         🙊.
       </p>
+    </section>
+    <section
+      class="pt-4 pb-8 s-marker dark:s-marker text-base max-w-none xl:col-span-2"
+    >
+      <Subtitle text="Work Experience" />
+      <div class="ml-[22px]">
+        {
+          jobActivities.map((activity) => (
+            <WorkExperience
+              startDate={activity.startDate}
+              endDate={activity.endDate}
+              urlCompany={activity.urlCompany}
+              company={activity.company}
+              job={activity.job}
+              jobActivities={activity.jobActivities}
+            />
+          ))
+        }
+      </div>
+    </section>
+    <section class="pt-4 pb-8 max-w-none xl:col-span-1">
+      <Subtitle text="I've worked on" />
+      <div class="flex flex-wrap w-full">
+        {tags.map((tag) => <Tag name={tag} />)}
+      </div>
     </section>
   </section>
 </BaseLayout>
