@@ -1,5 +1,6 @@
 ---
 import PageHeader from "../components/PageHeader.astro";
+import SocialLinksPanel from "../components/SocialLinksPanel.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 const title: string =
   "Francisco Gonzalez - Tech Lead and Senior Software Developer with 8 years of experience.";
@@ -9,8 +10,101 @@ const description: string = "";
 <BaseLayout title={title} description={description}>
   <PageHeader title="Hello" emoji="☕️" />
   <section
-    class="divide-y divide-gray-200 dark:divide-gray-700 items-start space-y-2 xl:grid xl:grid-cols-3 xl:gap-x-8 xl:space-y-0"
+    class="items-start space-y-2 xl:grid xl:grid-cols-3 xl:gap-x-8 xl:space-y-0"
   >
-    <h2>Hola</h2>
+    <section class="flex flex-col items-center pt-8 space-x-2">
+      <div class="animated-container">
+        <div class="animated-shape">
+          <img class="size-40 rounded-full" src="/profile.webp" alt="avatar" />
+        </div>
+      </div>
+      <h3 class="pt-4 pb-2 text-2xl font-bold leading-8 tracking-tight">
+        Francisco González
+      </h3>
+      <div class="text-center font-extralight text-gray-700 dark:text-gray-300">
+        🚀 First, solve the problem. Then, write the code. 🧑🏽‍💻 Tech Leader &
+        Senior Software Developer
+      </div>
+      <div class="flex pt-6 space-x-3 gap-x-2.5">
+        <SocialLinksPanel />
+      </div>
+    </section>
+    <section
+      class="pt-8 pb-8 prose dark:prose-dark max-w-none xl:col-span-2 [&>p]:my-5 [&>p]:font-normal [&>p]:text-gray [&>p]:font-sans"
+    >
+      <h1 id="me" class="text-4xl font-medium my-5">
+        <a href="#me">About Me</a>
+      </h1>
+      <p>My name is <strong>Francisco González</strong>.</p>
+      <p>
+        As a software developer with <strong class="text-secondary"
+          >+8 years of experience</strong
+        >, I have honed my skills in the analysis, design, development, testing,
+        deployment, and management of technology solutions across cloud and
+        mobile platforms. My leadership capabilities have been demonstrated over
+        <strong class="text-secondary">+3 years</strong>, guiding development
+        teams with expertise certified by CMMI.
+      </p>
+      <p>
+        My first job was at a small <em>(and really cool)</em> software factory in
+        my hometown, where I learned how to design and build Laravel, Angular, and
+        Web applications with a robust backend system from scratch. In this small
+        company I achieved my first great achievement as a professional, <strong
+          >🏆 1st place</strong
+        > in the <a
+          class="text-primary text font-medium"
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://www.eltiempo.com/tecnosfera/apps/app-para-reducir-el-abandono-animal-en-bogota-185424"
+          >Ministry of TIC's virtual hackathon Animalapp</a
+        >. Then I worked for a company in Spain 🇪🇸 where I learned about SMS and
+        multichannel messaging systems for very large companies. I currently
+        work for A&A Soluciones TIC as Technical Leader and Senior Software
+        Developer, where we have achieved <strong>🏆 1st place</strong> in the <a
+          class="text-primary text font-medium"
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://www.estamosenlinea.com/2021/02/14/tres-proyectos-ganadores-en-la-hackaton-workshop-de-avaya-e-innpulsa/"
+          >CPaaS (Cloud Platform as a Service) Hackathon Workshop by Avaya and
+          iNNpulsa Colombia</a
+        >
+        and I lead 💰 Fintech and 🩸 Health tech teams with connection to biometrics.
+      </p>
+      <p>
+        Outside of work, I spend time completing my numerous <a
+          class="underline font-medium"
+          target="_blank"
+          href="https://francgs.dev/links">side projects</a
+        >, contributing a bit to <a
+          class="underline font-medium"
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://github.com/franciscogsilva">open source</a
+        >. I am photographer, lover of coffee ☕️ and trekking ⛰. I love
+        training, kind of like a GymRat. I love playing video games. I'm
+        currently playing <a
+          class="underline font-medium"
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://worldofwarcraft.blizzard.com/en-us/character/us/ragnaros/asmun"
+          >World of Warcraft</a
+        > and <a
+          class="underline font-medium"
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://heroesofthestorm.blizzard.com/en-us/"
+          >Heroes of the storm</a
+        >.
+      </p>
+      <p>
+        <a
+          class="underline font-medium"
+          target="_blank"
+          rel="noopener noreferrer"
+          href="https://x.com/francgs_">Feel free to reach out</a
+        > if you want to talk about work, technology or just geek out in general
+        🙊.
+      </p>
+    </section>
   </section>
 </BaseLayout>
