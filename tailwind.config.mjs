@@ -8,6 +8,7 @@ export default {
     colors: {
       primary: "#00fff7",
       secondary: "#bd8afc",
+      accent: "#bd8afc",
       transparent: "transparent",
       current: "currentColor",
       black: colors.black,
