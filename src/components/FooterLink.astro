@@ -1,0 +1,17 @@
+---
+type Props = {
+  href: string;
+  text: string;
+};
+
+const { href, text } = Astro.props;
+---
+
+<a
+  target="_blank"
+  rel="noopener noreferrer"
+  href={href}
+  class="hover-underline-animation icon-link"
+>
+  {text}
+</a>
