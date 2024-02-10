@@ -1,21 +1,18 @@
 ---
-import BaseLayout from "../layouts/BaseLayout.astro";
+import data from "../data/site.json";
 
-const title: string =
-  "Francisco Gonzalez - Tech Lead and Senior Software Developer with 8 years of experience.";
-const description: string =
-  "Dive into the coding universe with Francisco Javier Gonzalez Silva, where creativity meets code. My personal website is your gateway to a broad range of programming resources, from in-depth language analyses to hands-on guides and tech tool reviews. Perfect for developers at any stage of their career, here you'll find inspiration, advanced techniques, and helpful tips to take your development projects to the next level.";
+import { getSocialData } from "../helpers/main";
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={data.siteTitle} description={data.siteDescription}>
   <section class="pt-12 pb-8 space-y-2 sm:space-y-5 md:space-y-4 md:w-[550px]">
     <h1
       class="text-4xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:leading-10 md:leading-14"
     >
       Hey, I'm
-      <a
-        class="hover-underline-animation text-accent text-primary"
-        href="/about">Francisco</a
+      <a class="hover-underline-animation text-primary" href="/about"
+        >{data.nickName}</a
       >
       <span class="wave" role="img" aria-label="Hello"> 👋🏽</span>
     </h1>
@@ -30,7 +27,7 @@ const description: string =
       <a
         target="_blank"
         rel="noopener noreferrer"
-        href="https://www.linkedin.com/in/franciscogonzalezsilva/"
+        href={getSocialData("linkedin").href}
         class="icon-link hover-underline-animation font-medium inline-flex flex-row items-center gap-2"
       >
         that profesional app.

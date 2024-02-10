@@ -10,10 +10,7 @@ const description = "Francgs Personal blog";
 ---
 
 <BaseLayout title={title} description={description}>
-  <PageHeader
-    title={title}
-    description="This is where I will post about my journey learning Astro."
-  />
+  <PageHeader title={title} />
   <ul>
     {
       posts.map((post) => (
