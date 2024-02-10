@@ -1,0 +1,31 @@
+{
+  "owner": "Francisco González",
+  "siteName": "Francisco González's Portfolio",
+  "siteDescription": "Francisco González's Portfolio for potential employers",
+  "about": "I'm a web developer from Anytown, USA. I like to build things with HTML, CSS, and JavaScript.",
+  "contact": {
+    "email": "javiergonzalezsilva@gmail.com"
+  },
+  "social": [
+    {
+      "title": "github",
+      "href": "https://github.com/franciscogsilva"
+    },
+    {
+      "title": "linkedin",
+      "href": "https://linkedin.com/in/franciscogonzalezsilva"
+    },
+    {
+      "title": "x",
+      "href": "https://www.x.com/francgs_"
+    },
+    {
+      "title": "RSS Feed",
+      "href": "/rss.xml"
+    },
+    {
+      "title": "stats",
+      "href": "https://analytics.us.umami.is/share/j4qKVpjnkQreUX8Z/francgs.dev"
+    }
+  ]
+}

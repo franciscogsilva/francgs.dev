@@ -1,7 +1,8 @@
 ---
-import SocialLinksPanel from "./SocialLinksPanel.astro";
+import data from "../data/site.json";
 
-const author = "Francisco González";
+import FooterLink from "./FooterLink.astro";
+
 const currentYear = new Date().getFullYear();
 ---
 
@@ -10,38 +11,20 @@ const currentYear = new Date().getFullYear();
     class="flex flex-row flex-wrap items-center justify-center md:justify-between my-8"
   >
     <div class="flex space-x-2 text-sm text-gray-500 dark:text-gray-400">
+      <span>{data.owner}</span>
       <span>© {currentYear}</span>
-      <span>{author}</span>
       <div>•</div>
       <a class="hover-underline-animation" href="/">Just a coffee lover</a>
     </div>
     <div class="flex space-x-2 text-sm text-gray-500 dark:text-gray-400">
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="https://github.com/franciscogsilva"
-        class="hover-underline-animation icon-link"
-      >
-        Github
-      </a>
-      <div>•</div>
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="https://in.linkedin.com/in/franciscogonzalezsilva "
-        class="hover-underline-animation icon-link"
-      >
-        LinkedIn
-      </a>
-      <div>•</div>
-      <a
-        target="_blank"
-        rel="noopener noreferrer"
-        href="https://www.x.com/francgs_"
-        class="hover-underline-animation icon-link">Twitter</a
-      >
-      <div>•</div>
-      <a href="/rss.xml" class="hover-underline-animation">RSS Feed</a>
+      {
+        data.social.map((social, index) => (
+          <>
+            <FooterLink text={social.title} href={social.href} />
+            {index <= data.social.length - 2 ? <div>•</div> : ""}
+          </>
+        ))
+      }
     </div>
   </div>
 </footer>
