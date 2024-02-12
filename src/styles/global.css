@@ -19,6 +19,12 @@ p {
   min-height: 100vh;
 }
 
+.links-main-section {
+  display: grid;
+  /* place-items: center; */
+  min-height: 100vh;
+}
+
 .hover-underline-animation {
   position: relative;
 }

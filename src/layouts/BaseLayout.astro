@@ -11,9 +11,10 @@ import Header from "../components/Header.astro";
 interface Props {
   title: string;
   description: string;
+  isLinks?: boolean;
 }
 
-const { title, description } = Astro.props;
+const { title, description, isLinks } = Astro.props;
 ---
 
 <html lang="en" class="dark">
@@ -35,13 +36,15 @@ const { title, description } = Astro.props;
     <!-- dark:bg-gray-950 -->
     <Background>
       <section
-        class="main-section dark:text-white mx-auto max-w-3xl px-4 sm:px-6 xl:max-w-5xl xl:px-0"
+        class=`${!isLinks ? "main-section" : "links-main-section"} dark:text-white mx-auto max-w-3xl px-4 sm:px-6 xl:max-w-5xl xl:px-0`
       >
-        <Header />
-        <main class="mb-auto divide-y divide-gray-200 dark:divide-gray-700">
+        {!isLinks && <Header />}
+        <main
+          class=`${!isLinks ? "mb-auto" : ""} divide-y divide-gray-200 dark:divide-gray-700`
+        >
           <slot />
         </main>
-        <Footer />
+        {!isLinks && <Footer />}
       </section>
     </Background>
   </body>
