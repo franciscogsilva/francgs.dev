@@ -1,0 +1,14 @@
+---
+interface Props {
+  image: string;
+  alt?: string;
+}
+
+const { image, alt } = Astro.props;
+---
+
+<div class="animated-container">
+  <div class="animated-shape">
+    <img class="size-36 rounded-full" src={image} alt={alt} />
+  </div>
+</div>
