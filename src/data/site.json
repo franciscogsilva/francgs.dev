@@ -155,5 +155,47 @@
     "Prometheus",
     "Grafana",
     "Selenium"
+  ],
+  "links": [
+    {
+      "title": "👽 Personal web:",
+      "href": "https://francgs.dev/about",
+      "description": "Thoughts and Tech Things."
+    },
+    {
+      "title": "🟦 LinkedIn:",
+      "href": "https://linkedin.com/in/franciscogonzalezsilva",
+      "description": "The profesional side."
+    },
+    {
+      "title": "👨‍💻 Github:",
+      "href": "https://github.com/franciscogsilva",
+      "description": "Lets code baby"
+    },
+    {
+      "title": "⬛️ X:",
+      "href": "https://www.x.com/francgs_",
+      "description": "Nothing serious"
+    },
+    {
+      "title": "🙊 Instagram:",
+      "href": "https://www.instagram.com/francgs_/",
+      "description": "Workout and mountains"
+    },
+    {
+      "title": "☕️ Code Coffee Hub:",
+      "href": "https://www.instagram.com/codecoffeehub/",
+      "description": "Coffee and Code Stuff"
+    },
+    {
+      "title": "🐱 Bitacora Felina",
+      "href": "https://www.instagram.com/bitacorafelina/",
+      "description": "Do u like cats?"
+    },
+    {
+      "title": "📷 #Photographer",
+      "href": "https://www.instagram.com/francgs_ph/",
+      "description": ""
+    }
   ]
 }
