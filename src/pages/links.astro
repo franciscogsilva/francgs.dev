@@ -5,7 +5,7 @@ import ProfileHeader from "../components/ProfileHeader.astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<BaseLayout title="" description="" isLinks>
+<BaseLayout title={data.siteTitle} description={data.siteDescription} isLinks>
   <div class="m-auto lg:max-w-[470px] px-10 py-24">
     <section class="flex flex-col items-center space-x-2">
       <ProfileHeader />
