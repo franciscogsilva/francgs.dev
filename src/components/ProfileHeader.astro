@@ -1,0 +1,13 @@
+---
+import data from "../data/site.json";
+
+import AnimatedImage from "../components/AnimatedImage.astro";
+---
+
+<AnimatedImage image="/profile.webp" alt="francisco gonzalez profile image" />
+<h2 class="pt-4 pb-2 text-2xl font-bold leading-8 tracking-tight">
+  {data.name}
+</h2>
+<h3 class="text-center font-extralight text-gray-800 dark:text-gray-200">
+  {data.description}
+</h3>
