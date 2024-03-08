@@ -1,7 +1,16 @@
 ---
+  title: "Solving Docker Permission Issues in Node.js Projects: A Guide to Overcoming EACCES Errors in Volumes"
+  author: 'Francisco Gonzalez'
+  description: 'A complete guide to solve this issue'
+  pubDate: 2024-02-05
+  image:
+    url: 'https://docs.astro.build/assets/full-logo-light.png'
+    alt: 'The full Astro logo.'
+  tags: ["linux", 'docker', 'nodejs', 'issue']
+  layout: ./../../layouts/MarkdownPostLayout.astro
 ---
 
-# Solving Docker Permission Issues in Node.js Projects: A Guide to Overcoming EACCES Errors in Volumes
+<!-- # Solving Docker Permission Issues in Node.js Projects: A Guide to Overcoming EACCES Errors in Volumes -->
 
 ## Introduction
 

@@ -1,7 +1,16 @@
 ---
+  title: "Easily accessing the project root directory from any file in Typescript and Javascript"
+  author: 'Francisco Gonzalez'
+  description: 'Setup for root directory'
+  pubDate: 2024-02-05
+  image:
+    url: 'https://docs.astro.build/assets/full-logo-light.png'
+    alt: 'The full Astro logo.'
+  tags: ["typescript", 'javascript']
+  layout: ./../../layouts/MarkdownPostLayout.astro
 ---
 
-# Easily accessing the project root directory from any file in Typescript and Javascript
+<!-- # Easily accessing the project root directory from any file in Typescript and Javascript -->
 
 ## Problem Statement
 

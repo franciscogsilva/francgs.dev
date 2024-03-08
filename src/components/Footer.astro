@@ -1,0 +1,30 @@
+---
+import data from "../data/site.json";
+
+import FooterLink from "./FooterLink.astro";
+
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="border-t border-gray-400 dark:border-gray-700">
+  <div
+    class="flex flex-row flex-wrap items-center justify-center md:justify-between my-8"
+  >
+    <div class="flex space-x-2 text-sm text-gray-500 dark:text-gray-400">
+      <span>{data.name}</span>
+      <span>© {currentYear}</span>
+      <div>•</div>
+      <a class="hover-underline-animation" href="/">Just a coffee lover</a>
+    </div>
+    <div class="flex space-x-2 text-sm text-gray-500 dark:text-gray-400">
+      {
+        data.social.map((social, index) => (
+          <>
+            <FooterLink text={social.title} href={social.href} />
+            {index <= data.social.length - 2 ? <div>•</div> : ""}
+          </>
+        ))
+      }
+    </div>
+  </div>
+</footer>

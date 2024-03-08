@@ -1,7 +1,16 @@
 ---
+  title: "Optimizing Disk Space on Linux and program to run ONE TIME a MONTH"
+  author: 'Francisco Gonzalez'
+  description: 'Clean your linux disk with docker environment'
+  pubDate: 2024-02-05
+  image:
+    url: 'https://docs.astro.build/assets/full-logo-light.png'
+    alt: 'The full Astro logo.'
+  tags: ["docker", 'linux']
+  layout: ./../../layouts/MarkdownPostLayout.astro
 ---
 
-# Optimizing Disk Space on Linux and program to run ONE TIME a MONTH
+<!-- # Optimizing Disk Space on Linux and program to run ONE TIME a MONTH -->
 
 ## Introduction
 Maintaining sufficient disk space is crucial for the smooth operation of any Linux system. Over time, unused files, logs, and temporary data can accumulate, leading to inefficient disk usage. This tutorial provides a step-by-step guide on how to automate disk space optimization on a Linux system, ensuring your system remains efficient and clutter-free.

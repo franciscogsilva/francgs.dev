@@ -1,0 +1,10 @@
+---
+const { url } = Astro.props;
+
+const style =
+  "flex items-center text-sm hover-underline-animation font-semibold leading-6 [&>svg]:mr-1";
+---
+
+<a href={url} class={style}>
+  <slot />
+</a>

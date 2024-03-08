@@ -1,13 +1,27 @@
 ---
+import BlogPost from "../../components/BlogPost.astro";
+import PageHeader from "../../components/PageHeader.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
 
+const posts = await Astro.glob("../../pages/blog/*.md");
+
+const title = "Francgs Personal blog";
+const description = "Francgs Personal blog";
 ---
 
-<body>
-  <a href="/">Home</a>
-  <a href="/about/">About</a>
-  <a href="/blog/">Blog</a>
-
-  <h1>My Astro Site</h1>
-  <h1>My Astro Learning Blog</h1>
-  <p>This is where I will post about my journey learning Astro.</p>
-</body>
+<BaseLayout title={title} description={description}>
+  <PageHeader title={title} />
+  <ul>
+    {
+      posts.map((post) => (
+        <BlogPost
+          pubDate={post.frontmatter.pubDate}
+          url={post.url}
+          title={post.frontmatter.title}
+          tags={post.frontmatter.tags}
+          description={post.frontmatter.description}
+        />
+      ))
+    }
+  </ul>
+</BaseLayout>
