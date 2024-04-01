@@ -2,7 +2,7 @@
   title: "Solving Docker Permission Issues in Node.js Projects: A Guide to Overcoming EACCES Errors in Volumes"
   author: 'Francisco Gonzalez'
   description: 'A complete guide to solve this issue'
-  publishDate: 2024-02-05
+  pubDate: 2024-02-05
   image:
     url: 'https://docs.astro.build/assets/full-logo-light.png'
     alt: 'The full Astro logo.'

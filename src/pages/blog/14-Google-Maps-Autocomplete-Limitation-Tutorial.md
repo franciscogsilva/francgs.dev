@@ -2,7 +2,7 @@
   title: "Limiting Google Maps Autocomplete API Results to a Specific Area"
   author: 'Francisco Gonzalez'
   description: 'A javascript guide'
-  publishDate: 2024-02-05
+  pubDate: 2024-02-05
   image:
     url: 'https://docs.astro.build/assets/full-logo-light.png'
     alt: 'The full Astro logo.'

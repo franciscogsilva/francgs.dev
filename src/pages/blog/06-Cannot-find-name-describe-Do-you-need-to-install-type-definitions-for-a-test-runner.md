@@ -2,7 +2,7 @@
   title: "Error with JEST and Typescript: Cannot find name 'describe'. Do you need to install type definitions for a test runner?"
   author: 'Francisco Gonzalez'
   description: 'A complete guide to solve this issue'
-  publishDate: 2024-02-05
+  pubDate: 2024-02-05
   image:
     url: 'https://docs.astro.build/assets/full-logo-light.png'
     alt: 'The full Astro logo.'

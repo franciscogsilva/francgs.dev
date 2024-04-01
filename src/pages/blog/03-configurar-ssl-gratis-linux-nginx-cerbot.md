@@ -2,7 +2,7 @@
   title: Configurar SSL gratis linux nginx cerbot
   author: Francisco González
   description: "How to add a free SSL to your linux server for each domain"
-  publishDate: 2022-07-15
+  pubDate: 2022-07-15
   image:
     url: "https://docs.astro.build/assets/rays.webp"
     alt: "Thumbnail of Astro rays."

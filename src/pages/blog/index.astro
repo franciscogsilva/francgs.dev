@@ -15,7 +15,7 @@ const description = "Francgs Personal blog";
     {
       posts.map((post) => (
         <BlogPost
-          publishDate={post.frontmatter.publishDate}
+          pubDate={post.frontmatter.pubDate}
           url={post.url}
           title={post.frontmatter.title}
           tags={post.frontmatter.tags}

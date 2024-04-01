@@ -2,7 +2,7 @@
   title: Configurar un nuevo sitio web en NGINX
   author: Francisco González
   description: "How to configure a new virtual host in your linux NGINX server"
-  publishDate: 2022-07-08
+  pubDate: 2022-07-08
   image:
     url: "https://docs.astro.build/assets/arc.webp"
     alt: "Thumbnail of Astro arcs."
