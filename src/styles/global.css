@@ -129,7 +129,7 @@ p {
   }
 }
 
-.s-marker :where(ul li):not(:where([class~="not-s-marker"] *))::marker {
+.prose :where(ul li, ol li):not(:where([class~="not-prose"] *))::marker {
   all: unset;
   font-weight: 600;
   color: var(--secondary-color);
@@ -137,6 +137,47 @@ p {
   padding: 0.5rem;
 }
 
-.s-marker :where(ul > li):not(:where([class~="not-s-marker"] *)) {
+.prose :where(ul > li, ol > li):not(:where([class~="not-prose"] *)) {
   padding-left: 0.375em;
+}
+
+.prose :where(ul, ol):not(:where([class~="not-prose"] *)) {
+  padding-left: 0;
+}
+
+.prose :where(li):not(:where([class~="not-prose"] *)) {
+  list-style-type: disc;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+}
+
+.prose :where(.prose > :first-child):not(:where([class~="not-prose"] *)) {
+  margin-top: 0;
+}
+
+.prose :where(p):not(:where([class~="not-prose"] *)) {
+  margin-bottom: 1.25em;
+}
+
+.prose :where(p > code) {
+  border-radius: 0.25rem;
+  border-width: 1px;
+  padding: 0.125rem 0.25rem;
+}
+
+.prose :where(p > code) {
+  border-color: rgb(82 82 82 / var(--tw-bg-opacity));
+  background-color: rgb(64 64 64 / var(--tw-bg-opacity));
+  color: rgb(229 229 229 / var(--tw-text-opacity));
+}
+
+.prose :where(code):not(:where([class~="not-prose"] *)) {
+  font-weight: 600;
+  font-size: 0.875em;
+}
+
+.prose :where(pre) {
+  color: #00fff7 !important;
+  padding: 20px;
+  margin-bottom: 1.5em;
 }

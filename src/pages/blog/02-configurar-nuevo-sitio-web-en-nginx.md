@@ -26,7 +26,8 @@ Seguir los siguientes comando:
 `sudo nano /var/www/{your-domain}/index.html`
 
 5. Contenido del archivo index.html
-```
+
+```html
 <html>
     <head>
         <title>Welcome to your-domain!</title>
@@ -38,10 +39,12 @@ Seguir los siguientes comando:
 ```
 
 6. Para que Nginx pueda servir este contenido, es necesario crear un server block con las directivas correctas. En lugar de modificar el archivo de configuración predeterminado directamente, hagamos uno nuevo en /etc/nginx/sites-available/{your-domain}:
+
 `sudo nano /etc/nginx/sites-available/{your-domain}`
 
 7. El contenido del archivo de configuración:
-```
+
+```nginx
 server {
         listen 80;
         listen [::]:80;
@@ -65,6 +68,7 @@ server {
 > **_NOTA:_** Nginx utiliza una práctica común llamada enlaces simbólicos, o symlinks, para rastrear cuáles de tus bloques de servidor están habilitados. Crear un symlink es como crear un acceso directo en el disco, de modo que más tarde podrías eliminar el acceso directo del directorio sites-enabled mientras mantienes el bloque de servidor en sites-available si quisieras habilitarlo.
 
 9. Para evitar un posible problema de memoria del hash bucket que puede surgir al agregar nombres de servidor adicionales, es necesario ajustar un solo valor en el archivo /etc/nginx/nginx.conf. Abre el archivo:
+
 `sudo nano /etc/nginx/nginx.conf`
 
 Encuentra la directiva `server_names_hash_bucket_size` y elimina el símbolo `#` para descomentar la línea. Si estás usando nano, puedes buscar rápidamente palabras en el archivo presionando `CTRL` y `w`.
@@ -74,3 +78,6 @@ Verifica que el archivo de configuración no contenga errores: `sudo nginx -t`
 10. Reiniciamos el servicio de nginx `sudo systemctl restart nginx`
 
 
+## Subtitulo
+
+### Otro subtitulo
