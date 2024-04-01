@@ -1,8 +1,8 @@
 ---
-const { pubDate, url, title, tags, description } = Astro.props;
+const { publishDate, url, title, tags, description } = Astro.props;
 
 // Fecha de entrada
-const fechaEntrada = new Date(pubDate);
+const fechaEntrada = new Date(publishDate);
 
 // Formatear la fecha en el formato deseado
 const fechaFormateada = fechaEntrada.toLocaleDateString("en-US", {
@@ -19,7 +19,7 @@ const fechaFormateada = fechaEntrada.toLocaleDateString("en-US", {
       <dd
         class="text-base font-medium leading-6 text-gray-500 dark:text-gray-400"
       >
-        <time datetime={pubDate}>{fechaFormateada}</time>
+        <time datetime={publishDate}>{fechaFormateada}</time>
       </dd>
     </dl>
     <div class="space-y-3">

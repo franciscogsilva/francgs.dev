@@ -2,7 +2,7 @@
   title: 'Fix to Key'
   author: 'Francisco Gonzalez'
   description: 'How to solve error with key in linux.'
-  pubDate: 2024-02-05
+  publishDate: 2024-02-05
   image:
     url: 'https://docs.astro.build/assets/full-logo-light.png'
     alt: 'The full Astro logo.'

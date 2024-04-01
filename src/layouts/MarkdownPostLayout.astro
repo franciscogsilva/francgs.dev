@@ -5,40 +5,76 @@ const { frontmatter } = Astro.props;
 ---
 
 <BaseLayout title={frontmatter.title} description={frontmatter.description}>
-  <h1>{frontmatter.title}</h1>
-  <p>Written by {frontmatter.author}</p>
-  <p>Published on: {frontmatter.pubDate.slice(0, 10)}</p>
-  <p><em>{frontmatter.description}</em></p>
-  <img src={frontmatter.image.url} width="300" alt={frontmatter.image.alt} />
-
-  <div class="tags">
-    {
-      frontmatter.tags.map((tag: string) => (
-        <p class="tag">
-          <a href={`/tags/${tag}`}>{tag}</a>
-        </p>
-      ))
-    }
-  </div>
-
-  <slot />
+  <article>
+    <header
+      class="py-4 flex flex-col items-start space-y-4 border-b border-double border-gray-400 dark:border-gray-700"
+    >
+      <h1
+        class="text-3xl font-extrabold leading-normal tracking-normal text-gray-900 dark:text-gray-100 sm:text-4xl md:text-5xl"
+      >
+        {frontmatter.title}
+      </h1>
+      <div
+        class="w-full flex flex-wrap gap-4 items-center place-content-between"
+      >
+        <div class="-mx-2">
+          {
+            frontmatter.tags.map((tag: string) => (
+              <>
+                <a href={`/tags/${tag}`}>
+                  <span class="inline-block py-1 px-2 mx-2 rounded border border-gray-700 hover:border-accent text-xs font-medium">
+                    {tag}
+                  </span>
+                </a>
+              </>
+            ))
+          }
+        </div>
+        <dl>
+          <div
+            class="flex flex-row items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300"
+          >
+            <dt class="sr-only">Published on</dt>
+            <dd class="">
+              <time datetime="2021-11-25T09:51:10.681Z"
+                >{frontmatter.publishDate.slice(0, 10)}</time
+              >
+            </dd> • <span>20 minutes read</span>
+          </div>
+        </dl>
+      </div>
+    </header>
+  </article>
+  <section
+    class="pb-8 divide-y divide-gray-200 xl:divide-y-0 dark:divide-gray-700"
+  >
+    <div class="relative flex flex-col items-center">
+      <img
+        class="object-cover md:w-3/4 rounded-lg shadow-lg overflow-hidden my-4 mx-auto"
+        alt={frontmatter.image.alt}
+        src={frontmatter.image.url}
+      />
+      <!-- <span
+        class="text-base font-medium leading-6 text-gray-500 dark:text-gray-400"
+        >Photo by <a
+          class="text-highlight"
+          href="https://unsplash.com/@milkandbourbons">Dean Brierley</a
+        > on <a
+          class="text-highlight"
+          href="https://unsplash.com/photos/nJ1-bdSTbzk">Unsplash</a
+        >
+      </span> -->
+    </div>
+    <div class="flex flex-col">
+      <div
+        class="xl:grid xl:grid-cols-4 xl:gap-x-6 bg-day dark:bg-night bg-opacity-50 dark:bg-opacity-75"
+      >
+        <div
+          class="xl:col-span-3 xl:row-span-2 pt-10 pb-8 prose dark:prose-dark max-w-none"
+        >
+          <slot />
+        </div>
+      </div>
+    </div>
+  </section>
 </BaseLayout>
-<style>
-  a {
-    color: #00539f;
-  }
-
-  .tags {
-    display: flex;
-    flex-wrap: wrap;
-  }
-
-  .tag {
-    margin: 0.25em;
-    border: dotted 1px #a1a1a1;
-    border-radius: 0.5em;
-    padding: 0.5em 1em;
-    font-size: 1.15em;
-    background-color: #f8fcfd;
-  }
-</style>

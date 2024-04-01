@@ -2,7 +2,7 @@
   title: 'How to Install MongoDB on Ubuntu 20.04'
   author: 'Francisco Gonzalez'
   description: 'How to Install MongoDB on Ubuntu 20.04, a complete guide'
-  pubDate: 2024-02-05
+  publishDate: 2024-02-05
   image:
     url: 'https://docs.astro.build/assets/full-logo-light.png'
     alt: 'The full Astro logo.'

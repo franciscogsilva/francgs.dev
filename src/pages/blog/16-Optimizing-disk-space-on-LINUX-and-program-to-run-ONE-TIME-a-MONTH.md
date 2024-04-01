@@ -2,7 +2,7 @@
   title: "Optimizing Disk Space on Linux and program to run ONE TIME a MONTH"
   author: 'Francisco Gonzalez'
   description: 'Clean your linux disk with docker environment'
-  pubDate: 2024-02-05
+  publishDate: 2024-02-05
   image:
     url: 'https://docs.astro.build/assets/full-logo-light.png'
     alt: 'The full Astro logo.'
