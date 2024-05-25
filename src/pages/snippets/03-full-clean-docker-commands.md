@@ -1,4 +1,13 @@
 ---
+  title: 'Full clean docker commands'
+  author: 'Francisco Gonzalez'
+  description: 'Full clean docker commands.'
+  pubDate: 2024-02-07
+  image:
+    url: 'https://docs.astro.build/assets/full-logo-light.png'
+    alt: 'The full Astro logo.'
+  tags: ["css", "resource"]
+  layout: ./../../layouts/MarkdownPostLayout.astro
 ---
 
 # Full clean docker commands
