@@ -55,28 +55,28 @@ Companies usually set a points limit that a team can handle in a sprint based on
 ### Examples of Software Development Tasks
 
 #### Examples of 0 Points
-1. Writing a quick email to a colleague.
-2. Attending a daily stand-up meeting (less than 15 minutes).
-3. Updating the status of a task in the project management system.
-4. Reviewing and approving a repository access request.
-5. Updating a README file with one additional line of information.
-6. Setting up a quick notification in the alert system.
-7. Sending a calendar invitation for a meeting.
-8. Commenting on a PR (Pull Request) without needing changes.
-9. Answering a quick question in a team chat channel.
-10. Updating a minor dependency without breaking the code.
+1. Minor documentation update.
+2. Small typo correction in the code.
+3. Quick validation of a completed task.
+4. Setting a parameter in the development environment.
+1. Fixing a compilation warning.
+1. Changing a configuration in the continuous integration system.
+1. Quick data verification in the database.
+1. Restarting a service.
+1. Updating a comment in the code.
+1. Reviewing an alert in the monitoring system.
 
 #### Examples of 0.5 Points
 1. Reviewing a simple PR (Pull Request) and approving it.
-2. Adding a small adjustment in the CSS to correct a margin.
-3. Correcting a small typo in the documentation.
-4. Setting up a new user in the project management system.
-5. Making a small optimization in a database query.
-6. Adding a unit test for an existing function.
-7. Updating an environment variable in the configuration file.
-8. Reviewing and accepting an automatic dependency update.
-9. Modifying one line of code to correct a linting warning.
-10. Updating a translation in the locales file.
+1. Adding a small adjustment in the CSS to correct a margin.
+1. Correcting a small typo in the documentation.
+1. Setting up a new user in the project management system.
+1. Making a small optimization in a database query.
+1. Adding a unit test for an existing function.
+1. Updating an environment variable in the configuration file.
+1. Reviewing and accepting an automatic dependency update.
+1. Modifying one line of code to correct a linting warning.
+1. Updating a translation in the locales file.
 
 #### Examples of 1 Point
 1. Fixing a minor bug that does not affect main functionality.
@@ -137,6 +137,7 @@ Companies usually set a points limit that a team can handle in a sprint based on
 8. Developing a complete native mobile application along with its backend.
 9. Implementing a user and roles management system for a large enterprise.
 10. Conducting a complete security audit and applying all necessary improvements.
+
 
 ### Conclusion
 
