@@ -33,7 +33,7 @@ The provided script automates the process of cleaning up unnecessary files and o
 
 ### Script
 
-```
+```bash
 #!/bin/bash
 
 # Display current disk usage
