@@ -36,6 +36,7 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           eval $(ssh-agent -s)
+          ssh-keyscan -t ed25519 ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
           ssh-add ~/.ssh/deploy_key
           echo "Host ${{ secrets.SERVER_HOST }}
             StrictHostKeyChecking no
