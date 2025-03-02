@@ -2,7 +2,7 @@
   "name": "Francisco González",
   "nickName": "Francisco",
   "description": "🚀 First, solve the problem. Then, write the code. 🧑🏽‍💻 Tech Leader & Senior Software Developer",
-  "siteTitle": "Francisco Gonzalez - Tech Lead and Senior Software Developer with 8 years of experience.",
+  "siteTitle": "Francisco Gonzalez - Tech Lead and Senior Software Developer with 9 years of experience.",
   "siteDescription": "Dive into the coding universe with Francisco Javier Gonzalez Silva, where creativity meets code. My personal website is your gateway to a broad range of programming resources, from in-depth language analyses to hands-on guides and tech tool reviews. Perfect for developers at any stage of their career, here you'll find inspiration, advanced techniques, and helpful tips to take your development projects to the next level.",
   "contact": {
     "email": "javiergonzalezsilva@gmail.com"
@@ -35,7 +35,20 @@
   ],
   "jobActivities": [
     {
+      "startDate": "Apr 2024",
+      "endDate": "Current",
+      "urlCompany": "https://www.linkedin.com/company/alegra/",
+      "company": "Alegra",
+      "job": "Senior Software Developer",
+      "jobActivities": [
+        "In my role as a Senior Software Developer, I have led the development of requirements focused on integrating billing processes, connecting systems with entities such as SAT (Mexico) and DGI (Panama). These implementations allow users to generate invoices and manage sales efficiently, contributing to the strengthening and competitiveness of the product.",
+        "I have worked with technologies such as PHP, TypeScript, JavaScript, and tools like AWS, Serverless Framework, Zend Framework, and Kafka. Additionally, I integrated AI APIs (OpenAI, Gemini, DeepSeek) to expand system capabilities. I also worked on migrating the product from a monolithic PHP architecture to microservices implemented with Serverless Framework and AWS CDK in TypeScript, applying Clean Architecture principles to improve maintainability and scalability. In the AWS environment, I utilized CDK, DynamoDB, OpenSearch, and S3 to orchestrate and manage the architecture, creating Lambdas and microservices that consume queues from SNS, SQS, and Kafka.",
+        "To ensure the quality and stability of each development, I implemented multiple testing phases (unit, functional, and integration tests), leveraging AWS CodeCommit and GitHub Actions for continuous delivery (CI/CD). This approach ensured a robust deployment flow in testing and pre-production environments, delivering a reliable and scalable product to Alegra's clients."
+      ]
+    },
+    {
       "startDate": "Jan 2020",
+      "endDate": "Apr 2024",
       "urlCompany": "https://www.linkedin.com/company/aiaticom/",
       "company": "A&A Soluctiones TIC",
       "job": "Tech Lead & Senior Software Developer",
