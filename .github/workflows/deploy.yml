@@ -36,10 +36,17 @@ jobs:
           echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
           eval $(ssh-agent -s)
-          ssh-keyscan -t ed25519 ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+          ssh-add ~/.ssh/deploy_key
+          echo "Host ${{ secrets.SERVER_HOST }}
+            StrictHostKeyChecking no
+            IdentityFile ~/.ssh/deploy_key
+            IdentitiesOnly yes" > ~/.ssh/config
+
+      - name: Test SSH Connection
+        run: ssh -v ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} 'echo "SSH Connection Successful"'
 
       - name: Deploy to VPS
         run: |
           rsync -avz --delete \
-            -e "ssh -i ~/.ssh/deploy_key" \
+            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
             dist/ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:${{ secrets.DEPLOY_PATH }}
