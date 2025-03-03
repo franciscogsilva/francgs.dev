@@ -14,6 +14,5 @@ export async function GET(context) {
     description: "My journey about tech",
     site: context.site,
     items,
-    customData: `<language>es-CO</language>`,
   });
 }
