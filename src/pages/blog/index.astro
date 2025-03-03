@@ -13,15 +13,17 @@ const description = "Francgs Personal blog";
   <PageHeader title={title} />
   <ul>
     {
-      posts.map((post) => (
-        <BlogPost
-          pubDate={post.frontmatter.pubDate}
-          url={post.url}
-          title={post.frontmatter.title}
-          tags={post.frontmatter.tags}
-          description={post.frontmatter.description}
-        />
-      ))
+      posts
+        .reverse()
+        .map((post) => (
+          <BlogPost
+            pubDate={post.frontmatter.pubDate}
+            url={post.url}
+            title={post.frontmatter.title}
+            tags={post.frontmatter.tags}
+            description={post.frontmatter.description}
+          />
+        ))
     }
   </ul>
 </BaseLayout>
