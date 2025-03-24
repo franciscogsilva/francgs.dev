@@ -1,7 +1,10 @@
 ---
+import BlogPost from "../components/BlogPost.astro";
 import data from "../data/site.json";
 
 import BaseLayout from "../layouts/BaseLayout.astro";
+
+const posts = await Astro.glob("../pages/blog/*.md");
 ---
 
 <BaseLayout title={data.siteTitle} description={data.siteDescription}>
@@ -41,4 +44,19 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       🔮.
     </p>
   </section>
+  <ul>
+    {
+      posts
+        .reverse()
+        .map((post) => (
+          <BlogPost
+            pubDate={post.frontmatter.pubDate}
+            url={post.url}
+            title={post.frontmatter.title}
+            tags={post.frontmatter.tags}
+            description={post.frontmatter.description}
+          />
+        ))
+    }
+  </ul>
 </BaseLayout>
