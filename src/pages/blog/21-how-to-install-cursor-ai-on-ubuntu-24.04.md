@@ -123,12 +123,17 @@ Open a text editor and save the following content in a file named, for example, 
 ```bash
 #!/bin/bash
 
-# Definición de variables de rutas y URLs
+# Definición de rutas
 APPIMAGE_PATH="/opt/cursor.appimage"
 ICON_PATH="/opt/cursor.png"
 DESKTOP_ENTRY_PATH="/usr/share/applications/cursor.desktop"
-CURSOR_URL="https://downloader.cursor.sh/linux/appImage/x64"
 ICON_URL="https://pub-e67c19bba5c64333a98782860493cce5.r2.dev/cursor.png"
+API_URL="https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=stable"
+
+# Función para obtener la URL real del AppImage
+function getCursorURL() {
+  curl -s "$API_URL" | grep -oP '"downloadUrl"\s*:\s*"\K[^"]+'
+}
 
 # Función para instalar Cursor AI IDE
 function installCursor() {
@@ -145,14 +150,21 @@ function installCursor() {
     sudo apt-get install -y curl
   fi
 
+  # Obtener URL de descarga
+  CURSOR_URL=$(getCursorURL)
+  if [[ -z "$CURSOR_URL" ]]; then
+    echo "Error: No se pudo obtener la URL de descarga del AppImage."
+    exit 1
+  fi
+
   # Descargar el AppImage
   echo "Descargando Cursor AppImage..."
-  sudo curl -L $CURSOR_URL -o $APPIMAGE_PATH
-  sudo chmod +x $APPIMAGE_PATH
+  sudo curl -L "$CURSOR_URL" -o "$APPIMAGE_PATH"
+  sudo chmod +x "$APPIMAGE_PATH"
 
   # Descargar el ícono
   echo "Descargando el ícono de Cursor..."
-  sudo curl -L $ICON_URL -o $ICON_PATH
+  sudo curl -L "$ICON_URL" -o "$ICON_PATH"
 
   # Crear la entrada de escritorio (.desktop)
   echo "Creando entrada de escritorio..."
@@ -175,8 +187,8 @@ function cursor() {
 }
 EOL
 
-  # Recargar la configuración del shell para aplicar el alias
-  source \$HOME/.bashrc
+  # Recargar configuración del shell
+  source "$HOME/.bashrc"
 
   echo "Instalación completada. Puede iniciar Cursor AI IDE desde el menú de aplicaciones o usando el comando 'cursor'."
 }
@@ -196,14 +208,21 @@ function updateCursor() {
     sudo apt-get install -y curl
   fi
 
+  # Obtener URL de descarga
+  CURSOR_URL=$(getCursorURL)
+  if [[ -z "$CURSOR_URL" ]]; then
+    echo "Error: No se pudo obtener la URL de descarga del AppImage."
+    exit 1
+  fi
+
   # Descargar la nueva versión del AppImage
   echo "Descargando la nueva versión del AppImage..."
-  sudo curl -L $CURSOR_URL -o $APPIMAGE_PATH
-  sudo chmod +x $APPIMAGE_PATH
+  sudo curl -L "$CURSOR_URL" -o "$APPIMAGE_PATH"
+  sudo chmod +x "$APPIMAGE_PATH"
 
   # Descargar el ícono actualizado
   echo "Descargando el ícono actualizado..."
-  sudo curl -L $ICON_URL -o $ICON_PATH
+  sudo curl -L "$ICON_URL" -o "$ICON_PATH"
 
   echo "Actualización completada."
 }
@@ -216,14 +235,10 @@ function uninstallCursor() {
   fi
   echo "Desinstalando Cursor AI IDE..."
 
-  # Eliminar AppImage y el ícono
-  sudo rm -f $APPIMAGE_PATH
-  sudo rm -f $ICON_PATH
+  sudo rm -f "$APPIMAGE_PATH"
+  sudo rm -f "$ICON_PATH"
+  sudo rm -f "$DESKTOP_ENTRY_PATH"
 
-  # Eliminar la entrada de escritorio
-  sudo rm -f $DESKTOP_ENTRY_PATH
-
-  # Avisar al usuario que el alias agregado en .bashrc deberá eliminarse manualmente
   echo "Por favor, elimine manualmente la función alias 'cursor' de su archivo ~/.bashrc si ya no la desea."
   echo "Desinstalación completada."
 }
@@ -234,12 +249,11 @@ function showUsage() {
   exit 1
 }
 
-# Comprobar que se haya pasado un parámetro
+# Seleccionar acción según argumento
 if [ -z "$1" ]; then
   showUsage
 fi
 
-# Seleccionar la acción según el parámetro recibido
 case "$1" in
   install)
     installCursor
