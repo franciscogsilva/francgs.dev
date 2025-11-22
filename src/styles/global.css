@@ -1,3 +1,82 @@
+@import "tailwindcss";
+
+@theme {
+  /* Custom brand colors */
+  --color-primary: #00fff7;
+  --color-secondary: #bd8afc;
+  --color-accent: #bd8afc;
+
+  /* Custom semantic colors for day/night modes */
+  --color-day: #ffffff;
+  --color-night: #000000;
+
+  /* Color aliases - map to Tailwind default color palettes */
+  --color-gray-*: initial;
+  --color-gray-50: var(--color-slate-50);
+  --color-gray-100: var(--color-slate-100);
+  --color-gray-200: var(--color-slate-200);
+  --color-gray-300: var(--color-slate-300);
+  --color-gray-400: var(--color-slate-400);
+  --color-gray-500: var(--color-slate-500);
+  --color-gray-600: var(--color-slate-600);
+  --color-gray-700: var(--color-slate-700);
+  --color-gray-800: var(--color-slate-800);
+  --color-gray-900: var(--color-slate-900);
+  --color-gray-950: var(--color-slate-950);
+
+  --color-green-*: initial;
+  --color-green-50: var(--color-emerald-50);
+  --color-green-100: var(--color-emerald-100);
+  --color-green-200: var(--color-emerald-200);
+  --color-green-300: var(--color-emerald-300);
+  --color-green-400: var(--color-emerald-400);
+  --color-green-500: var(--color-emerald-500);
+  --color-green-600: var(--color-emerald-600);
+  --color-green-700: var(--color-emerald-700);
+  --color-green-800: var(--color-emerald-800);
+  --color-green-900: var(--color-emerald-900);
+  --color-green-950: var(--color-emerald-950);
+
+  --color-purple-*: initial;
+  --color-purple-50: var(--color-violet-50);
+  --color-purple-100: var(--color-violet-100);
+  --color-purple-200: var(--color-violet-200);
+  --color-purple-300: var(--color-violet-300);
+  --color-purple-400: var(--color-violet-400);
+  --color-purple-500: var(--color-violet-500);
+  --color-purple-600: var(--color-violet-600);
+  --color-purple-700: var(--color-violet-700);
+  --color-purple-800: var(--color-violet-800);
+  --color-purple-900: var(--color-violet-900);
+  --color-purple-950: var(--color-violet-950);
+
+  --color-yellow-*: initial;
+  --color-yellow-50: var(--color-amber-50);
+  --color-yellow-100: var(--color-amber-100);
+  --color-yellow-200: var(--color-amber-200);
+  --color-yellow-300: var(--color-amber-300);
+  --color-yellow-400: var(--color-amber-400);
+  --color-yellow-500: var(--color-amber-500);
+  --color-yellow-600: var(--color-amber-600);
+  --color-yellow-700: var(--color-amber-700);
+  --color-yellow-800: var(--color-amber-800);
+  --color-yellow-900: var(--color-amber-900);
+  --color-yellow-950: var(--color-amber-950);
+
+  --color-pink-*: initial;
+  --color-pink-50: var(--color-fuchsia-50);
+  --color-pink-100: var(--color-fuchsia-100);
+  --color-pink-200: var(--color-fuchsia-200);
+  --color-pink-300: var(--color-fuchsia-300);
+  --color-pink-400: var(--color-fuchsia-400);
+  --color-pink-500: var(--color-fuchsia-500);
+  --color-pink-600: var(--color-fuchsia-600);
+  --color-pink-700: var(--color-fuchsia-700);
+  --color-pink-800: var(--color-fuchsia-800);
+  --color-pink-900: var(--color-fuchsia-900);
+  --color-pink-950: var(--color-fuchsia-950);
+}
+
 :root {
   color-scheme: dark;
   --primary-color: #00fff7;
@@ -6,10 +85,6 @@
 
 html {
   font-family: "Onest Variable", system-ui, sans-serif;
-}
-
-p {
-  /* color: #d4d4d4; */
 }
 
 .main-section {
