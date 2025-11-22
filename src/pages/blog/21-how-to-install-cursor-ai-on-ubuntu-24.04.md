@@ -121,137 +121,114 @@ You can automate all the previous steps using a script. Below is an example of a
 Open a text editor and save the following content in a file named, for example, `install_cursor.sh`:
 
 ```bash
-#!/bin/bash
+#!/usr/bin/env bash
+set -euo pipefail
 
-# Definición de variables de rutas y URLs
+# ==============================
+# Configuración de rutas y URLs
+# ==============================
 APPIMAGE_PATH="/opt/cursor.appimage"
 ICON_PATH="/opt/cursor.png"
 DESKTOP_ENTRY_PATH="/usr/share/applications/cursor.desktop"
-CURSOR_URL="https://downloader.cursor.sh/linux/appImage/x64"
 ICON_URL="https://pub-e67c19bba5c64333a98782860493cce5.r2.dev/cursor.png"
+API_URL="https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=stable"
 
-# Función para instalar Cursor AI IDE
-function installCursor() {
-  if [ -f "$APPIMAGE_PATH" ]; then
-    echo "Cursor AI IDE ya está instalado. Para actualizar, ejecute el script con el parámetro 'update'."
-    exit 0
-  fi
-  echo "Instalando Cursor AI IDE..."
-
-  # Verificar si curl está instalado
-  if ! command -v curl &> /dev/null; then
-    echo "curl no está instalado. Instalando..."
+# =======================================
+# Función: Comprueba e instala dependencia
+# =======================================
+ensure_dependency() {
+  local cmd="$1" pkg="$2"
+  if ! command -v "$cmd" &> /dev/null; then
+    echo "Instalando dependencia: $pkg..."
     sudo apt-get update
-    sudo apt-get install -y curl
+    sudo apt-get install -y "$pkg"
+  fi
+}
+
+# ===================================
+# Función: Obtiene URL del AppImage
+# ===================================
+get_cursor_url() {
+  # Seguimos redirecciones para obtener el JSON final
+  local raw
+  if ! raw=$(curl -sSL "$API_URL"); then
+    echo "Error: no se pudo contactar la API ($API_URL)" >&2
+    return 1
   fi
 
-  # Descargar el AppImage
-  echo "Descargando Cursor AppImage..."
-  sudo curl -L $CURSOR_URL -o $APPIMAGE_PATH
-  sudo chmod +x $APPIMAGE_PATH
+  # Muestra JSON completo en stderr para debug
+  echo "DEBUG: respuesta API -> $raw" >&2
 
-  # Descargar el ícono
-  echo "Descargando el ícono de Cursor..."
-  sudo curl -L $ICON_URL -o $ICON_PATH
+  # Extrae downloadUrl o url con jq
+  local url
+  url=$(printf '%s' "$raw" | jq -r '.downloadUrl // .url // empty')
+  printf '%s' "$url"
+}
 
-  # Crear la entrada de escritorio (.desktop)
-  echo "Creando entrada de escritorio..."
-  sudo bash -c "cat > $DESKTOP_ENTRY_PATH" <<EOL
+# ==================================================
+# Función: Descarga e instala AppImage, ícono y .desktop
+# ==================================================
+fetch_and_install() {
+  echo "Obteniendo URL de descarga de Cursor..."
+  local CURSOR_URL
+  if ! CURSOR_URL=$(get_cursor_url); then
+    echo "Error: no se pudo obtener la URL de descarga." >&2
+    exit 1
+  fi
+
+  if [[ -z "$CURSOR_URL" ]]; then
+    echo "Error: campo downloadUrl/url vacío en la respuesta." >&2
+    exit 1
+  fi
+
+  echo "Descargando AppImage desde:"
+  echo "  $CURSOR_URL"
+  sudo curl -L --fail "$CURSOR_URL" -o "$APPIMAGE_PATH"
+  sudo chmod +x "$APPIMAGE_PATH"
+
+  echo "Descargando ícono..."
+  sudo curl -L --fail "$ICON_URL" -o "$ICON_PATH"
+
+  echo "Creando/actualizando entrada de escritorio..."
+  sudo tee "$DESKTOP_ENTRY_PATH" > /dev/null <<EOF
 [Desktop Entry]
 Name=Cursor AI IDE
 Exec=$APPIMAGE_PATH --no-sandbox
 Icon=$ICON_PATH
 Type=Application
 Categories=Development;
-EOL
-
-  # Agregar alias al archivo de configuración de shell (.bashrc)
-  echo "Agregando alias 'cursor' a .bashrc..."
-  bash -c "cat >> \$HOME/.bashrc" <<EOL
-
-# Alias para Cursor AI IDE
-function cursor() {
-    $APPIMAGE_PATH --no-sandbox "\${@}" > /dev/null 2>&1 & disown
-}
-EOL
-
-  # Recargar la configuración del shell para aplicar el alias
-  source \$HOME/.bashrc
-
-  echo "Instalación completada. Puede iniciar Cursor AI IDE desde el menú de aplicaciones o usando el comando 'cursor'."
+EOF
 }
 
-# Función para actualizar Cursor AI IDE
-function updateCursor() {
-  if ! [ -f "$APPIMAGE_PATH" ]; then
-    echo "Cursor AI IDE no está instalado. Primero ejecute la instalación usando 'install'."
-    exit 1
-  fi
-  echo "Actualizando Cursor AI IDE..."
-
-  # Verificar si curl está instalado
-  if ! command -v curl &> /dev/null; then
-    echo "curl no está instalado. Instalando..."
-    sudo apt-get update
-    sudo apt-get install -y curl
-  fi
-
-  # Descargar la nueva versión del AppImage
-  echo "Descargando la nueva versión del AppImage..."
-  sudo curl -L $CURSOR_URL -o $APPIMAGE_PATH
-  sudo chmod +x $APPIMAGE_PATH
-
-  # Descargar el ícono actualizado
-  echo "Descargando el ícono actualizado..."
-  sudo curl -L $ICON_URL -o $ICON_PATH
-
-  echo "Actualización completada."
-}
-
-# Función para desinstalar Cursor AI IDE
-function uninstallCursor() {
-  if ! [ -f "$APPIMAGE_PATH" ]; then
-    echo "Cursor AI IDE no está instalado."
-    exit 1
-  fi
-  echo "Desinstalando Cursor AI IDE..."
-
-  # Eliminar AppImage y el ícono
-  sudo rm -f $APPIMAGE_PATH
-  sudo rm -f $ICON_PATH
-
-  # Eliminar la entrada de escritorio
-  sudo rm -f $DESKTOP_ENTRY_PATH
-
-  # Avisar al usuario que el alias agregado en .bashrc deberá eliminarse manualmente
-  echo "Por favor, elimine manualmente la función alias 'cursor' de su archivo ~/.bashrc si ya no la desea."
-  echo "Desinstalación completada."
-}
-
-# Función para mostrar el uso del script
-function showUsage() {
-  echo "Uso: $0 {install|update|uninstall}"
-  exit 1
-}
-
-# Comprobar que se haya pasado un parámetro
-if [ -z "$1" ]; then
-  showUsage
-fi
-
-# Seleccionar la acción según el parámetro recibido
-case "$1" in
+# ============================
+# Lógica principal del script
+# ============================
+case "${1:-install}" in
   install)
-    installCursor
+    if [[ -f "$APPIMAGE_PATH" ]]; then
+      echo "Cursor ya está instalado. Usa '$0 update' para actualizar."
+      exit 0
+    fi
+    echo "=== Instalando Cursor AI IDE ==="
+    ensure_dependency curl curl
+    ensure_dependency jq jq
+    fetch_and_install
+    echo "¡Instalación completada!"
     ;;
   update)
-    updateCursor
-    ;;
-  uninstall)
-    uninstallCursor
+    if [[ ! -f "$APPIMAGE_PATH" ]]; then
+      echo "Cursor no está instalado. Usa '$0 install' primero."
+      exit 1
+    fi
+    echo "=== Actualizando Cursor AI IDE ==="
+    ensure_dependency curl curl
+    ensure_dependency jq jq
+    fetch_and_install
+    echo "¡Actualización completada!"
     ;;
   *)
-    showUsage
+    echo "Uso: $0 [install|update]"
+    exit 1
     ;;
 esac
 ```
