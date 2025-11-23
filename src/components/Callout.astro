@@ -1,0 +1,26 @@
+---
+export interface Props {
+  type?: "note" | "tip" | "important" | "warning" | "caution";
+}
+
+const { type = "note" } = Astro.props;
+
+const icons = {
+  note: "💬",
+  tip: "💡",
+  important: "⚠️",
+  warning: "⚡",
+  caution: "🔥",
+};
+
+const icon = icons[type];
+---
+
+<div class={`callout callout-${type}`}>
+  <div class="callout-icon" aria-hidden="true">
+    {icon}
+  </div>
+  <div class="callout-content">
+    <slot />
+  </div>
+</div>

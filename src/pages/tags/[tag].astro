@@ -1,6 +1,6 @@
 ---
 import type { MarkdownInstance } from "astro";
-import BlogPost from "../../components/BlogPost.astro";
+import PostCard from "../../components/PostCard.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 const allPosts = await Astro.glob("../blog/*.md");
@@ -31,7 +31,7 @@ export async function getStaticPaths() {
 const { tag } = Astro.params;
 const { posts } = Astro.props as Record<string, any>;
 
-const description = '';
+const description = "";
 ---
 
 <BaseLayout title=`Tag - ${tag}` description={description}>
@@ -43,58 +43,65 @@ const description = '';
     </h1>
     <div class="flex sm:space-x-24">
       <div
-        class="hidden h-full max-h-screen min-w-[280px] max-w-[280px] flex-wrap overflow-auto rounded bg-gray-50 pt-5 shadow-md dark:bg-gray-900/70 dark:shadow-gray-800/40 sm:flex"
+        class="hidden h-full max-h-screen min-w-[280px] max-w-[280px] flex-wrap overflow-auto pt-5 sm:flex"
       >
-        <div class="px-6 py-4">
-          <a
-            class="font-bold uppercase text-gray-700 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-500"
-            href="/blog"
-            >All Posts
-          </a>
-          <ul>
+        <div class="px-6 py-4 w-full">
+          <h3
+            class="font-bold text-gray-900 dark:text-gray-100 uppercase tracking-wider text-sm mb-4"
+          >
+            All Tags
+          </h3>
+          <div class="flex flex-col space-y-1">
+            <a
+              class="group flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200
+                     text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100"
+              href="/blog"
+            >
+              <span>All Posts</span>
+            </a>
+
             {
-              tags.map((currentTag: string) => (
-                <>
-                  <li class="my-3">
-                    {tag == currentTag ? (
-                      <h3 class="inline px-3 py-2 text-sm font-bold uppercase text-primary-500">
-                        {currentTag} (
-                        {
-                          allPosts.filter((post) =>
-                            post.frontmatter.tags?.includes(currentTag)
-                          ).length
-                        }
-                        )
-                      </h3>
-                    ) : (
-                      <a
-                        class="px-3 py-2 text-sm font-medium uppercase text-gray-500 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-500"
-                        aria-label=`View posts tagged ${currentTag}`
-                        href=`/tags/${currentTag}`
-                      >
-                        {currentTag} (
-                        {
-                          allPosts.filter((post) =>
-                            post.frontmatter.tags?.includes(currentTag)
-                          ).length
-                        }
-                        )
-                      </a>
-                    )}
-                  </li>
-                </>
-              ))
+              tags.map((currentTag: string) => {
+                const isActive = tag === currentTag;
+                const count = allPosts.filter((post) =>
+                  post.frontmatter.tags?.includes(currentTag),
+                ).length;
+
+                return (
+                  <a
+                    href={`/tags/${currentTag}`}
+                    class={`group flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-all duration-200
+                      ${
+                        isActive
+                          ? "bg-primary/10 text-primary border-l-2 border-primary"
+                          : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 border-l-2 border-transparent"
+                      }`}
+                  >
+                    <span class="capitalize">{currentTag}</span>
+                    <span
+                      class={`text-xs px-2 py-0.5 rounded-full 
+                        ${
+                          isActive
+                            ? "bg-primary/20 text-primary"
+                            : "bg-gray-100 dark:bg-gray-800 text-gray-500 group-hover:bg-gray-200 dark:group-hover:bg-gray-700"
+                        }`}
+                    >
+                      {count}
+                    </span>
+                  </a>
+                );
+              })
             }
-          </ul>
+          </div>
         </div>
       </div>
 
       <div class="flex sm:space-x-24">
         <div>
-          <ul>
+          <div class="grid grid-cols-1 gap-6">
             {
               posts.map((post: any) => (
-                <BlogPost
+                <PostCard
                   pubDate={post.frontmatter.pubDate}
                   url={post.url}
                   title={post.frontmatter.title}
@@ -103,7 +110,7 @@ const description = '';
                 />
               ))
             }
-          </ul>
+          </div>
         </div>
       </div>
     </div>

@@ -9,22 +9,45 @@ const uniqueTags = [
   ...new Set(allPosts.map((post) => post.frontmatter.tags).flat()),
 ];
 
-const description = '';
+const description = "";
 ---
 
 <BaseLayout title={title} description={description}>
-  <div class="flex flex-col items-start justify-start divide-y divide-gray-200 dark:divide-gray-700 md:mt-24 md:flex-row md:items-center md:justify-center md:space-x-6 md:divide-y-0">
-    <div class="space-x-2 pb-8 pt-6 md:space-y-5">
-      <h1 class="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:border-r-2 md:px-6 md:text-6xl md:leading-14">{title}</h1>
+  <div class="max-w-4xl mx-auto mt-12">
+    <div class="text-center mb-12">
+      <h1
+        class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-4"
+      >
+        {title}
+      </h1>
+      <p class="text-gray-600 dark:text-gray-400">
+        Explore all topics and categories
+      </p>
     </div>
-    <div class="flex max-w-lg flex-wrap">
+
+    <div class="flex flex-wrap justify-center gap-3">
       {
-        uniqueTags.map((tag) => (
-          <div class="mb-2 mr-5 mt-2">
-            <a class="mr-3 text-sm font-medium uppercase text-primary-500 hover:text-primary-600 dark:hover:text-primary-400" href=`/tags/${tag}`>{tag}</a>
-            <a class="-ml-2 text-sm font-semibold uppercase text-gray-600 dark:text-gray-300" aria-label="View posts tagged next-js" href=`/tags/${tag}`> ({allPosts.filter(post => post.frontmatter.tags?.includes(tag)).length})</a>
-          </div>
-        ))
+        uniqueTags.map((tag) => {
+          const count = allPosts.filter((post) =>
+            post.frontmatter.tags?.includes(tag),
+          ).length;
+          return (
+            <a
+              href={`/tags/${tag}`}
+              class="group flex items-center gap-2 px-4 py-2 rounded-full
+                     bg-gray-100 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700
+                     hover:border-secondary/50 hover:bg-secondary/5 hover:text-secondary
+                     transition-all duration-300 ease-out"
+            >
+              <span class="text-sm font-medium text-gray-700 dark:text-gray-200 group-hover:text-secondary uppercase tracking-wide">
+                {tag}
+              </span>
+              <span class="flex items-center justify-center h-5 min-w-[1.25rem] px-1.5 rounded-full bg-gray-200 dark:bg-gray-700 text-[10px] font-bold text-gray-600 dark:text-gray-300 group-hover:bg-secondary/20 group-hover:text-secondary transition-colors">
+                {count}
+              </span>
+            </a>
+          );
+        })
       }
     </div>
   </div>

@@ -1,0 +1,109 @@
+---
+export interface PostInfo {
+  url: string;
+  title: string;
+  description?: string;
+}
+
+export interface Props {
+  prev?: PostInfo;
+  next?: PostInfo;
+}
+
+const { prev, next } = Astro.props;
+---
+
+{
+  (prev || next) && (
+    <nav class="post-navigation" aria-label="Post navigation">
+      <div class="post-nav-container">
+        {prev && (
+          <a href={prev.url} class="post-nav-link post-nav-prev">
+            <span class="post-nav-label">← Anterior</span>
+            <span class="post-nav-title">{prev.title}</span>
+            {prev.description && (
+              <span class="post-nav-desc">{prev.description}</span>
+            )}
+          </a>
+        )}
+        {next && (
+          <a href={next.url} class="post-nav-link post-nav-next">
+            <span class="post-nav-label">Siguiente →</span>
+            <span class="post-nav-title">{next.title}</span>
+            {next.description && (
+              <span class="post-nav-desc">{next.description}</span>
+            )}
+          </a>
+        )}
+      </div>
+    </nav>
+  )
+}
+
+<style>
+  .post-navigation {
+    margin: 4rem 0 2rem;
+    padding-top: 2rem;
+    border-top: 1px solid rgb(64 64 64);
+  }
+
+  .post-nav-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .post-nav-link {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.5rem;
+    background: rgba(0, 255, 247, 0.05);
+    border: 1px solid rgba(0, 255, 247, 0.2);
+    border-radius: 0.5rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+  }
+
+  .post-nav-link:hover {
+    background: rgba(0, 255, 247, 0.1);
+    border-color: var(--primary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 255, 247, 0.15);
+  }
+
+  .post-nav-prev {
+    text-align: left;
+  }
+
+  .post-nav-next {
+    text-align: right;
+    grid-column: -1;
+  }
+
+  .post-nav-label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .post-nav-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: rgb(229 229 229);
+  }
+
+  .post-nav-desc {
+    font-size: 0.875rem;
+    color: rgb(156 163 175);
+    line-height: 1.5;
+  }
+
+  @media (max-width: 640px) {
+    .post-nav-next {
+      grid-column: auto;
+    }
+  }
+</style>

@@ -1,0 +1,88 @@
+---
+// Script para agregar botones de copiar a los bloques de código
+---
+
+<script>
+  function setupCopyButtons() {
+    // Encontrar todos los bloques de código
+    const codeBlocks = document.querySelectorAll(".prose pre");
+
+    codeBlocks.forEach((pre) => {
+      // Evitar agregar múltiples botones
+      if (pre.querySelector(".copy-code-button")) return;
+
+      // Crear botón de copiar
+      const button = document.createElement("button");
+      button.className = "copy-code-button";
+      button.setAttribute("aria-label", "Copiar código");
+      button.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+        </svg>
+        <span>Copiar</span>
+      `;
+
+      // Agregar evento de click
+      button.addEventListener("click", async () => {
+        // Obtener el código del bloque
+        const code = pre.querySelector("code");
+        const text = (code ? code.textContent : pre.textContent) || "";
+
+        try {
+          // Copiar al portapapeles
+          await navigator.clipboard.writeText(text);
+
+          // Cambiar estado del botón
+          button.classList.add("copied");
+          button.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+            </svg>
+            <span>¡Copiado!</span>
+          `;
+
+          // Restaurar después de 2 segundos
+          setTimeout(() => {
+            button.classList.remove("copied");
+            button.innerHTML = `
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+              <span>Copiar</span>
+            `;
+          }, 2000);
+        } catch (err) {
+          console.error("Error al copiar:", err);
+          button.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+            <span>Error</span>
+          `;
+
+          setTimeout(() => {
+            button.innerHTML = `
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" />
+              </svg>
+              <span>Copiar</span>
+            `;
+          }, 2000);
+        }
+      });
+
+      // Insertar el botón al inicio del pre
+      pre.insertBefore(button, pre.firstChild);
+    });
+  }
+
+  // Ejecutar al cargar la página
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", setupCopyButtons);
+  } else {
+    setupCopyButtons();
+  }
+
+  // Re-ejecutar después de view transitions de Astro
+  document.addEventListener("astro:after-swap", setupCopyButtons);
+</script>

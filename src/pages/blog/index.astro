@@ -11,19 +11,31 @@ const description = "Francgs Personal blog";
 
 <BaseLayout title={title} description={description}>
   <PageHeader title={title} />
-  <ul>
-    {
-      posts
-        .reverse()
-        .map((post) => (
-          <BlogPost
-            pubDate={post.frontmatter.pubDate}
-            url={post.url}
-            title={post.frontmatter.title}
-            tags={post.frontmatter.tags}
-            description={post.frontmatter.description}
-          />
-        ))
-    }
-  </ul>
+
+  <!-- Content wrapper with semi-transparent background -->
+  <div class="relative">
+    <!-- Semi-transparent dark background overlay -->
+    <div
+      class="absolute inset-0 rounded-lg"
+      style="background-color: color-mix(in oklab, black 10%, transparent);"
+    >
+    </div>
+
+    <!-- Content -->
+    <ul class="relative">
+      {
+        posts
+          .reverse()
+          .map((post) => (
+            <BlogPost
+              pubDate={post.frontmatter.pubDate}
+              url={post.url}
+              title={post.frontmatter.title}
+              tags={post.frontmatter.tags}
+              description={post.frontmatter.description}
+            />
+          ))
+      }
+    </ul>
+  </div>
 </BaseLayout>
