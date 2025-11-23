@@ -1,7 +1,7 @@
 ---
+import CopyCodeButton from "../components/CopyCodeButton.astro";
 import PostNavigation from "../components/PostNavigation.astro";
 import TableOfContents from "../components/TableOfContents.astro";
-import CopyCodeButton from "../components/CopyCodeButton.astro";
 import { calculateReadingTime } from "../helpers/readingTime";
 import { getTableOfContents } from "../helpers/tableOfContents";
 import BaseLayout from "./BaseLayout.astro";
@@ -22,7 +22,12 @@ const prevPost = undefined;
 const nextPost = undefined;
 ---
 
-<BaseLayout title={frontmatter.title} description={frontmatter.description}>
+<BaseLayout
+  title={frontmatter.title}
+  description={frontmatter.description}
+  image={frontmatter.image?.url}
+  articleDate={frontmatter.pubDate.toString()}
+>
   <article class="blog-post">
     <header
       class="py-4 flex flex-col items-start space-y-4 border-b border-double border-gray-400 dark:border-gray-700"

@@ -3,14 +3,18 @@ import type { MarkdownInstance } from "astro";
 import PostCard from "../../components/PostCard.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
-const allPosts = await Astro.glob("../blog/*.md");
+const allPosts = Object.values(
+  import.meta.glob<MarkdownInstance<any>>("../blog/*.md", { eager: true }),
+);
 
 const tags: Array<string> = [
   ...new Set(allPosts.map((post: any) => post.frontmatter.tags).flat()),
 ];
 
 export async function getStaticPaths() {
-  const allPosts = await Astro.glob("../blog/*.md");
+  const allPosts = Object.values(
+    import.meta.glob<MarkdownInstance<any>>("../blog/*.md", { eager: true }),
+  );
 
   const tags: Array<string> = [
     ...new Set(allPosts.map((post: any) => post.frontmatter.tags).flat()),

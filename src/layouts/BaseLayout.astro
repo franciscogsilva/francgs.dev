@@ -7,30 +7,41 @@ import { ClientRouter } from "astro:transitions";
 import Background from "../components/Background.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
+import SEO from "../components/SEO.astro";
 
 interface Props {
   title: string;
   description: string;
+  image?: string;
+  articleDate?: string;
+  lang?: string;
   isLinks?: boolean;
 }
 
-const { title, description, isLinks } = Astro.props;
+const {
+  title,
+  description,
+  image,
+  articleDate,
+  lang = "en",
+  isLinks,
+} = Astro.props;
 ---
 
-<html lang="en" class="dark">
+<html lang={lang} class="dark">
   <head>
-    <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width" />
-    <meta name="generator" content={Astro.generator} />
-    <meta name="description" content={description} />
-    <link rel="canonical" href={`https://francgs.dev${Astro.url.pathname}`} />
+    <SEO
+      title={title}
+      description={description}
+      image={image}
+      articleDate={articleDate}
+    />
+    <meta name="referrer" content="no-referrer-when-downgrade" />
     <script
       is:inline
       async
       src="https://us.umami.is/script.js"
       data-website-id="f2869995-c81f-476f-85d8-ef8516b023d6"></script>
-    <title>{title}</title>
     <ClientRouter />
   </head>
   <!-- #1A1B26 -->

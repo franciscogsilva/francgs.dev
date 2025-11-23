@@ -2,9 +2,14 @@
 import PostCard from "../components/PostCard.astro";
 import data from "../data/site.json";
 
+import type { MarkdownInstance } from "astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const posts = await Astro.glob("../pages/blog/*.md");
+const posts = Object.values(
+  import.meta.glob<MarkdownInstance<any>>("../pages/blog/*.md", {
+    eager: true,
+  }),
+);
 ---
 
 <BaseLayout title={data.siteTitle} description={data.siteDescription}>
