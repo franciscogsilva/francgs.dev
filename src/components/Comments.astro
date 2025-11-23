@@ -1,0 +1,118 @@
+---
+// You'll need to configure these values after setting up giscus
+// Visit https://giscus.app/ to get your configuration
+const giscusConfig = {
+  repo: "franciscogsilva/francgs.dev", // Replace with your repo
+  repoId: "R_kgDOKauSaw", // Get from giscus.app
+  category: "Comments", // GitHub Discussions category
+  categoryId: "DIC_kwDOKauSa84CyIBc", // Get from giscus.app
+  mapping: "pathname",
+  reactionsEnabled: "1",
+  emitMetadata: "0",
+  inputPosition: "bottom",
+  theme: "catppuccin_mocha",
+  lang: "en",
+};
+---
+
+<div class="comments-section">
+  <h2 class="comments-title">Comments</h2>
+  <div
+    class="giscus"
+    data-repo={giscusConfig.repo}
+    data-repo-id={giscusConfig.repoId}
+    data-category={giscusConfig.category}
+    data-category-id={giscusConfig.categoryId}
+    data-mapping={giscusConfig.mapping}
+    data-reactions-enabled={giscusConfig.reactionsEnabled}
+    data-emit-metadata={giscusConfig.emitMetadata}
+    data-input-position={giscusConfig.inputPosition}
+    data-theme={giscusConfig.theme}
+    data-lang={giscusConfig.lang}
+    data-loading="lazy"
+  >
+  </div>
+</div>
+
+<style>
+  .comments-section {
+    margin-top: 4rem;
+    padding-top: 3rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .comments-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 2rem;
+  }
+
+  .giscus {
+    min-height: 200px;
+  }
+</style>
+
+<script>
+  function loadGiscus() {
+    const container = document.querySelector(".giscus");
+    if (!container) return;
+
+    const script = document.createElement("script");
+    script.src = "https://giscus.app/client.js";
+
+    // Read all data attributes from the container
+    script.setAttribute("data-repo", container.getAttribute("data-repo") || "");
+    script.setAttribute(
+      "data-repo-id",
+      container.getAttribute("data-repo-id") || "",
+    );
+    script.setAttribute(
+      "data-category",
+      container.getAttribute("data-category") || "",
+    );
+    script.setAttribute(
+      "data-category-id",
+      container.getAttribute("data-category-id") || "",
+    );
+    script.setAttribute(
+      "data-mapping",
+      container.getAttribute("data-mapping") || "pathname",
+    );
+    script.setAttribute(
+      "data-reactions-enabled",
+      container.getAttribute("data-reactions-enabled") || "1",
+    );
+    script.setAttribute(
+      "data-emit-metadata",
+      container.getAttribute("data-emit-metadata") || "0",
+    );
+    script.setAttribute(
+      "data-input-position",
+      container.getAttribute("data-input-position") || "bottom",
+    );
+    script.setAttribute(
+      "data-theme",
+      container.getAttribute("data-theme") || "dark",
+    );
+    script.setAttribute(
+      "data-lang",
+      container.getAttribute("data-lang") || "en",
+    );
+    script.setAttribute("data-loading", "lazy");
+    script.setAttribute("crossorigin", "anonymous");
+    script.async = true;
+
+    container.appendChild(script);
+  }
+
+  // Load on page load
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", loadGiscus);
+  } else {
+    loadGiscus();
+  }
+
+  // Reload on view transitions
+  document.addEventListener("astro:page-load", loadGiscus);
+</script>

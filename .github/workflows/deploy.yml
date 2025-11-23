@@ -27,6 +27,10 @@ jobs:
         run: pnpm install
 
       - name: Build project
+        env:
+          WEB3FORMS_ACCESS_KEY: ${{ secrets.WEB3FORMS_ACCESS_KEY }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
         run: pnpm run build
 
       - name: Configure SSH
@@ -48,6 +52,59 @@ jobs:
 
       - name: Deploy to VPS
         run: |
+          # Copy dist folder
           rsync -avz --delete \
             -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
-            dist/ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:${{ secrets.DEPLOY_PATH }}
+            dist/ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:${{ secrets.DEPLOY_PATH }}/dist/
+          
+          # Copy package.json and pnpm-lock.yaml for dependencies
+          rsync -avz \
+            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
+            package.json pnpm-lock.yaml \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:${{ secrets.DEPLOY_PATH }}/
+
+      - name: Create environment file
+        run: |
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << EOF
+            cd ${{ secrets.DEPLOY_PATH }}
+            
+            # Create .env file with secrets from GitHub
+            cat > .env << 'ENVFILE'
+          HOST=0.0.0.0
+          PORT=3000
+          SUPABASE_URL=${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY=${{ secrets.SUPABASE_SERVICE_KEY }}
+          WEB3FORMS_ACCESS_KEY=${{ secrets.WEB3FORMS_ACCESS_KEY }}
+          SITE_URL=https://francgs.dev
+          ENVFILE
+          EOF
+
+      - name: Install dependencies and restart server
+        run: |
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+            cd ${{ secrets.DEPLOY_PATH }}
+            
+            # Install production dependencies
+            pnpm install --prod --frozen-lockfile
+            
+            # Restart the app with PM2 (install PM2 if not already installed)
+            if ! command -v pm2 &> /dev/null; then
+              npm install -g pm2
+            fi
+            
+            # Stop existing process if running
+            pm2 delete francgs-dev || true
+            
+            # Start the Node.js server with environment variables
+            pm2 start dist/server/entry.mjs --name francgs-dev \
+              --node-args="--env-file=.env" \
+              --update-env
+            
+            # Save PM2 process list
+            pm2 save
+            
+            # Show status
+            pm2 status
+          EOF

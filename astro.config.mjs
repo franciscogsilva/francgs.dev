@@ -5,9 +5,14 @@ import remarkDirective from "remark-directive";
 import { remarkCallouts } from "./src/plugins/remark-callouts.mjs";
 
 import sitemap from "@astrojs/sitemap";
+import node from "@astrojs/node";
 
 // https://astro.build/config
 export default defineConfig({
+  output: "server", // Server mode for SSR support
+  adapter: node({
+    mode: "standalone",
+  }),
   vite: {
     plugins: [tailwindcss()],
   },
