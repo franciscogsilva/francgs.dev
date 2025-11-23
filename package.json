@@ -11,9 +11,11 @@
   },
   "dependencies": {
     "@astrojs/check": "0.9.5",
+    "@astrojs/node": "9.5.1",
     "@astrojs/rss": "4.0.14",
     "@astrojs/sitemap": "3.6.0",
     "@fontsource-variable/onest": "5.2.11",
+    "@supabase/supabase-js": "2.84.0",
     "astro": "5.16.0",
     "hastscript": "9.0.1",
     "rehype-raw": "7.0.0",

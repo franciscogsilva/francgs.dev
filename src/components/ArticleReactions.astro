@@ -1,0 +1,192 @@
+---
+interface Props {
+  articleId: string;
+}
+
+const { articleId } = Astro.props;
+---
+
+<div class="article-reactions" data-article-id={articleId}>
+  <h3 class="reactions-title">Reactions</h3>
+  <div class="reactions-container">
+    <button class="reaction-btn" data-reaction="love" aria-label="Love">
+      <span class="emoji">❤️</span>
+      <span class="count">0</span>
+    </button>
+    <button class="reaction-btn" data-reaction="clap" aria-label="Clap">
+      <span class="emoji">👏</span>
+      <span class="count">0</span>
+    </button>
+    <button class="reaction-btn" data-reaction="target" aria-label="On target">
+      <span class="emoji">🎯</span>
+      <span class="count">0</span>
+    </button>
+    <button class="reaction-btn" data-reaction="idea" aria-label="Great idea">
+      <span class="emoji">💡</span>
+      <span class="count">0</span>
+    </button>
+  </div>
+</div>
+
+<style>
+  .article-reactions {
+    padding: 1.5rem;
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.75rem;
+    margin-top: 1.5rem;
+  }
+
+  .reactions-title {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .reactions-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .reaction-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .reaction-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: rgba(255, 255, 255, 0.2);
+    transform: translateX(4px);
+  }
+
+  .reaction-btn.active {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: rgba(59, 130, 246, 0.3);
+  }
+
+  .emoji {
+    font-size: 1.5rem;
+    line-height: 1;
+  }
+
+  .count {
+    font-size: 0.875rem;
+    font-weight: 600;
+    min-width: 1.5rem;
+  }
+
+  @media (max-width: 1279px) {
+    .article-reactions {
+      position: static;
+      margin-top: 2rem;
+    }
+
+    .reactions-container {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+
+    .reaction-btn {
+      flex: 1;
+      min-width: calc(50% - 0.375rem);
+    }
+  }
+</style>
+
+<script>
+  function initReactions() {
+    const container = document.querySelector(".article-reactions");
+    if (!container) return;
+
+    const articleId = container.getAttribute("data-article-id");
+    if (!articleId) return;
+
+    const storageKey = `reactions_${articleId}`;
+    const buttons = container.querySelectorAll(".reaction-btn");
+
+    // Load reactions from localStorage
+    function loadReactions() {
+      const stored = localStorage.getItem(storageKey);
+      const reactions = stored ? JSON.parse(stored) : {};
+
+      buttons.forEach((btn) => {
+        const reaction = btn.getAttribute("data-reaction");
+        if (!reaction) return;
+
+        const count = reactions[reaction] || 0;
+        const countEl = btn.querySelector(".count");
+        if (countEl) countEl.textContent = count.toString();
+
+        // Check if user has reacted
+        const userReactionsKey = `user_reactions_${articleId}`;
+        const userReactions = JSON.parse(
+          localStorage.getItem(userReactionsKey) || "[]",
+        );
+        if (userReactions.includes(reaction)) {
+          btn.classList.add("active");
+        }
+      });
+    }
+
+    // Save reaction
+    function saveReaction(reaction: string) {
+      const stored = localStorage.getItem(storageKey);
+      const reactions = stored ? JSON.parse(stored) : {};
+
+      const userReactionsKey = `user_reactions_${articleId}`;
+      const userReactions = JSON.parse(
+        localStorage.getItem(userReactionsKey) || "[]",
+      );
+
+      if (userReactions.includes(reaction)) {
+        // Remove reaction
+        reactions[reaction] = Math.max(0, (reactions[reaction] || 0) - 1);
+        const index = userReactions.indexOf(reaction);
+        userReactions.splice(index, 1);
+      } else {
+        // Add reaction
+        reactions[reaction] = (reactions[reaction] || 0) + 1;
+        userReactions.push(reaction);
+      }
+
+      localStorage.setItem(storageKey, JSON.stringify(reactions));
+      localStorage.setItem(userReactionsKey, JSON.stringify(userReactions));
+
+      loadReactions();
+    }
+
+    // Add click handlers
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const reaction = btn.getAttribute("data-reaction");
+        if (reaction) {
+          saveReaction(reaction);
+        }
+      });
+    });
+
+    loadReactions();
+  }
+
+  // Initialize on page load
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initReactions);
+  } else {
+    initReactions();
+  }
+
+  // Re-initialize on view transitions
+  document.addEventListener("astro:page-load", initReactions);
+</script>

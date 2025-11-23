@@ -1,13 +1,9 @@
 ---
-export interface PostInfo {
-  url: string;
-  title: string;
-  description?: string;
-}
+import type { MarkdownInstance } from "astro";
 
 export interface Props {
-  prev?: PostInfo;
-  next?: PostInfo;
+  prev?: MarkdownInstance<any>;
+  next?: MarkdownInstance<any>;
 }
 
 const { prev, next } = Astro.props;
@@ -19,19 +15,19 @@ const { prev, next } = Astro.props;
       <div class="post-nav-container">
         {prev && (
           <a href={prev.url} class="post-nav-link post-nav-prev">
-            <span class="post-nav-label">← Anterior</span>
-            <span class="post-nav-title">{prev.title}</span>
-            {prev.description && (
-              <span class="post-nav-desc">{prev.description}</span>
+            <span class="post-nav-label">← Previous post</span>
+            <span class="post-nav-title">{prev.frontmatter.title}</span>
+            {prev.frontmatter.description && (
+              <span class="post-nav-desc">{prev.frontmatter.description}</span>
             )}
           </a>
         )}
         {next && (
           <a href={next.url} class="post-nav-link post-nav-next">
-            <span class="post-nav-label">Siguiente →</span>
-            <span class="post-nav-title">{next.title}</span>
-            {next.description && (
-              <span class="post-nav-desc">{next.description}</span>
+            <span class="post-nav-label">Next post →</span>
+            <span class="post-nav-title">{next.frontmatter.title}</span>
+            {next.frontmatter.description && (
+              <span class="post-nav-desc">{next.frontmatter.description}</span>
             )}
           </a>
         )}
@@ -42,9 +38,9 @@ const { prev, next } = Astro.props;
 
 <style>
   .post-navigation {
-    margin: 4rem 0 2rem;
-    padding-top: 2rem;
-    border-top: 1px solid rgb(64 64 64);
+    margin: 2rem 0 1rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   .post-nav-container {
@@ -58,18 +54,18 @@ const { prev, next } = Astro.props;
     flex-direction: column;
     gap: 0.5rem;
     padding: 1.5rem;
-    background: rgba(0, 255, 247, 0.05);
-    border: 1px solid rgba(0, 255, 247, 0.2);
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 0.5rem;
     text-decoration: none;
     transition: all 0.3s ease;
   }
 
   .post-nav-link:hover {
-    background: rgba(0, 255, 247, 0.1);
-    border-color: var(--primary-color);
+    background: rgba(168, 85, 247, 0.1);
+    border-color: rgba(168, 85, 247, 0.5);
     transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 255, 247, 0.15);
+    box-shadow: 0 4px 12px rgba(168, 85, 247, 0.15);
   }
 
   .post-nav-prev {
@@ -84,9 +80,14 @@ const { prev, next } = Astro.props;
   .post-nav-label {
     font-size: 0.875rem;
     font-weight: 600;
-    color: var(--primary-color);
+    color: rgba(255, 255, 255, 0.5);
     text-transform: uppercase;
     letter-spacing: 0.05em;
+    transition: color 0.3s ease;
+  }
+
+  .post-nav-link:hover .post-nav-label {
+    color: rgb(168, 85, 247);
   }
 
   .post-nav-title {

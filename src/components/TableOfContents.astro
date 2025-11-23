@@ -3,9 +3,10 @@ import type { HeadingItem } from "../helpers/tableOfContents";
 
 export interface Props {
   headings: HeadingItem[];
+  articleId?: string;
 }
 
-const { headings } = Astro.props;
+const { headings, articleId } = Astro.props;
 ---
 
 {
@@ -25,6 +26,43 @@ const { headings } = Astro.props;
           </li>
         ))}
       </ul>
+
+      {articleId && (
+        <div class="toc-reactions" data-article-id={articleId}>
+          <button
+            class="reaction-btn"
+            data-reaction="love"
+            aria-label="Love"
+            title="Love this article"
+          >
+            <span class="emoji">❤️</span>
+          </button>
+          <button
+            class="reaction-btn"
+            data-reaction="clap"
+            aria-label="Clap"
+            title="Great content"
+          >
+            <span class="emoji">👏</span>
+          </button>
+          <button
+            class="reaction-btn"
+            data-reaction="target"
+            aria-label="On target"
+            title="Right on target"
+          >
+            <span class="emoji">🎯</span>
+          </button>
+          <button
+            class="reaction-btn"
+            data-reaction="idea"
+            aria-label="Great idea"
+            title="Brilliant idea"
+          >
+            <span class="emoji">💡</span>
+          </button>
+        </div>
+      )}
     </nav>
   )
 }
@@ -107,6 +145,47 @@ const { headings } = Astro.props;
 
   .toc::-webkit-scrollbar-thumb:hover {
     background: rgba(75, 85, 99, 0.5);
+  }
+
+  /* Reactions */
+  .toc-reactions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1.5rem;
+    padding-top: 1rem;
+    border-top: 1px solid rgba(75, 85, 99, 0.2);
+    justify-content: center;
+  }
+
+  .reaction-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem;
+    transition: all 0.2s ease;
+    opacity: 0.4;
+  }
+
+  .reaction-btn:hover {
+    opacity: 1;
+  }
+
+  .reaction-btn.active {
+    opacity: 1;
+  }
+
+  .emoji {
+    font-size: 1.5rem;
+    line-height: 1;
+    display: block;
+  }
+
+  .reaction-btn.has-reactions {
+    opacity: 0.7;
+  }
+
+  .reaction-btn.has-reactions:hover {
+    opacity: 1;
   }
 </style>
 
@@ -224,4 +303,109 @@ const { headings } = Astro.props;
 
   // Re-run after view transitions (for Astro)
   document.addEventListener("astro:after-swap", setupTocActiveTracking);
+
+  // Reactions handling with Supabase
+  function initReactions() {
+    const container = document.querySelector(".toc-reactions");
+    if (!container) return;
+
+    const articleIdAttr = container.getAttribute("data-article-id");
+    if (!articleIdAttr) return;
+
+    // Type refinement: articleId is now guaranteed to be string
+    const articleId: string = articleIdAttr;
+
+    const buttons = container.querySelectorAll(".reaction-btn");
+
+    // Load reactions from Supabase
+    async function loadReactions() {
+      try {
+        const response = await fetch(
+          `/api/reactions?articleId=${encodeURIComponent(articleId)}`,
+        );
+        const data = await response.json();
+
+        buttons.forEach((btn) => {
+          const reaction = btn.getAttribute("data-reaction");
+          if (!reaction) return;
+
+          const count = data[reaction] || 0;
+
+          // Update button appearance based on count
+          if (count > 0) {
+            btn.classList.add("has-reactions");
+            btn.setAttribute("title", `${count} reactions`);
+          }
+
+          // Check if user has reacted (from localStorage for UX)
+          const userReactionsKey = `user_reactions_${articleId}`;
+          const userReactions = JSON.parse(
+            localStorage.getItem(userReactionsKey) || "[]",
+          );
+          if (userReactions.includes(reaction)) {
+            btn.classList.add("active");
+          }
+        });
+      } catch (error) {
+        console.error("Error loading reactions:", error);
+      }
+    }
+
+    // Add reaction
+    async function addReaction(reaction: string) {
+      try {
+        const response = await fetch("/api/reactions", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ articleId, reactionType: reaction }),
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          alert(data.error || "Failed to add reaction");
+          return;
+        }
+
+        // Update localStorage for UX
+        const userReactionsKey = `user_reactions_${articleId}`;
+        const userReactions = JSON.parse(
+          localStorage.getItem(userReactionsKey) || "[]",
+        );
+
+        if (!userReactions.includes(reaction)) {
+          userReactions.push(reaction);
+          localStorage.setItem(userReactionsKey, JSON.stringify(userReactions));
+        }
+
+        // Reload to show updated counts
+        await loadReactions();
+      } catch (error) {
+        console.error("Error adding reaction:", error);
+        alert("Failed to add reaction. Please try again.");
+      }
+    }
+
+    // Add click handlers
+    buttons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const reaction = btn.getAttribute("data-reaction");
+        if (reaction) {
+          addReaction(reaction);
+        }
+      });
+    });
+
+    loadReactions();
+  }
+
+  // Initialize reactions
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initReactions);
+  } else {
+    initReactions();
+  }
+
+  document.addEventListener("astro:page-load", initReactions);
 </script>
+```
