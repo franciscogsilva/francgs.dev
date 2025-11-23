@@ -22,6 +22,12 @@ export async function POST({ request }: { request: Request }) {
     formData.append('email', email);
     formData.append('message', message);
     formData.append('subject', 'New Contact Form Submission from francgs.dev');
+    
+    // Add honeypot field if present
+    const botcheck = data.get('botcheck');
+    if (botcheck) {
+      formData.append('botcheck', botcheck);
+    }
 
     const response = await fetch('https://api.web3forms.com/submit', {
       method: 'POST',

@@ -15,6 +15,14 @@ const description = "Get in touch with Francisco González";
     </p>
 
     <form class="contact-form" id="contactForm">
+      <!-- Honeypot for spam protection -->
+      <input
+        type="checkbox"
+        name="botcheck"
+        class="hidden"
+        style="display: none;"
+      />
+
       <div class="form-group">
         <label for="name">Name</label>
         <input
