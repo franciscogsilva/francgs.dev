@@ -1,11 +1,29 @@
 ---
+import PostNavigation from "../components/PostNavigation.astro";
+import TableOfContents from "../components/TableOfContents.astro";
+import CopyCodeButton from "../components/CopyCodeButton.astro";
+import { calculateReadingTime } from "../helpers/readingTime";
+import { getTableOfContents } from "../helpers/tableOfContents";
 import BaseLayout from "./BaseLayout.astro";
 
 const { frontmatter } = Astro.props;
+const { headings } = Astro.props;
+
+// Calculate reading time from the raw content
+const rawContent = await Astro.slots.render("default");
+const readingTime = calculateReadingTime(rawContent);
+
+// Get table of contents from headings
+const toc = headings ? getTableOfContents(headings) : [];
+
+// TODO: Get prev/next posts (will need to be passed from the page or calculated)
+// For now, we'll leave these undefined
+const prevPost = undefined;
+const nextPost = undefined;
 ---
 
 <BaseLayout title={frontmatter.title} description={frontmatter.description}>
-  <article>
+  <article class="blog-post">
     <header
       class="py-4 flex flex-col items-start space-y-4 border-b border-double border-gray-400 dark:border-gray-700"
     >
@@ -22,7 +40,7 @@ const { frontmatter } = Astro.props;
             frontmatter.tags.map((tag: string) => (
               <>
                 <a href={`/tags/${tag}`}>
-                  <span class="inline-block py-1 px-2 mx-2 rounded border border-gray-700 hover:border-accent text-xs font-medium">
+                  <span class="inline-block py-1 px-2 mx-2 rounded border border-gray-700 hover:border-accent text-xs font-medium transition-colors duration-200">
                     {tag}
                   </span>
                 </a>
@@ -36,45 +54,73 @@ const { frontmatter } = Astro.props;
           >
             <dt class="sr-only">Published on</dt>
             <dd class="">
-              <time datetime="2021-11-25T09:51:10.681Z"
-                >{frontmatter.pubDate.slice(0, 10)}</time
-              >
-            </dd> • <span>20 minutes read</span>
+              <time datetime={frontmatter.pubDate}>
+                {frontmatter.pubDate.toString().slice(0, 10)}
+              </time>
+            </dd>
+            •
+            <span>{readingTime}</span>
           </div>
         </dl>
       </div>
     </header>
   </article>
-  <section
-    class="pb-8 divide-y divide-gray-200 xl:divide-y-0 dark:divide-gray-700"
-  >
-    <div class="relative flex flex-col items-center">
-      <img
-        class="object-cover md:w-3/4 rounded-lg shadow-lg overflow-hidden my-4 mx-auto"
-        alt={frontmatter.image.alt}
-        src={frontmatter.image.url}
-      />
-      <!-- <span
-        class="text-base font-medium leading-6 text-gray-500 dark:text-gray-400"
-        >Photo by <a
-          class="text-highlight"
-          href="https://unsplash.com/@milkandbourbons">Dean Brierley</a
-        > on <a
-          class="text-highlight"
-          href="https://unsplash.com/photos/nJ1-bdSTbzk">Unsplash</a
-        >
-      </span> -->
+  <!-- Content wrapper with semi-transparent background -->
+  <div class="relative">
+    <!-- Semi-transparent dark background overlay -->
+    <div
+      class="absolute inset-0 rounded-lg"
+      style="background-color: color-mix(in oklab, black 10%, transparent);"
+    >
     </div>
-    <div class="flex flex-col">
-      <div
-        class="xl:grid xl:grid-cols-4 xl:gap-x-6 bg-day dark:bg-night bg-opacity-50 dark:bg-opacity-75"
-      >
-        <div
-          class="xl:col-span-3 xl:row-span-2 pt-10 pb-8 prose dark:prose-dark max-w-none"
-        >
-          <slot />
+
+    <!-- Content -->
+    <section
+      class="relative pb-8 divide-y divide-gray-200 xl:divide-y-0 dark:divide-gray-700"
+    >
+      {
+        frontmatter.image && frontmatter.image.url && (
+          <div class="relative flex flex-col items-center">
+            <img
+              class="object-cover md:w-3/4 rounded-lg shadow-lg overflow-hidden my-4 mx-auto"
+              alt={frontmatter.image.alt}
+              src={frontmatter.image.url}
+            />
+          </div>
+        )
+      }
+      <div class="flex flex-col">
+        <!-- Grid with content centered, ToC narrow on right -->
+        <div class="xl:grid xl:grid-cols-6 xl:gap-x-10">
+          <!-- Main Content (takes 4 columns for better centering) -->
+          <div
+            class:list={[
+              "pt-10 pb-8 prose dark:prose-dark",
+              toc.length > 0 ? "xl:col-span-4" : "xl:col-span-6",
+            ]}
+            style="max-width: 65ch;"
+          >
+            <slot />
+          </div>
+
+          <!-- Table of Contents Sidebar on RIGHT (narrower, hidden on mobile) -->
+          {
+            toc.length > 0 && (
+              <aside class="hidden xl:block xl:col-span-2 pt-10">
+                <TableOfContents headings={toc} />
+              </aside>
+            )
+          }
+        </div>
+
+        <!-- Post Navigation -->
+        <div class="xl:col-span-6" style="max-width: 65ch;">
+          <PostNavigation prev={prevPost} next={nextPost} />
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </div>
+
+  <!-- Copy code button functionality -->
+  <CopyCodeButton />
 </BaseLayout>

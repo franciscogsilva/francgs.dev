@@ -1,0 +1,75 @@
+---
+const { pubDate, url, title, tags, description } = Astro.props;
+
+const date = new Date(pubDate).toLocaleDateString("en-US", {
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+---
+
+<a
+  href={url}
+  class="group relative flex flex-col justify-between p-6 h-full
+         bg-[color-mix(in_oklab,var(--color-night)_10%,transparent)]
+         dark:bg-[color-mix(in_oklab,var(--color-day)_5%,transparent)]
+         border border-gray-200 dark:border-gray-800
+         rounded-2xl transition-all duration-300 ease-out
+         hover:scale-[1.02] hover:bg-[rgba(189,138,252,0.2)]
+         hover:border-secondary/30 hover:shadow-lg hover:shadow-secondary/5"
+>
+  <div class="flex flex-col gap-3">
+    <div
+      class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400"
+    >
+      <time datetime={pubDate}>{date}</time>
+      <div class="flex gap-2">
+        {
+          tags
+            .slice(0, 3)
+            .map((tag: string) => (
+              <span class="px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-[10px] uppercase tracking-wider font-medium text-gray-600 dark:text-gray-300 group-hover:bg-secondary/10 group-hover:text-secondary transition-colors">
+                {tag}
+              </span>
+            ))
+        }
+        {
+          tags.length > 3 && (
+            <span class="text-[10px] text-gray-400 self-center">
+              +{tags.length - 3}
+            </span>
+          )
+        }
+      </div>
+    </div>
+
+    <h3
+      class="text-xl font-bold text-gray-900 dark:text-gray-100 group-hover:text-secondary transition-colors leading-tight"
+    >
+      {title}
+    </h3>
+
+    <p
+      class="text-sm text-gray-600 dark:text-gray-400 line-clamp-3 leading-relaxed"
+    >
+      {description}
+    </p>
+  </div>
+
+  <div
+    class="mt-4 flex items-center text-sm font-medium text-secondary opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0"
+  >
+    Read article
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      class="h-4 w-4 ml-1"
+      viewBox="0 0 20 20"
+      fill="currentColor"
+    >
+      <path
+        fill-rule="evenodd"
+        d="M12.293 5.293a1 1 0 011.414 0l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-2.293-2.293a1 1 0 010-1.414z"
+        clip-rule="evenodd"></path>
+    </svg>
+  </div>
+</a>

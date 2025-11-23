@@ -6,10 +6,10 @@ const { startDate, endDate, urlCompany, company, job, jobActivities } =
 ---
 
 <div
-  class="pl-4 flex flex-col place-items-start border-l border-b border-gray-300 dark:border-gray-700"
+  class="pl-4 flex flex-col place-items-start border-l border-b border-[oklch(0.33_0_0)]"
 >
   <span
-    class="py-1 px-2 mt-4 ml-[-40px] rounded border border-gray-700 hover:border-accent bg-day dark:bg-night text-xs font-medium"
+    class="py-1 px-2 mt-4 ml-[-40px] rounded border border-[oklch(0.33_0_0)] hover:border-accent bg-day dark:bg-night text-xs font-medium"
   >
     {startDate} - {endDate ?? "Current"}
   </span>
@@ -32,7 +32,7 @@ const { startDate, endDate, urlCompany, company, job, jobActivities } =
         href={urlCompany}
         target="_blank"
         rel="noreferrer nofollow"
-        class="text-2xl"
+        class="text-2xl !text-white hover:!text-primary transition-colors"
       >
         {company}
       </a>
