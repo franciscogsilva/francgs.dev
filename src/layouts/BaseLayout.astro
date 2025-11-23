@@ -3,7 +3,7 @@ import "../styles/global.css";
 
 import "@fontsource-variable/onest";
 
-import { ViewTransitions } from "astro:transitions";
+import { ClientRouter } from "astro:transitions";
 import Background from "../components/Background.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
@@ -31,7 +31,7 @@ const { title, description, isLinks } = Astro.props;
       src="https://us.umami.is/script.js"
       data-website-id="f2869995-c81f-476f-85d8-ef8516b023d6"></script>
     <title>{title}</title>
-    <ViewTransitions />
+    <ClientRouter />
   </head>
   <!-- #1A1B26 -->
   <body class="w-full">
