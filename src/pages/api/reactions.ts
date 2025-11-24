@@ -7,6 +7,7 @@ const VALID_REACTIONS = ['love', 'clap', 'target', 'idea'];
 
 export async function GET({ url }: { url: URL }) {
   const articleId = url.searchParams.get('articleId');
+  console.log('GET /api/reactions hit for:', articleId);
 
   if (!articleId) {
     return new Response(JSON.stringify({ error: 'Missing articleId' }), {
@@ -21,7 +22,12 @@ export async function GET({ url }: { url: URL }) {
       .select('reaction_type, count')
       .eq('article_id', articleId);
 
-    if (error) throw error;
+    if (error) {
+      console.error('Supabase error in GET:', error);
+      throw error;
+    }
+
+    console.log('Reactions fetched:', data?.length || 0, 'rows');
 
     // Convert to object format
     const reactions: Record<string, number> = {};
