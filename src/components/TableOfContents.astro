@@ -36,6 +36,7 @@ const { headings, articleId } = Astro.props;
             title="Love this article"
           >
             <span class="emoji">❤️</span>
+            <span class="count" />
           </button>
           <button
             class="reaction-btn"
@@ -44,6 +45,7 @@ const { headings, articleId } = Astro.props;
             title="Great content"
           >
             <span class="emoji">👏</span>
+            <span class="count" />
           </button>
           <button
             class="reaction-btn"
@@ -52,6 +54,7 @@ const { headings, articleId } = Astro.props;
             title="Right on target"
           >
             <span class="emoji">🎯</span>
+            <span class="count" />
           </button>
           <button
             class="reaction-btn"
@@ -60,6 +63,7 @@ const { headings, articleId } = Astro.props;
             title="Brilliant idea"
           >
             <span class="emoji">💡</span>
+            <span class="count" />
           </button>
         </div>
       )}
@@ -164,6 +168,9 @@ const { headings, articleId } = Astro.props;
     padding: 0.25rem;
     transition: all 0.2s ease;
     opacity: 0.4;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
   }
 
   .reaction-btn:hover {
@@ -178,6 +185,12 @@ const { headings, articleId } = Astro.props;
     font-size: 1.5rem;
     line-height: 1;
     display: block;
+  }
+
+  .count {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: inherit;
   }
 
   .reaction-btn.has-reactions {
@@ -330,11 +343,15 @@ const { headings, articleId } = Astro.props;
           if (!reaction) return;
 
           const count = data[reaction] || 0;
+          const countSpan = btn.querySelector(".count");
 
           // Update button appearance based on count
           if (count > 0) {
             btn.classList.add("has-reactions");
             btn.setAttribute("title", `${count} reactions`);
+            if (countSpan) countSpan.textContent = count.toString();
+          } else {
+            if (countSpan) countSpan.textContent = "";
           }
 
           // Check if user has reacted (from localStorage for UX)
@@ -408,4 +425,3 @@ const { headings, articleId } = Astro.props;
 
   document.addEventListener("astro:page-load", initReactions);
 </script>
-```
