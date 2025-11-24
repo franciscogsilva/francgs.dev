@@ -8,7 +8,7 @@ export async function POST({ request }: { request: Request }) {
     const email = data.get('email');
     const message = data.get('message');
     
-    console.log('Contact form data received:', { name, email, messageLength: message?.toString().length });
+    console.log('Contact form data received:', { name, email, messageLength: message?.toString().length, message });
 
     // Validate
     if (!name || !email || !message) {
@@ -48,8 +48,16 @@ export async function POST({ request }: { request: Request }) {
       body: formData
     });
 
-    const result = await response.json();
-    console.log('Web3Forms response:', result);
+    let result;
+    const responseText = await response.text();
+    
+    try {
+      result = JSON.parse(responseText);
+      console.log('Web3Forms response:', result);
+    } catch (e) {
+      console.error('Failed to parse Web3Forms response:', responseText);
+      throw new Error('Invalid response from Web3Forms');
+    }
 
     return new Response(JSON.stringify(result), {
       status: response.ok ? 200 : 400,
