@@ -1,23 +1,35 @@
 export const prerender = false;
 
 export async function POST({ request }: { request: Request }) {
+  console.log('POST /api/contact hit');
   try {
     const data = await request.formData();
     const name = data.get('name');
     const email = data.get('email');
     const message = data.get('message');
+    
+    console.log('Contact form data received:', { name, email, messageLength: message?.toString().length });
 
     // Validate
     if (!name || !email || !message) {
+      console.warn('Missing fields in contact form');
       return new Response(JSON.stringify({ success: false, message: 'Missing fields' }), {
         status: 400,
         headers: { 'Content-Type': 'application/json' }
       });
     }
 
+    const accessKey = import.meta.env.WEB3FORMS_ACCESS_KEY;
+    console.log('Web3Forms Key present:', !!accessKey);
+
+    if (!accessKey) {
+      console.error('CRITICAL: Missing WEB3FORMS_ACCESS_KEY');
+      throw new Error('Missing WEB3FORMS_ACCESS_KEY');
+    }
+
     // Send to Web3Forms
     const formData = new FormData();
-    formData.append('access_key', import.meta.env.WEB3FORMS_ACCESS_KEY);
+    formData.append('access_key', accessKey);
     formData.append('name', name);
     formData.append('email', email);
     formData.append('message', message);
@@ -26,21 +38,25 @@ export async function POST({ request }: { request: Request }) {
     // Add honeypot field if present
     const botcheck = data.get('botcheck');
     if (botcheck) {
+      console.log('Botcheck field present:', botcheck);
       formData.append('botcheck', botcheck);
     }
 
+    console.log('Sending to Web3Forms...');
     const response = await fetch('https://api.web3forms.com/submit', {
       method: 'POST',
       body: formData
     });
 
     const result = await response.json();
+    console.log('Web3Forms response:', result);
 
     return new Response(JSON.stringify(result), {
       status: response.ok ? 200 : 400,
       headers: { 'Content-Type': 'application/json' }
     });
   } catch (error) {
+    console.error('Error in contact API:', error);
     return new Response(JSON.stringify({ success: false, message: 'Server error' }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' }
