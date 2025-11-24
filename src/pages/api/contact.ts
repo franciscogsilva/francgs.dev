@@ -27,25 +27,30 @@ export async function POST({ request }: { request: Request }) {
       throw new Error('Missing WEB3FORMS_ACCESS_KEY');
     }
 
-    // Send to Web3Forms
-    const formData = new FormData();
-    formData.append('access_key', accessKey);
-    formData.append('name', name);
-    formData.append('email', email);
-    formData.append('message', message);
-    formData.append('subject', 'New Contact Form Submission from francgs.dev');
-    
     // Add honeypot field if present
     const botcheck = data.get('botcheck');
     if (botcheck) {
       console.log('Botcheck field present:', botcheck);
-      formData.append('botcheck', botcheck);
     }
 
-    console.log('Sending to Web3Forms...');
+    // Send to Web3Forms as JSON to avoid Cloudflare bot detection
+    const payload = {
+      access_key: accessKey,
+      name,
+      email,
+      message,
+      subject: 'New Contact Form Submission from francgs.dev',
+      botcheck: botcheck || undefined
+    };
+
+    console.log('Sending JSON to Web3Forms...');
     const response = await fetch('https://api.web3forms.com/submit', {
       method: 'POST',
-      body: formData
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(payload)
     });
 
     let result;
