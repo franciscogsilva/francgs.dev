@@ -47,10 +47,10 @@ save and add to file `~/.config/opencode/themes/asmun.json`:
 {
   "$schema": "https://opencode.ai/theme.json",
   "theme": {
-    "background": "none",
+    "background": "#1a1b26",
     "backgroundPanel": "#1a1b26",
     "backgroundElement": "#16161e",
-    "text": "#c0caf5",
+    "text": "#a9b1d6",
     "textMuted": "#565f89",
     "primary": "#7aa2f7",
     "secondary": "#a9b1d6",
@@ -68,17 +68,17 @@ save and add to file `~/.config/opencode/themes/asmun.json`:
     "diffHunkHeader": "#737aa2",
     "diffHighlightAdded": "#73daca",
     "diffHighlightRemoved": "#db4b4b",
-    "diffAddedBg": "#243e4a",
-    "diffRemovedBg": "#4a272f",
+    "diffAddedBg": "#1f3a40",
+    "diffRemovedBg": "#3d2028",
     "diffContextBg": "#16161e",
     "diffLineNumber": "#3b4261",
     "diffAddedLineNumberBg": "#1f3a40",
     "diffRemovedLineNumberBg": "#3d2028",
-    "markdownText": "#c0caf5",
-    "markdownHeading": "#bb9af7",
-    "markdownLink": "#7aa2f7",
+    "markdownText": "#9aa5ce",
+    "markdownHeading": "#7dcfff",
+    "markdownLink": "#73daca",
     "markdownLinkText": "#7dcfff",
-    "markdownCode": "#9ece6a",
+    "markdownCode": "#7dcfff",
     "markdownBlockQuote": "#e0af68",
     "markdownEmph": "#7dcfff",
     "markdownStrong": "#ff9e64",
@@ -94,10 +94,11 @@ save and add to file `~/.config/opencode/themes/asmun.json`:
     "syntaxVariable": "#c0caf5",
     "syntaxString": "#9ece6a",
     "syntaxNumber": "#ff9e64",
-    "syntaxType": "#7dcfff",
-    "syntaxOperator": "#89ddff",
+    "syntaxType": "#2ac3de",
+    "syntaxOperator": "#bb9af7",
     "syntaxPunctuation": "#a9b1d6"
   }
+}
 ```
 
 Save
