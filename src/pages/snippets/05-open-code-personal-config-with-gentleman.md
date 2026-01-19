@@ -98,6 +98,7 @@ save and add to file `~/.config/opencode/themes/asmun.json`:
     "syntaxOperator": "#89ddff",
     "syntaxPunctuation": "#a9b1d6"
   }
+```
 
 Save
 
