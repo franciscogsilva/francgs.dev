@@ -6,11 +6,9 @@ pubDate: 2024-08-05
 image:
   url: 'https://media.licdn.com/dms/image/C4E12AQHDbBKr_r-3JA/article-cover_image-shrink_720_1280/0/1550832537671?e=1728518400&v=beta&t=aaM_kWJWmlkFNz0lJ0RwHL0QMESiYBf2itDG7HkBa2I'
   alt: 'Agile Estimation Concept.'
-tags: ["Story Points", "Agile", "Estimation", "Software Development", "Planning"]
+tags: ["agile", "software-engineering"]
 layout: ./../../layouts/MarkdownPostLayout.astro
 ---
-
-# Understanding Story Points AGILE Estimation
 
 ## Introduction
 

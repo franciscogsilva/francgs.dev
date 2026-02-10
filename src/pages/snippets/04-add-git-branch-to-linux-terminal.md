@@ -6,11 +6,9 @@
   image:
     url: 'https://assets.francgs.dev/add-git-branch-to-linux-terminal.jpg'
     alt: 'Add git branch to linux terminal'
-  tags: ["bash", "git",  "terminal"]
+  tags: ["git", "terminal", "linux"]
   layout: ./../../layouts/MarkdownPostLayout.astro
 ---
-
-# Git branch config to terminal
 
 Add this to your `.bashrc` or `.zshrc` file:
 

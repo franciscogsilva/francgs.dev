@@ -1,12 +1,12 @@
 ---
   title: "How to setup multiple GIT accounts with SSH"
   author: 'Francisco Gonzalez'
-  description: 'A complete guide for multiples git accounts'
+  description: "Complete guide to configure and manage multiple Git accounts with SSH keys on a single machine"
   pubDate: 2024-02-05
   image:
     url: 'https://docs.astro.build/assets/full-logo-light.png'
     alt: 'The full Astro logo.'
-  tags: ["git", 'ssh']
+  tags: ["git", "security", "devops"]
   layout: ./../../layouts/MarkdownPostLayout.astro
 ---
 

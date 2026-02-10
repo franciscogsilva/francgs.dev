@@ -1,12 +1,12 @@
 ---
   title: "Limiting Google Maps Autocomplete API Results to a Specific Area"
   author: 'Francisco Gonzalez'
-  description: 'A javascript guide'
+  description: 'How to limit Google Maps Autocomplete API results to a specific geographic area with JavaScript'
   pubDate: 2024-02-05
   image:
     url: 'https://docs.astro.build/assets/full-logo-light.png'
     alt: 'The full Astro logo.'
-  tags: ["javascript", 'google-maps']
+  tags: ["javascript", "web-development"]
   layout: ./../../layouts/MarkdownPostLayout.astro
 ---
 

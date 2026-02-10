@@ -22,8 +22,6 @@ export async function getStaticPaths() {
     ...new Set(allPosts.map((post: any) => post.frontmatter.tags).flat()),
   ];
 
-  console.log(tags);
-
   return tags.map((tag: string) => {
     const filteredPosts: MarkdownInstance<Record<string, any>>[] =
       allPosts.filter((post: any) => post.frontmatter.tags.includes(tag));
@@ -37,7 +35,7 @@ export async function getStaticPaths() {
 const { tag } = Astro.params;
 const { posts } = Astro.props as Record<string, any>;
 
-const description = "";
+const description = `Articles tagged with "${tag}" — tutorials, guides, and insights from Francisco Gonzalez.`;
 ---
 
 <BaseLayout title=`Tag - ${tag}` description={description}>

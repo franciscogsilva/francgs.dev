@@ -14,6 +14,7 @@ interface Props {
   description: string;
   image?: string;
   articleDate?: string;
+  updatedDate?: string;
   lang?: string;
   isLinks?: boolean;
 }
@@ -23,6 +24,7 @@ const {
   description,
   image,
   articleDate,
+  updatedDate,
   lang = "en",
   isLinks,
 } = Astro.props;
@@ -35,8 +37,9 @@ const {
       description={description}
       image={image}
       articleDate={articleDate}
+      updatedDate={updatedDate}
+      lang={lang}
     />
-    <meta name="referrer" content="no-referrer-when-downgrade" />
     <script
       is:inline
       async
@@ -44,9 +47,7 @@ const {
       data-website-id="f2869995-c81f-476f-85d8-ef8516b023d6"></script>
     <ClientRouter />
   </head>
-  <!-- #1A1B26 -->
   <body class="w-full">
-    <!-- dark:bg-gray-950 -->
     <Background>
       <section
         class=`${!isLinks ? "main-section" : "links-main-section"} dark:text-white mx-auto max-w-3xl px-4 sm:px-6 xl:max-w-5xl xl:px-0`

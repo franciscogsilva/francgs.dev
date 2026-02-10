@@ -6,11 +6,9 @@
   image:
     url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/Tux.svg/200px-Tux.svg.png'
     alt: 'Linux Tux logo.'
-  tags: ["audio", 'ubuntu', 'linux', 'desktop environments']
+  tags: ["linux", "terminal"]
   layout: ./../../layouts/MarkdownPostLayout.astro
 ---
-
-# Setting Default Audio Device at Session Start in Ubuntu 22.04
 
 ## Introduction
 

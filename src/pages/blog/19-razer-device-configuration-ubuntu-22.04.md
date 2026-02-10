@@ -6,11 +6,9 @@
   image:
     url: 'https://linuxiac.b-cdn.net/wp-content/uploads/2021/08/openrazer.png'
     alt: 'Linux Tux logo.'
-  tags: ["Razer", "Ubuntu", "Linux", "Configuration", "Gaming"]
+  tags: ["linux", "developer-tools"]
   layout: ./../../layouts/MarkdownPostLayout.astro
 ---
-
-# How to Configure Razer Devices on Ubuntu 22.04
 
 ## Introduction
 

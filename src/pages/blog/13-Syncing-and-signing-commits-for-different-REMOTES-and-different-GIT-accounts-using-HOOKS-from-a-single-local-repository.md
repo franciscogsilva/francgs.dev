@@ -1,12 +1,12 @@
 ---
   title: "Syncing and signing commits for different REMOTES and different GIT accounts using HOOKS from a single local repository"
   author: 'Francisco Gonzalez'
-  description: 'A complete guide for signing commits like a pro'
+  description: 'Advanced guide to sync and GPG-sign commits across multiple Git remotes and accounts using hooks from a single repository'
   pubDate: 2024-02-05
   image:
     url: 'https://docs.astro.build/assets/full-logo-light.png'
     alt: 'The full Astro logo.'
-  tags: ["git"]
+  tags: ["git", "security", "devops"]
   layout: ./../../layouts/MarkdownPostLayout.astro
 ---
 

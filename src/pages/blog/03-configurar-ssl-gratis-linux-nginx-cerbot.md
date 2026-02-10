@@ -1,12 +1,12 @@
 ---
   title: Configurar SSL gratis linux nginx cerbot
   author: Francisco González
-  description: "How to add a free SSL to your linux server for each domain"
+  description: "Complete guide to add free SSL certificates to your Linux NGINX server using Certbot for each domain"
   pubDate: 2022-07-15
   image:
     url: "https://docs.astro.build/assets/rays.webp"
     alt: "Thumbnail of Astro rays."
-  tags: ["linux", "nginx", "servers", "cerbot", "ssl"]
+  tags: ["linux", "nginx", "security", "devops"]
   layout: ./../../layouts/MarkdownPostLayout.astro
 ---
 <!-- # Configurar SSL gratis linux nginx cerbot -->

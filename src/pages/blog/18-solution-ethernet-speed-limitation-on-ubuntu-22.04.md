@@ -5,12 +5,10 @@
   pubDate: 2024-07-13
   image:
     url: 'https://www.lifewire.com/thmb/DJFkg9M0762ac_LclJbNT3Y5K8E=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/how-fast-is-ethernet-817549-5b14c980aebb4891a54c1ed6cd9aacea.png'
-    alt: 'Linux Tux logo.'
-  tags: ["networking", "ubuntu", "linux", "troubleshooting"]
+    alt: 'Ethernet speed comparison diagram'
+  tags: ["linux", "networking", "troubleshooting"]
   layout: ./../../layouts/MarkdownPostLayout.astro
 ---
-
-# Solution to Ethernet Speed Limitation in Ubuntu 22.04
 
 ## Problem
 

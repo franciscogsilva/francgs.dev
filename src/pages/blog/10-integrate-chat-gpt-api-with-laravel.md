@@ -1,12 +1,12 @@
 ---
   title: "How to integrate Chat GPT API with Laravel"
   author: 'Francisco Gonzalez'
-  description: 'Complete guide for consume OpenAI api in Laravel'
+  description: "Step-by-step guide to integrate OpenAI ChatGPT API into a Laravel application with practical examples"
   pubDate: 2024-02-05
   image:
     url: 'https://docs.astro.build/assets/full-logo-light.png'
     alt: 'The full Astro logo.'
-  tags: ["laravel", 'openai', 'php']
+  tags: ["laravel", "ai", "php", "web-development"]
   layout: ./../../layouts/MarkdownPostLayout.astro
 ---
 

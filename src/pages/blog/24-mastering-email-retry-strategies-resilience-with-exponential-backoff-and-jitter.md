@@ -6,11 +6,9 @@ pubDate: 2026-01-27
 image:
   url: "https://images.unsplash.com/photo-1563986768609-322da13575f3?q=80&w=1470&auto=format&fit=crop"
   alt: "Digital communication and network reliability concepts"
-tags: ["Email Deliverability", "System Design", "Exponential Backoff", "Backend Engineering", "Cloud Architecture"]
+tags: ["system-design", "web-development", "devops"]
 layout: ./../../layouts/MarkdownPostLayout.astro
 ---
-
-# Mastering Email Retry Strategies: Resilience with Exponential Backoff and Jitter
 
 In the 2026 technical ecosystem, sending an email is no longer a "fire and forget" operation. With AI-driven spam filters and ultra-strict IP reputation policies from major providers, a burst of failed attempts can blacklist your domain in seconds.
 

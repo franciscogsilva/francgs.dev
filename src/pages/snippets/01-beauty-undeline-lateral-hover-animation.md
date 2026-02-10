@@ -6,7 +6,7 @@
   image:
     url: 'https://docs.astro.build/assets/full-logo-light.png'
     alt: 'The full Astro logo.'
-  tags: ["css", "resource"]
+  tags: ["css", "web-development"]
   layout: ./../../layouts/MarkdownPostLayout.astro
 ---
 

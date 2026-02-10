@@ -43,6 +43,7 @@ const nextPost =
   description={frontmatter.description}
   image={frontmatter.image?.url}
   articleDate={frontmatter.pubDate.toString()}
+  updatedDate={frontmatter.updatedDate?.toString()}
 >
   <article class="blog-post">
     <header
@@ -106,6 +107,10 @@ const nextPost =
               class="object-cover md:w-3/4 rounded-lg shadow-lg overflow-hidden my-4 mx-auto"
               alt={frontmatter.image.alt}
               src={frontmatter.image.url}
+              loading="lazy"
+              decoding="async"
+              width="768"
+              height="432"
             />
           </div>
         )

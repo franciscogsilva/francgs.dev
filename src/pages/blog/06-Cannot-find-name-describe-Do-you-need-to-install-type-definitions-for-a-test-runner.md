@@ -6,11 +6,9 @@
   image:
     url: 'https://docs.astro.build/assets/full-logo-light.png'
     alt: 'The full Astro logo.'
-  tags: ["linux", 'issue', 'jest', 'typescript']
+  tags: ["typescript", "nodejs", "troubleshooting"]
   layout: ./../../layouts/MarkdownPostLayout.astro
 ---
-
-# Error with JEST and Typescript: Cannot find name 'describe'. Do you need to install type definitions for a test runner?
 
 El objetivo de este articulo es poder tener un tsconfig.json que no transcriba los test al crear el dist con el build del código, pero que a su vez se tenga cobertura para que reconozca los @types/jest y poder trabajar en desarrollo bien.
 

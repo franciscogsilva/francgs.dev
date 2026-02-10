@@ -1,12 +1,12 @@
 ---
   title: Configurar un nuevo sitio web en NGINX
   author: Francisco González
-  description: "How to configure a new virtual host in your linux NGINX server"
+  description: "Step-by-step guide to configure a new virtual host site on your Linux NGINX server from scratch"
   pubDate: 2022-07-08
   image:
     url: "https://docs.astro.build/assets/arc.webp"
     alt: "Thumbnail of Astro arcs."
-  tags: ["linux", "nginx", "servers"]
+  tags: ["linux", "nginx", "devops"]
   layout: ./../../layouts/MarkdownPostLayout.astro
 ---
 <!-- # Configurar un nuevo sitio web en NGINX -->

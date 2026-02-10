@@ -1,12 +1,12 @@
 ---
   title: "Optimizing Disk Space on Linux and program to run ONE TIME a MONTH"
   author: 'Francisco Gonzalez'
-  description: 'Clean your linux disk with docker environment'
+  description: 'Automate monthly disk cleanup on Linux with Docker environment using cron jobs and system maintenance scripts'
   pubDate: 2024-02-05
   image:
     url: 'https://docs.astro.build/assets/full-logo-light.png'
     alt: 'The full Astro logo.'
-  tags: ["docker", 'linux']
+  tags: ["linux", "docker", "devops"]
   layout: ./../../layouts/MarkdownPostLayout.astro
 ---
 

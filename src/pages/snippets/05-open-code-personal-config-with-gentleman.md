@@ -6,11 +6,9 @@
   image:
     url: 'https://assets.francgs.dev/05-open-code-personal-config-with-gentleman.png'
     alt: 'Personal Open code configuration with gentleman agent'
-  tags: ["gentleman", "open-code", "configuration", "tokyonigth", "ai", "ide", "productivity", "claude", "gemini", "openai"]
+  tags: ["ai", "developer-tools", "productivity"]
   layout: ./../../layouts/MarkdownPostLayout.astro
 ---
-
-# Personal Open code configuration with gentleman agent
 
 Add to file `nano ~/.config/opencode/opencode.json`:
 

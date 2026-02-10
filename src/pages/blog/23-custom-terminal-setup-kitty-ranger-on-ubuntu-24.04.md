@@ -6,19 +6,9 @@ pubDate: 2025-03-24
 image:
   url: "https://assets.francgs.dev/kitty-terminal-ranger-config.jpg"
   alt: "Kitty terminal setup with Ranger and image previews"
-tags:
-  [
-    "Terminal",
-    "linux",
-    "ubuntu",
-    "Shell Scripting",
-    "kitty terminal",
-    "ranger file manager",
-  ]
+tags: ["linux", "terminal", "developer-tools"]
 layout: ./../../layouts/MarkdownPostLayout.astro
 ---
-
-# Custom Terminal Setup - Kitty + Ranger on Ubuntu 24.04
 
 Are you tired of a dull and slow terminal? Want a beautiful, fast, and highly customizable terminal experience? This tutorial walks you through setting up **Kitty** as your terminal emulator and **Ranger** as your file manager, with **image previews**, custom fonts, and the popular **Tokyo Night** theme.
 

@@ -1,12 +1,12 @@
 ---
   title: 'Fix to Key'
   author: 'Francisco Gonzalez'
-  description: 'How to solve error with key in linux.'
+  description: "How to solve GPG key errors and repository authentication issues on Linux systems"
   pubDate: 2024-02-05
   image:
     url: 'https://docs.astro.build/assets/full-logo-light.png'
     alt: 'The full Astro logo.'
-  tags: ["linux", "issue"]
+  tags: ["linux", "troubleshooting"]
   layout: ./../../layouts/MarkdownPostLayout.astro
 ---
 <!-- # FIx to key -->

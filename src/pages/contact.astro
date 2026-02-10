@@ -198,40 +198,41 @@ const description = "Get in touch with Francisco González";
       const btnText = submitBtn.querySelector(".btn-text") as HTMLElement;
       const btnLoader = submitBtn.querySelector(".btn-loader") as HTMLElement;
 
-      // Show loading state
       submitBtn.disabled = true;
       btnText.style.display = "none";
       btnLoader.style.display = "inline";
 
       const formData = new FormData(form);
-      const object = Object.fromEntries(formData);
+      const rawPayload = Object.fromEntries(formData);
 
       try {
-        // 1. Get the key securely from our backend
-        const keyResponse = await fetch("/api/get-key");
-        if (!keyResponse.ok) throw new Error("Failed to get configuration");
-        const { key } = await keyResponse.json();
+        // Step 1: Server-side validation + get access key
+        const validateRes = await fetch("/api/contact", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(rawPayload),
+        });
 
-        // 2. Add key to payload
-        const payload = {
-          ...object,
-          access_key: key,
-        };
-        const json = JSON.stringify(payload);
+        const validateData = await validateRes.json();
 
-        // 3. Submit directly to Web3Forms from client
-        const response = await fetch("https://api.web3forms.com/submit", {
+        if (!validateRes.ok || !validateData.validated) {
+          alert(validateData.error || "Validation failed. Please try again.");
+          return;
+        }
+
+        // Step 2: Submit to Web3Forms from browser (required by their Cloudflare setup)
+        const web3Res = await fetch("https://api.web3forms.com/submit", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Accept: "application/json",
           },
-          body: json,
+          body: JSON.stringify(validateData.payload),
         });
 
-        const data = await response.json();
+        const web3Data = await web3Res.json();
 
-        if (response.status === 200) {
+        if (web3Res.ok && web3Data.success) {
           form.reset();
           if (successMessage) {
             successMessage.style.display = "flex";
@@ -242,11 +243,9 @@ const description = "Get in touch with Francisco González";
             }
           }, 5000);
         } else {
-          console.error("Web3Forms error:", data);
-          alert(data.message || "Something went wrong. Please try again.");
+          alert(web3Data.message || "Something went wrong. Please try again.");
         }
-      } catch (error) {
-        console.error("Submission error:", error);
+      } catch {
         alert("Something went wrong. Please try again.");
       } finally {
         submitBtn.disabled = false;

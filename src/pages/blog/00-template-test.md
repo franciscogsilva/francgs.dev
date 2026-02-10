@@ -6,7 +6,7 @@ pubDate: 2024-11-23
 image:
   url: "https://docs.astro.build/assets/full-logo-light.png"
   alt: "The full Astro logo."
-tags: ["astro", "diseño", "blog", "template", "documentación"]
+tags: ["astro", "css", "documentation"]
 layout: ./../../layouts/MarkdownPostLayout.astro
 ---
 

@@ -6,11 +6,9 @@
   image:
     url: 'https://docs.astro.build/assets/full-logo-light.png'
     alt: 'The full Astro logo.'
-  tags: ["css", "resource"]
+  tags: ["docker", "devops"]
   layout: ./../../layouts/MarkdownPostLayout.astro
 ---
-
-# Full clean docker commands
 
 ## Total clean
 

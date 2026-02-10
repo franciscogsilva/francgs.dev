@@ -6,11 +6,9 @@ pubDate: 2025-03-11
 image:
   url: "https://assets.francgs.dev/22-how-to-create-command-aliases-in-linux-and-macos.jpg"
   alt: "Linux and macOS terminal alias creation"
-tags: ["Linux", "macOS", "Terminal", "Aliases", "Shell Scripting"]
+tags: ["linux", "terminal", "productivity"]
 layout: ./../../layouts/MarkdownPostLayout.astro
 ---
-
-# How to Create Command Aliases in Linux and macOS
 
 Aliases in Unix-based systems like Linux and macOS allow you to create shortcuts for frequently used or complex commands. This tutorial will guide you through creating aliases that execute multiple commands in sequence.
 

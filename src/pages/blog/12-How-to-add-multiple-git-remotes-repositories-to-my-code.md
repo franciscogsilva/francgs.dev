@@ -1,12 +1,12 @@
 ---
   title: "How to add MULTIPLE GIT remotes repositories to my CODE"
   author: 'Francisco Gonzalez'
-  description: 'A complete guide for multiples git remotes'
+  description: "Step-by-step guide to add and manage multiple Git remote repositories for syncing code across platforms"
   pubDate: 2024-02-05
   image:
     url: 'https://docs.astro.build/assets/full-logo-light.png'
     alt: 'The full Astro logo.'
-  tags: ["git"]
+  tags: ["git", "devops"]
   layout: ./../../layouts/MarkdownPostLayout.astro
 ---
 

@@ -6,18 +6,9 @@ pubDate: 2025-03-03
 image:
   url: "https://assets.francgs.dev/1731997744170-Cursor%20AI-min.png"
   alt: "Cursor AI IDE banner"
-tags:
-  [
-    "Cursor AI IDE",
-    "Ubuntu",
-    "AI-First Code Editor",
-    "Development Tools",
-    "linux",
-  ]
+tags: ["linux", "ai", "developer-tools"]
 layout: ./../../layouts/MarkdownPostLayout.astro
 ---
-
-# Complete Guide to Install Cursor AI IDE on Ubuntu 24.04
 
 ## Introduction
 

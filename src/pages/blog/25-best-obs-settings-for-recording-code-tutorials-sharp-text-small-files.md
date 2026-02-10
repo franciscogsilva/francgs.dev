@@ -6,11 +6,9 @@ pubDate: 2026-02-10
 image:
   url: "https://assets.francgs.dev/25-best-obs-settings-for-recording-code-tutorials-sharp-text-small-files.png"
   alt: "Screen recording setup for programming tutorials with code editor"
-tags: ["OBS Studio", "Screen Recording", "Video Production", "Developer Tools", "Content Creation"]
+tags: ["developer-tools", "productivity"]
 layout: ./../../layouts/MarkdownPostLayout.astro
 ---
-
-# Best OBS Settings for Recording Code Tutorials: Sharp Text, Small Files
 
 If you've ever recorded a coding tutorial and the final video turned your beautiful syntax highlighting into a blurry mess, or if the file ended up being a 50GB monster for a 30-minute screencast, you're not alone. The default OBS settings are optimized for gaming, not for sharp, static text.
 
