@@ -1,18 +1,20 @@
-import rss, { pagesGlobToRssItems } from "@astrojs/rss";
+import rss from "@astrojs/rss";
+import { getCollection } from "astro:content";
 
 export async function GET(context) {
-  // Obtener los items del blog
-  const items = await pagesGlobToRssItems(import.meta.glob("./blog/*.md"));
-
-  // Ordenar los posts del más nuevo al más antiguo
-  items.sort(
-    (a, b) => new Date(b.pubDate).getTime() - new Date(a.pubDate).getTime()
-  );
+  const posts = (
+    await getCollection("blog", ({ data }) => !data.draft)
+  ).sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
 
   return rss({
     title: "Francisco Gonzalez | Blog",
     description: "My journey about tech",
     site: context.site,
-    items,
+    items: posts.map((post) => ({
+      title: post.data.title,
+      description: post.data.description,
+      pubDate: post.data.pubDate,
+      link: `/blog/${post.id}/`,
+    })),
   });
 }

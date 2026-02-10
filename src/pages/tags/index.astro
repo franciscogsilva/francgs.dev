@@ -1,18 +1,19 @@
 ---
-import type { MarkdownInstance } from "astro";
+import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export const prerender = true;
 
 const title = "Tags";
 
-const allPosts = Object.values(
-  import.meta.glob<MarkdownInstance<any>>("../blog/*.md", { eager: true }),
-);
+const allPosts = await getCollection("blog", ({ data }) => !data.draft);
 
 const uniqueTags = [
-  ...new Set(allPosts.map((post) => post.frontmatter.tags).flat()),
-];
+  ...new Set(allPosts.map((post) => post.data.tags).flat()),
+].sort();
 
-const description = "Browse all topics and categories: Linux, DevOps, TypeScript, system design, Git, and more from Francisco Gonzalez's tech blog.";
+const description =
+  "Browse all topics and categories: Linux, DevOps, TypeScript, system design, Git, and more from Francisco Gonzalez's tech blog.";
 ---
 
 <BaseLayout title={title} description={description}>
@@ -32,7 +33,7 @@ const description = "Browse all topics and categories: Linux, DevOps, TypeScript
       {
         uniqueTags.map((tag) => {
           const count = allPosts.filter((post) =>
-            post.frontmatter.tags?.includes(tag),
+            post.data.tags?.includes(tag)
           ).length;
           return (
             <a
