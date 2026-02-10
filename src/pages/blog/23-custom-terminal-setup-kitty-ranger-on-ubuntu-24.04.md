@@ -4,7 +4,7 @@ author: "Francisco Gonzalez"
 description: "Learn how to create a fast and aesthetic terminal using Kitty, Ranger and image previews with JetBrains Mono font and Tokyo Night theme on Ubuntu 24.04"
 pubDate: 2025-03-24
 image:
-  url: "https://pub-e67c19bba5c64333a98782860493cce5.r2.dev/kitty-terminal-ranger-config.jpg"
+  url: "https://assets.francgs.dev/kitty-terminal-ranger-config.jpg"
   alt: "Kitty terminal setup with Ranger and image previews"
 tags:
   [

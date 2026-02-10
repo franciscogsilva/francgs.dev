@@ -4,7 +4,7 @@
   description: 'Add git branch to linux terminal.'
   pubDate: 2025-03-25
   image:
-    url: 'https://pub-e67c19bba5c64333a98782860493cce5.r2.dev/add-git-branch-to-linux-terminal.jpg'
+    url: 'https://assets.francgs.dev/add-git-branch-to-linux-terminal.jpg'
     alt: 'Add git branch to linux terminal'
   tags: ["bash", "git",  "terminal"]
   layout: ./../../layouts/MarkdownPostLayout.astro
