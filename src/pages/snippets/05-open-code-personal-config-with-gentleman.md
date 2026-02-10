@@ -4,7 +4,7 @@
   description: 'Personal Open code configuration with gentleman agent.'
   pubDate: 2026-01-19
   image:
-    url: 'https://pub-e67c19bba5c64333a98782860493cce5.r2.dev/05-open-code-personal-config-with-gentleman.png'
+    url: 'https://assets.francgs.dev/05-open-code-personal-config-with-gentleman.png'
     alt: 'Personal Open code configuration with gentleman agent'
   tags: ["gentleman", "open-code", "configuration", "tokyonigth", "ai", "ide", "productivity", "claude", "gemini", "openai"]
   layout: ./../../layouts/MarkdownPostLayout.astro

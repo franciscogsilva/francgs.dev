@@ -4,7 +4,7 @@ author: "Francisco Gonzalez"
 description: "Learn how to create aliases in Linux and macOS to run multiple commands with a single shortcut."
 pubDate: 2025-03-11
 image:
-  url: "https://pub-e67c19bba5c64333a98782860493cce5.r2.dev/22-how-to-create-command-aliases-in-linux-and-macos.jpg"
+  url: "https://assets.francgs.dev/22-how-to-create-command-aliases-in-linux-and-macos.jpg"
   alt: "Linux and macOS terminal alias creation"
 tags: ["Linux", "macOS", "Terminal", "Aliases", "Shell Scripting"]
 layout: ./../../layouts/MarkdownPostLayout.astro

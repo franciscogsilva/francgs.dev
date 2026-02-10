@@ -4,7 +4,7 @@ author: "Francisco Gonzalez"
 description: "Learn the optimal OBS Studio settings to record crystal-clear code tutorials with sharp text and small file sizes using CQP/CRF rate control, proper resolution, and color settings."
 pubDate: 2026-02-10
 image:
-  url: "https://francgs.dev/25-best-obs-settings-for-recording-code-tutorials-sharp-text-small-files.png"
+  url: "https://assets.francgs.dev/25-best-obs-settings-for-recording-code-tutorials-sharp-text-small-files.png"
   alt: "Screen recording setup for programming tutorials with code editor"
 tags: ["OBS Studio", "Screen Recording", "Video Production", "Developer Tools", "Content Creation"]
 layout: ./../../layouts/MarkdownPostLayout.astro

@@ -4,7 +4,7 @@ author: "Francisco Gonzalez"
 description: "Learn how to install and configure Cursor AI IDE on Linux - Ubuntu 24.04, an AI-powered first code editor, to improve your development productivity."
 pubDate: 2025-03-03
 image:
-  url: "https://pub-e67c19bba5c64333a98782860493cce5.r2.dev/1731997744170-Cursor%20AI-min.png"
+  url: "https://assets.francgs.dev/1731997744170-Cursor%20AI-min.png"
   alt: "Cursor AI IDE banner"
 tags:
   [
@@ -130,7 +130,7 @@ set -euo pipefail
 APPIMAGE_PATH="/opt/cursor.appimage"
 ICON_PATH="/opt/cursor.png"
 DESKTOP_ENTRY_PATH="/usr/share/applications/cursor.desktop"
-ICON_URL="https://pub-e67c19bba5c64333a98782860493cce5.r2.dev/cursor.png"
+ICON_URL="https://assets.francgs.dev/cursor.png"
 API_URL="https://www.cursor.com/api/download?platform=linux-x64&releaseTrack=stable"
 
 # =======================================
