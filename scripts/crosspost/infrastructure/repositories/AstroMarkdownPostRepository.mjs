@@ -32,7 +32,7 @@ export class AstroMarkdownPostRepository {
     this.siteUrl = siteUrl.endsWith("/") ? siteUrl.slice(0, -1) : siteUrl;
   }
 
-  async listPublishedPosts({ all = false, changedFiles = [] } = {}) {
+  async listPublishedPosts({ all = false, changedFiles = [], langFilter = [] } = {}) {
     const files = await readdir(this.contentDir);
     const markdownFiles = files.filter((f) => f.endsWith(".md"));
 
@@ -70,8 +70,14 @@ export class AstroMarkdownPostRepository {
       const description = readField(frontmatter, "description") ?? "";
       const pubDate = readField(frontmatter, "pubDate") ?? "1970-01-01";
       const tags = parseInlineArray(readField(frontmatter, "tags") ?? "[]");
+      const lang = readField(frontmatter, "lang") ?? "en";
+
+      if (langFilter.length > 0 && !langFilter.includes(lang)) {
+        continue;
+      }
+
       const slug = normalizeSlug(filename);
-      const canonicalUrl = `${this.siteUrl}/blog/${slug}/`;
+      const canonicalUrl = `${this.siteUrl}/${lang}/blog/${slug}/`;
 
       posts.push(
         new BlogPost({
@@ -82,6 +88,7 @@ export class AstroMarkdownPostRepository {
           pubDate,
           canonicalUrl,
           body,
+          lang,
         })
       );
     }

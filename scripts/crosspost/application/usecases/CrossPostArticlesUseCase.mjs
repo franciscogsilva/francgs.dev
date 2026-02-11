@@ -6,10 +6,24 @@ export class CrossPostArticlesUseCase {
     this.logger = logger;
   }
 
-  async execute({ all = false, dryRun = false, changedFiles = [] }) {
-    const posts = await this.postRepository.listPublishedPosts({ all, changedFiles });
+  async execute({
+    all = false,
+    dryRun = false,
+    changedFiles = [],
+    langFilter = [],
+    maxPosts,
+  }) {
+    const allMatchedPosts = await this.postRepository.listPublishedPosts({
+      all,
+      changedFiles,
+      langFilter,
+    });
+    const posts = Number.isFinite(maxPosts) && maxPosts > 0
+      ? allMatchedPosts.slice(0, maxPosts)
+      : allMatchedPosts;
     const summary = {
       totalPosts: posts.length,
+      matchedPosts: allMatchedPosts.length,
       published: 0,
       skipped: 0,
       failed: 0,

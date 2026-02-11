@@ -1,5 +1,5 @@
 export class BlogPost {
-  constructor({ slug, title, description, tags, pubDate, canonicalUrl, body }) {
+  constructor({ slug, title, description, tags, pubDate, canonicalUrl, body, lang }) {
     this.slug = slug;
     this.title = title;
     this.description = description;
@@ -7,6 +7,7 @@ export class BlogPost {
     this.pubDate = pubDate;
     this.canonicalUrl = canonicalUrl;
     this.body = body;
+    this.lang = lang;
   }
 
   toMarkdown() {
