@@ -2,12 +2,9 @@
 export const prerender = false;
 
 const cookieLang = Astro.cookies.get("site_lang")?.value;
-const preferredLang =
-  cookieLang === "es" || cookieLang === "en"
-    ? cookieLang
-    : Astro.request.headers.get("accept-language")?.toLowerCase().includes("es")
-      ? "es"
-      : "en";
+if (cookieLang === "es") {
+  return Astro.redirect("/es/blog/", 302);
+}
 
-return Astro.redirect(`/${preferredLang}/blog/`, 302);
+return Astro.redirect("/en/blog/", 302);
 ---

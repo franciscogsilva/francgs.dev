@@ -161,6 +161,12 @@ jobs:
           MEDIUM_TOKEN: ${{ secrets.MEDIUM_TOKEN }}
           SITE_URL: https://francgs.dev
           CROSSPOST_STATE_PATH: .crosspost/state-${{ matrix.platform }}.json
+          CROSSPOST_LANGS: en
+          CROSSPOST_PRIORITY_SLUGS: 50-refactor-real-blog-bilingue-rutas-hreflang-y-seo-consistente-en,49-como-construimos-un-sistema-de-sincronizacion-automatizada-devto-medium-en
           CROSSPOST_DEVTO_PUBLISHED: "true"
+          CROSSPOST_DEVTO_MAX_RETRIES: "6"
+          CROSSPOST_DEVTO_MIN_INTERVAL_MS: "5000"
+          CROSSPOST_MAX_POSTS: "1"
           CROSSPOST_MEDIUM_STATUS: "public"
+          CROSSPOST_FAIL_ON_ERROR: "false"
         run: pnpm run crosspost -- --all --platform=${{ matrix.platform }}

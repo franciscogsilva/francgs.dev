@@ -27,12 +27,26 @@ const siteUrl = process.env.SITE_URL || "https://francgs.dev";
 const contentDir = process.env.CROSSPOST_CONTENT_DIR || "src/data/blog";
 const statePath = process.env.CROSSPOST_STATE_PATH || ".crosspost/state.json";
 const devToPublish = (process.env.CROSSPOST_DEVTO_PUBLISHED || "true") === "true";
+const devToMaxRetries = Number(process.env.CROSSPOST_DEVTO_MAX_RETRIES || "4");
+const devToMinIntervalMs = Number(process.env.CROSSPOST_DEVTO_MIN_INTERVAL_MS || "3500");
 const mediumStatus = process.env.CROSSPOST_MEDIUM_STATUS || "public";
+const failOnError = (process.env.CROSSPOST_FAIL_ON_ERROR || "false") === "true";
+const maxPosts = Number(process.env.CROSSPOST_MAX_POSTS || "0");
+const langFilter = (process.env.CROSSPOST_LANGS || "en")
+  .split(",")
+  .map((value) => value.trim())
+  .filter(Boolean);
+const prioritySlugs = (process.env.CROSSPOST_PRIORITY_SLUGS || "")
+  .split(",")
+  .map((value) => value.trim())
+  .filter(Boolean);
 
 const availablePublishers = {
   devto: new DevToPublisher({
     apiKey: process.env.DEVTO_API_KEY,
     publish: devToPublish,
+    maxRetries: devToMaxRetries,
+    minIntervalMs: devToMinIntervalMs,
   }),
   medium: new MediumPublisher({
     token: process.env.MEDIUM_TOKEN,
@@ -68,20 +82,31 @@ const main = async () => {
   console.log(`- dryRun: ${dryRun}`);
   console.log(`- platforms: ${selectedPlatforms.join(", ")}`);
   console.log(`- changedFiles: ${changedFiles.length}`);
+  console.log(`- langFilter: ${langFilter.join(", ")}`);
+  if (maxPosts > 0) {
+    console.log(`- maxPosts: ${maxPosts}`);
+  }
+  if (prioritySlugs.length > 0) {
+    console.log(`- prioritySlugs: ${prioritySlugs.join(", ")}`);
+  }
 
   const summary = await useCase.execute({
     all,
     dryRun,
     changedFiles,
+    langFilter,
+    maxPosts,
+    prioritySlugs,
   });
 
   console.log("\nCross-post summary:");
+  console.log(`- matchedPosts: ${summary.matchedPosts}`);
   console.log(`- totalPosts: ${summary.totalPosts}`);
   console.log(`- published: ${summary.published}`);
   console.log(`- skipped: ${summary.skipped}`);
   console.log(`- failed: ${summary.failed}`);
 
-  if (summary.failed > 0) {
+  if (summary.failed > 0 && failOnError) {
     process.exitCode = 1;
   }
 };

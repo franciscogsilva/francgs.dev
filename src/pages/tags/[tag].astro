@@ -7,12 +7,9 @@ if (!tag) {
 }
 
 const cookieLang = Astro.cookies.get("site_lang")?.value;
-const preferredLang =
-  cookieLang === "es" || cookieLang === "en"
-    ? cookieLang
-    : Astro.request.headers.get("accept-language")?.toLowerCase().includes("es")
-      ? "es"
-      : "en";
+if (cookieLang === "es") {
+  return Astro.redirect(`/es/tags/${tag}/`, 302);
+}
 
-return Astro.redirect(`/${preferredLang}/tags/${tag}/`, 302);
+return Astro.redirect(`/en/tags/${tag}/`, 302);
 ---

@@ -1,0 +1,70 @@
+name: Crosspost Dry Run
+
+on:
+  workflow_dispatch:
+    inputs:
+      platform:
+        description: "Platform to test"
+        required: true
+        default: "devto"
+        type: choice
+        options:
+          - devto
+          - medium
+          - both
+      langs:
+        description: "Comma-separated languages (example: en or en,es)"
+        required: false
+        default: "en"
+      max_posts:
+        description: "Max posts to simulate"
+        required: false
+        default: "3"
+
+jobs:
+  dryrun:
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: ${{ inputs.platform == 'both' && fromJSON('["devto","medium"]') || fromJSON(format('["{0}"]', inputs.platform)) }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Restore crosspost state cache
+        uses: actions/cache@v4
+        with:
+          path: .crosspost/state-${{ matrix.platform }}.json
+          key: crosspost-state-${{ matrix.platform }}-${{ github.run_id }}
+          restore-keys: |
+            crosspost-state-${{ matrix.platform }}-
+
+      - name: Simulate crosspost publication
+        continue-on-error: true
+        env:
+          DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
+          MEDIUM_TOKEN: ${{ secrets.MEDIUM_TOKEN }}
+          SITE_URL: https://francgs.dev
+          CROSSPOST_STATE_PATH: .crosspost/state-${{ matrix.platform }}.json
+          CROSSPOST_LANGS: ${{ inputs.langs }}
+          CROSSPOST_MAX_POSTS: ${{ inputs.max_posts }}
+          CROSSPOST_DEVTO_MAX_RETRIES: "6"
+          CROSSPOST_DEVTO_MIN_INTERVAL_MS: "5000"
+          CROSSPOST_FAIL_ON_ERROR: "false"
+        run: pnpm run crosspost -- --all --platform=${{ matrix.platform }} --dry-run

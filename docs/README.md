@@ -12,6 +12,9 @@ Documentación técnica del proyecto organizada por dominios.
   - contratos, flujos, CI/CD y troubleshooting
 - `docs/engineering/medium-rss-syndication.md`
   - estrategia de publicacion en Medium usando RSS (sin API)
+- `docs/engineering/crosspost-migration-dummies.md`
+  - guia paso a paso (simple) para migracion automatica en cola
+  - incluye workflow dedicado de dry-run para validar sin publicar
 
 ## SEO
 
