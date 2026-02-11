@@ -2,7 +2,7 @@
 title: "PRD + RULES + SKILLS + MCP: contexto compartido para que la IA sirva de verdad"
 author: "Francisco Gonzalez"
 description: "Estrategia practica para equipos que usan LLMs con sesiones que se reinician: PRD compartido, RULES versionables, SKILLS por rol y MCP para un flujo robusto."
-pubDate: 2026-02-02
+pubDate: 2026-02-01
 tags: ["ai", "developer-tools", "software-engineering"]
 category: ai
 translationKey: post-35

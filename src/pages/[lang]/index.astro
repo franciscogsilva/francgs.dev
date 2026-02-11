@@ -3,6 +3,7 @@ import { getCollection } from "astro:content";
 import PostCard from "../../components/PostCard.astro";
 import data from "../../data/site.json";
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import { sortPostsByPubDateDesc } from "../../utils/sortPosts";
 
 export const prerender = true;
 const POSTS_PER_PAGE = 20;
@@ -16,10 +17,9 @@ export async function getStaticPaths() {
 
 const { lang } = Astro.props as { lang: "en" | "es" };
 
-const allPosts = (await getCollection(
-  "blog",
-  ({ data }) => !data.draft && data.lang === lang
-)).sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+const allPosts = sortPostsByPubDateDesc(
+  await getCollection("blog", ({ data }) => !data.draft && data.lang === lang)
+);
 
 const currentPage = 1;
 const totalPages = Math.max(1, Math.ceil(allPosts.length / POSTS_PER_PAGE));
@@ -90,6 +90,7 @@ const copy =
           title={post.data.title}
           tags={post.data.tags}
           description={post.data.description}
+          hideDate={post.data.pubDate.getTime() > Date.now()}
         />
       ))
     }

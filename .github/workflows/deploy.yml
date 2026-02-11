@@ -6,7 +6,8 @@ on:
       - main
 
 jobs:
-  deploy:
+  build:
+    name: Build
     runs-on: ubuntu-latest
 
     steps:
@@ -32,6 +33,28 @@ jobs:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
         run: pnpm run build
+
+      - name: Upload deploy artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: deploy-artifact
+          path: |
+            dist
+            package.json
+            pnpm-lock.yaml
+          retention-days: 1
+
+  deploy_sync:
+    name: Deploy Sync
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download deploy artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: deploy-artifact
+          path: .
 
       - name: Configure SSH
         run: |
@@ -75,6 +98,26 @@ jobs:
           WEB3FORMS_ACCESS_KEY=${{ secrets.WEB3FORMS_ACCESS_KEY }}
           SITE_URL=https://francgs.dev
           ENVFILE"
+
+  deploy_runtime:
+    name: Deploy Runtime
+    needs: deploy_sync
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Configure SSH
+        run: |
+          mkdir -p ~/.ssh
+          touch ~/.ssh/known_hosts
+          echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          eval $(ssh-agent -s)
+          ssh-keyscan -t ed25519 ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+          ssh-add ~/.ssh/deploy_key
+          echo "Host ${{ secrets.SERVER_HOST }}
+            StrictHostKeyChecking no
+            IdentityFile ~/.ssh/deploy_key
+            IdentitiesOnly yes" > ~/.ssh/config
 
       - name: Validate remote runtime
         env:
@@ -188,8 +231,8 @@ jobs:
 
   crosspost-missing-only:
     name: Crosspost Missing Only (${{ matrix.platform }})
-    needs: deploy
-    if: ${{ needs.deploy.result == 'success' }}
+    needs: deploy_runtime
+    if: ${{ needs.deploy_runtime.result == 'success' }}
     runs-on: ubuntu-latest
     continue-on-error: true
     strategy:
