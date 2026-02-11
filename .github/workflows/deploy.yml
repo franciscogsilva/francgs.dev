@@ -50,14 +50,14 @@ jobs:
       - name: Test SSH Connection
         run: ssh -v ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} 'echo "SSH Connection Successful"'
 
-      - name: Deploy to VPS
+      - name: Sync dist to VPS
         run: |
-          # Copy dist folder
           rsync -avz --delete \
             -e "ssh -i ~/.ssh/deploy_key" \
             dist/ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:${{ secrets.DEPLOY_PATH }}/dist/
 
-          # Copy package.json and pnpm-lock.yaml for dependencies
+      - name: Sync manifest files to VPS
+        run: |
           rsync -avz \
             -e "ssh -i ~/.ssh/deploy_key" \
             package.json pnpm-lock.yaml \
@@ -76,7 +76,7 @@ jobs:
           SITE_URL=https://francgs.dev
           ENVFILE"
 
-      - name: Install dependencies and restart server
+      - name: Validate remote runtime
         env:
           DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
@@ -93,28 +93,96 @@ jobs:
             echo "Error: Node.js is not installed or not in PATH"
             exit 1
           fi
+          EOF
+
+      - name: Ensure pnpm on VPS
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+          export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+          [ -s "$HOME/.nvm/nvm.sh" ] && . "$HOME/.nvm/nvm.sh"
+          [ -s "$HOME/.profile" ] && . "$HOME/.profile"
+          [ -s "$HOME/.bashrc" ] && . "$HOME/.bashrc"
 
           if ! command -v pnpm &> /dev/null; then
             echo "Installing pnpm..."
             npm install -g pnpm
           fi
+          EOF
+
+      - name: Install production dependencies on VPS
+        env:
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+          export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+          [ -s "$HOME/.nvm/nvm.sh" ] && . "$HOME/.nvm/nvm.sh"
+          [ -s "$HOME/.profile" ] && . "$HOME/.profile"
+          [ -s "$HOME/.bashrc" ] && . "$HOME/.bashrc"
+
+          cd ${{ secrets.DEPLOY_PATH }}
 
           pnpm install --prod --frozen-lockfile
+          EOF
+
+      - name: Ensure PM2 on VPS
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+          export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+          [ -s "$HOME/.nvm/nvm.sh" ] && . "$HOME/.nvm/nvm.sh"
+          [ -s "$HOME/.profile" ] && . "$HOME/.profile"
+          [ -s "$HOME/.bashrc" ] && . "$HOME/.bashrc"
 
           if ! command -v pm2 &> /dev/null; then
             echo "Installing PM2..."
             npm install -g pm2
           fi
+          EOF
+
+      - name: Restart PM2 app
+        env:
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+          export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+          [ -s "$HOME/.nvm/nvm.sh" ] && . "$HOME/.nvm/nvm.sh"
+          [ -s "$HOME/.profile" ] && . "$HOME/.profile"
+          [ -s "$HOME/.bashrc" ] && . "$HOME/.bashrc"
+
+          cd ${{ secrets.DEPLOY_PATH }}
 
           pm2 delete francgs-dev || true
 
-          # Start with explicit env vars for HOST and PORT
           HOST=0.0.0.0 PORT=3000 pm2 start dist/server/entry.mjs \
             --name francgs-dev \
             --node-args="--env-file=.env" \
             --update-env
+          EOF
+
+      - name: Persist PM2 process list
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+          export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+          [ -s "$HOME/.nvm/nvm.sh" ] && . "$HOME/.nvm/nvm.sh"
+          [ -s "$HOME/.profile" ] && . "$HOME/.profile"
+          [ -s "$HOME/.bashrc" ] && . "$HOME/.bashrc"
 
           pm2 save
+          EOF
+
+      - name: Check PM2 status
+        run: |
+          ssh -i ~/.ssh/deploy_key \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+          export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+          [ -s "$HOME/.nvm/nvm.sh" ] && . "$HOME/.nvm/nvm.sh"
+          [ -s "$HOME/.profile" ] && . "$HOME/.profile"
+          [ -s "$HOME/.bashrc" ] && . "$HOME/.bashrc"
+
           pm2 status
           EOF
 
