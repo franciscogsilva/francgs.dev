@@ -159,6 +159,29 @@ Este workflow:
 - Si persiste, subir intervalo:
   - `CROSSPOST_DEVTO_MIN_INTERVAL_MS=8000` o `10000`.
 
+### Error 422 en Dev.to por tags invalidos
+
+Si aparece algo como:
+
+```text
+Dev.to publish failed: 422 {"error":"Tag \"web-development\" contains non-alphanumeric..."}
+```
+
+la causa es formato de tags: Dev.to acepta solo caracteres alfanumericos en su API.
+
+Solucion aplicada en `DevToPublisher`:
+
+- normalizar unicode (quitar acentos),
+- convertir a minusculas,
+- remover todo lo que no sea `[a-z0-9]` (incluyendo guiones),
+- truncar cada tag a 20 chars,
+- deduplicar y enviar maximo 4 tags.
+
+Ejemplo:
+
+- `web-development` -> `webdevelopment`
+- `engineering-culture` -> `engineeringculture`
+
 ### Publica demasiado
 
 - Verifica `CROSSPOST_MAX_POSTS=1` en workflow.

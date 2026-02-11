@@ -113,6 +113,30 @@ if (response.status === 429) {
 }
 ```
 
+## Paso 4.1: corregir error 422 por tags invalidos en Dev.to
+
+En migracion real aparecio otro fallo: `422` por tags con guiones (ej: `web-development`).
+
+Dev.to en API valida tags como alfanumericos, asi que reforzamos sanitizacion:
+
+```js
+const sanitizeTags = (tags) =>
+  [...new Set(
+    tags
+      .map((tag) => tag.normalize("NFKD").replace(/[\u0300-\u036f]/g, ""))
+      .map((tag) => tag.toLowerCase().replace(/[^a-z0-9]/g, ""))
+      .map((tag) => tag.slice(0, 20))
+      .filter(Boolean)
+  )].slice(0, 4);
+```
+
+Con esto:
+
+- `web-development` -> `webdevelopment`
+- `engineering-culture` -> `engineeringculture`
+
+y evitamos que una corrida completa falle por formato de tags.
+
 ## Paso 5: ejecutar en modo migracion por cola
 
 Creamos workflow dedicado con cron cada 5 minutos:

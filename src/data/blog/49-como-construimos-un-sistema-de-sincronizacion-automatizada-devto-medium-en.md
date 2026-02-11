@@ -94,6 +94,30 @@ if (response.status === 429) {
 }
 ```
 
+## Step 4.1: Fix Dev.to 422 for Invalid Tags
+
+During real migration we hit another failure mode: `422` for tags like `web-development`.
+
+Dev.to API accepts alphanumeric tags, so we tightened sanitization:
+
+```js
+const sanitizeTags = (tags) =>
+  [...new Set(
+    tags
+      .map((tag) => tag.normalize("NFKD").replace(/[\u0300-\u036f]/g, ""))
+      .map((tag) => tag.toLowerCase().replace(/[^a-z0-9]/g, ""))
+      .map((tag) => tag.slice(0, 20))
+      .filter(Boolean)
+  )].slice(0, 4);
+```
+
+With this:
+
+- `web-development` -> `webdevelopment`
+- `engineering-culture` -> `engineeringculture`
+
+So one invalid tag no longer breaks the whole crosspost run.
+
 ## Step 5: Queue-Based Migration Every 5 Minutes
 
 We added a dedicated GitHub Actions workflow with cron:
