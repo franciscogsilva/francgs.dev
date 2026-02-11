@@ -90,6 +90,7 @@ const copy =
           title={post.data.title}
           tags={post.data.tags}
           description={post.data.description}
+          hideDate={post.data.pubDate.getTime() > Date.now()}
         />
       ))
     }
