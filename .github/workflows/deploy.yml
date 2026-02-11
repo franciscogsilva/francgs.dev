@@ -165,7 +165,7 @@ jobs:
           CROSSPOST_DEVTO_PUBLISHED: "true"
           CROSSPOST_DEVTO_MAX_RETRIES: "6"
           CROSSPOST_DEVTO_MIN_INTERVAL_MS: "5000"
-          CROSSPOST_MAX_POSTS: "4"
+          CROSSPOST_MAX_POSTS: "1"
           CROSSPOST_MEDIUM_STATUS: "public"
           CROSSPOST_FAIL_ON_ERROR: "false"
         run: pnpm run crosspost -- --all --platform=${{ matrix.platform }}
