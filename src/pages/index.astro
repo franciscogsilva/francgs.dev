@@ -3,10 +3,9 @@ import { getCollection } from "astro:content";
 import PostCard from "../components/PostCard.astro";
 import data from "../data/site.json";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import { sortPostsByPubDateDesc } from "../utils/sortPosts";
 
-const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
-);
+const posts = sortPostsByPubDateDesc(await getCollection("blog", ({ data }) => !data.draft));
 ---
 
 <BaseLayout title={data.siteTitle} description={data.siteDescription}>
