@@ -20,11 +20,13 @@ const parseRetrySeconds = (response, bodyText) => {
 };
 
 const sanitizeTags = (tags) =>
-  tags
-    .map((tag) => tag.toLowerCase().replace(/[^a-z0-9-]/g, "-"))
-    .map((tag) => tag.replace(/-+/g, "-").replace(/^-|-$/g, ""))
-    .filter(Boolean)
-    .slice(0, 4);
+  [...new Set(
+    tags
+      .map((tag) => tag.normalize("NFKD").replace(/[\u0300-\u036f]/g, ""))
+      .map((tag) => tag.toLowerCase().replace(/[^a-z0-9]/g, ""))
+      .map((tag) => tag.slice(0, 20))
+      .filter(Boolean)
+  )].slice(0, 4);
 
 export class DevToPublisher {
   constructor({

@@ -1,0 +1,107 @@
+---
+import { getCollection } from "astro:content";
+import PostCard from "../../../components/PostCard.astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+
+export const prerender = true;
+const POSTS_PER_PAGE = 20;
+
+export async function getStaticPaths() {
+  const postsPerPage = 20;
+  const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+  const paths = [];
+
+  for (const lang of ["en", "es"] as const) {
+    const totalPostsForLang = allPosts.filter((post) => post.data.lang === lang).length;
+    const totalPages = Math.ceil(totalPostsForLang / postsPerPage);
+
+    for (let page = 2; page <= totalPages; page += 1) {
+      paths.push({ params: { lang, page: String(page) } });
+    }
+  }
+
+  return paths;
+}
+
+const { lang, page } = Astro.params;
+const locale: "en" | "es" = lang === "es" ? "es" : "en";
+const currentPage = Number(page);
+
+const allPosts = (await getCollection(
+  "blog",
+  ({ data }) => !data.draft && data.lang === locale
+)).sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const totalPages = Math.max(1, Math.ceil(allPosts.length / POSTS_PER_PAGE));
+const start = (currentPage - 1) * POSTS_PER_PAGE;
+const posts = allPosts.slice(start, start + POSTS_PER_PAGE);
+
+const title =
+  locale === "es"
+    ? `Blog - Pagina ${currentPage}`
+    : `Blog - Page ${currentPage}`;
+const description =
+  locale === "es"
+    ? `Listado de articulos, pagina ${currentPage} de ${totalPages}.`
+    : `Article list, page ${currentPage} of ${totalPages}.`;
+
+const prevPageHref = currentPage === 2 ? `/${locale}/` : `/${locale}/page/${currentPage - 1}/`;
+const nextPageHref = currentPage < totalPages ? `/${locale}/page/${currentPage + 1}/` : null;
+---
+
+<BaseLayout title={title} description={description} lang={locale}>
+  <section class="pt-12 pb-8">
+    <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
+      {locale === "es" ? "Articulos" : "Articles"}
+    </h1>
+    <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">
+      {locale === "es"
+        ? `Pagina ${currentPage} de ${totalPages}`
+        : `Page ${currentPage} of ${totalPages}`}
+    </p>
+  </section>
+
+  <div class="grid grid-cols-1 gap-6 mt-2">
+    {
+      posts.map((post) => (
+        <PostCard
+          pubDate={post.data.pubDate.toISOString()}
+          url={`/${locale}/blog/${post.id}`}
+          title={post.data.title}
+          tags={post.data.tags}
+          description={post.data.description}
+        />
+      ))
+    }
+  </div>
+
+  <nav class="mt-10 mb-14 flex items-center justify-between gap-4" aria-label="Pagination">
+    <a
+      href={prevPageHref}
+      class="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-800 transition hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-100 dark:hover:border-gray-500 dark:hover:bg-gray-800"
+    >
+      {locale === "es" ? "Anterior" : "Previous"}
+    </a>
+
+    <span class="text-sm text-gray-600 dark:text-gray-400">
+      {locale === "es"
+        ? `Pagina ${currentPage} de ${totalPages}`
+        : `Page ${currentPage} of ${totalPages}`}
+    </span>
+
+    {
+      nextPageHref ? (
+        <a
+          href={nextPageHref}
+          class="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-800 transition hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-100 dark:hover:border-gray-500 dark:hover:bg-gray-800"
+        >
+          {locale === "es" ? "Siguiente" : "Next"}
+        </a>
+      ) : (
+        <span class="inline-flex items-center rounded-lg border border-transparent px-4 py-2 text-sm font-medium text-transparent">
+          .
+        </span>
+      )
+    }
+  </nav>
+</BaseLayout>

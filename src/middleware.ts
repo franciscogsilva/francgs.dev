@@ -75,13 +75,14 @@ const getRequestHeader = (context: APIContext, header: string): string | null =>
  * and handles CORS for API endpoints.
  */
 export const onRequest = defineMiddleware(async (_context, next) => {
+  if (_context.isPrerendered) {
+    return next();
+  }
+
   const url = new URL(_context.request.url);
   const normalizedPath = normalizePath(url.pathname);
-  const isPrerendered = _context.isPrerendered;
 
-  const cookieLang = isPrerendered
-    ? undefined
-    : _context.cookies.get(LANG_COOKIE)?.value;
+  const cookieLang = _context.cookies.get(LANG_COOKIE)?.value;
   const preferredLang = resolvePreferredLang(
     cookieLang,
     getRequestHeader(_context, "accept-language")
@@ -90,7 +91,7 @@ export const onRequest = defineMiddleware(async (_context, next) => {
   const langPrefixMatch = normalizedPath.match(/^\/(en|es)(\/|$)/);
   if (langPrefixMatch) {
     const currentLang = langPrefixMatch[1] as "en" | "es";
-    if (!isPrerendered && cookieLang !== currentLang) {
+    if (cookieLang !== currentLang) {
       _context.cookies.set(LANG_COOKIE, currentLang, {
         path: "/",
         maxAge: 60 * 60 * 24 * 365,

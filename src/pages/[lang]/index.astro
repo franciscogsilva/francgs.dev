@@ -5,6 +5,7 @@ import data from "../../data/site.json";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
 export const prerender = true;
+const POSTS_PER_PAGE = 20;
 
 export async function getStaticPaths() {
   return [
@@ -15,10 +16,15 @@ export async function getStaticPaths() {
 
 const { lang } = Astro.props as { lang: "en" | "es" };
 
-const posts = (await getCollection(
+const allPosts = (await getCollection(
   "blog",
   ({ data }) => !data.draft && data.lang === lang
 )).sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const currentPage = 1;
+const totalPages = Math.max(1, Math.ceil(allPosts.length / POSTS_PER_PAGE));
+const posts = allPosts.slice(0, POSTS_PER_PAGE);
+const nextPageHref = totalPages > 1 ? `/${lang}/page/2/` : null;
 
 const copy =
   lang === "es"
@@ -88,4 +94,23 @@ const copy =
       ))
     }
   </div>
+
+  {
+    totalPages > 1 && (
+      <nav class="mt-10 mb-14 flex items-center justify-between gap-4" aria-label="Pagination">
+        <span class="text-sm text-gray-600 dark:text-gray-400">
+          {lang === "es"
+            ? `Pagina ${currentPage} de ${totalPages}`
+            : `Page ${currentPage} of ${totalPages}`}
+        </span>
+
+        <a
+          href={nextPageHref!}
+          class="inline-flex items-center rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-800 transition hover:border-gray-400 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-100 dark:hover:border-gray-500 dark:hover:bg-gray-800"
+        >
+          {lang === "es" ? "Siguiente" : "Next"}
+        </a>
+      </nav>
+    )
+  }
 </BaseLayout>
