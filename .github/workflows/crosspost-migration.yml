@@ -2,7 +2,7 @@ name: Crosspost Migration Queue
 
 on:
   schedule:
-    - cron: "*/5 * * * *"
+    - cron: "2-59/5 * * * *"
   workflow_dispatch:
 
 concurrency:
@@ -13,6 +13,7 @@ jobs:
   crosspost-one:
     if: ${{ vars.CROSSPOST_MIGRATION_ENABLED != 'false' }}
     runs-on: ubuntu-latest
+    timeout-minutes: 4
     continue-on-error: true
 
     steps:
@@ -34,13 +35,32 @@ jobs:
 
       - name: Select platform for this slot
         id: slot
+        env:
+          CROSSPOST_MIGRATION_PLATFORM_MODE: ${{ vars.CROSSPOST_MIGRATION_PLATFORM_MODE || 'devto' }}
         run: |
+          mode=$(printf '%s' "$CROSSPOST_MIGRATION_PLATFORM_MODE" | tr '[:upper:]' '[:lower:]')
           minute=$(date -u +%M)
-          if [ $((10#$minute % 10)) -eq 0 ]; then
+
+          if [ "$mode" = "devto" ]; then
             echo "platform=devto" >> $GITHUB_OUTPUT
-          else
+          elif [ "$mode" = "medium" ]; then
             echo "platform=medium" >> $GITHUB_OUTPUT
+          elif [ "$mode" = "auto" ]; then
+            if [ $(( (10#$minute / 5) % 2 )) -eq 0 ]; then
+              echo "platform=devto" >> $GITHUB_OUTPUT
+            else
+              echo "platform=medium" >> $GITHUB_OUTPUT
+            fi
+          else
+            echo "platform=devto" >> $GITHUB_OUTPUT
           fi
+
+      - name: Log scheduler context
+        run: |
+          echo "event=${{ github.event_name }}"
+          echo "utc=$(date -u +'%Y-%m-%d %H:%M:%S')"
+          echo "mode=${{ vars.CROSSPOST_MIGRATION_PLATFORM_MODE || 'devto' }}"
+          echo "platform=${{ steps.slot.outputs.platform }}"
 
       - name: Restore crosspost state cache
         uses: actions/cache@v4

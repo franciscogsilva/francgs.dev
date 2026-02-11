@@ -3,6 +3,7 @@ import { defineConfig } from "astro/config";
 import rehypeRaw from "rehype-raw";
 import remarkDirective from "remark-directive";
 import { remarkCallouts } from "./src/plugins/remark-callouts.mjs";
+import { remarkStripRelatedLinks } from "./src/plugins/remark-strip-related-links.mjs";
 
 import sitemap from "@astrojs/sitemap";
 import node from "@astrojs/node";
@@ -18,7 +19,7 @@ export default defineConfig({
   },
   site: "https://francgs.dev",
   markdown: {
-    remarkPlugins: [remarkDirective, remarkCallouts],
+    remarkPlugins: [remarkDirective, remarkCallouts, remarkStripRelatedLinks],
     rehypePlugins: [rehypeRaw],
   },
   integrations: [
