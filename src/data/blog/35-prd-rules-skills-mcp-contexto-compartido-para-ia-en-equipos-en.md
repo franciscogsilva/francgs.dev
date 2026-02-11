@@ -2,7 +2,7 @@
 title: "PRD + RULES + SKILLS + MCP: Shared Context that Makes AI Actually Useful"
 author: "Francisco Gonzalez"
 description: "Practical strategy for LLM-enabled teams: shared PRDs, versioned rules, role-based skills, and MCP integration."
-pubDate: 2026-04-21
+pubDate: 2026-02-01
 tags: ["ai", "developer-tools", "software-engineering"]
 category: ai
 translationKey: post-35
