@@ -1,113 +1,18 @@
 ---
-import { getCollection } from "astro:content";
-import PostCard from "../../components/PostCard.astro";
-import BaseLayout from "../../layouts/BaseLayout.astro";
-
-export const prerender = true;
-
-export async function getStaticPaths() {
-  const allPosts = await getCollection("blog", ({ data }) => !data.draft);
-
-  const tags = [...new Set(allPosts.map((post) => post.data.tags).flat())];
-
-  return tags.map((tag) => {
-    const filteredPosts = allPosts
-      .filter((post) => post.data.tags.includes(tag))
-      .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
-    return {
-      params: { tag },
-      props: { posts: filteredPosts, allTags: tags },
-    };
-  });
-}
+export const prerender = false;
 
 const { tag } = Astro.params;
-const { posts, allTags } = Astro.props;
+if (!tag) {
+  return Astro.redirect("/", 302);
+}
 
-const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+const cookieLang = Astro.cookies.get("site_lang")?.value;
+const preferredLang =
+  cookieLang === "es" || cookieLang === "en"
+    ? cookieLang
+    : Astro.request.headers.get("accept-language")?.toLowerCase().includes("es")
+      ? "es"
+      : "en";
 
-const description = `Articles tagged with "${tag}" — tutorials, guides, and insights from Francisco Gonzalez.`;
+return Astro.redirect(`/${preferredLang}/tags/${tag}/`, 302);
 ---
-
-<BaseLayout title={`Tag - ${tag}`} description={description}>
-  <div class="pb-6 pt-6">
-    <h1
-      class="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:hidden sm:text-4xl sm:leading-10 md:text-6xl md:leading-14"
-    >
-      {tag}
-    </h1>
-    <div class="flex sm:space-x-24">
-      <div
-        class="hidden h-full max-h-screen min-w-[280px] max-w-[280px] flex-wrap overflow-auto pt-5 sm:flex"
-      >
-        <div class="px-6 py-4 w-full">
-          <h3
-            class="font-bold text-gray-900 dark:text-gray-100 uppercase tracking-wider text-sm mb-4"
-          >
-            All Tags
-          </h3>
-          <div class="flex flex-col space-y-1">
-            <a
-              class="group flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200
-                     text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100"
-              href="/blog"
-            >
-              <span>All Posts</span>
-            </a>
-
-            {
-              allTags.sort().map((currentTag: string) => {
-                const isActive = tag === currentTag;
-                const count = allPosts.filter((post) =>
-                  post.data.tags?.includes(currentTag)
-                ).length;
-
-                return (
-                  <a
-                    href={`/tags/${currentTag}`}
-                    class={`group flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-all duration-200
-                      ${
-                        isActive
-                          ? "bg-primary/10 text-primary border-l-2 border-primary"
-                          : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 border-l-2 border-transparent"
-                      }`}
-                  >
-                    <span class="capitalize">{currentTag}</span>
-                    <span
-                      class={`text-xs px-2 py-0.5 rounded-full 
-                        ${
-                          isActive
-                            ? "bg-primary/20 text-primary"
-                            : "bg-gray-100 dark:bg-gray-800 text-gray-500 group-hover:bg-gray-200 dark:group-hover:bg-gray-700"
-                        }`}
-                    >
-                      {count}
-                    </span>
-                  </a>
-                );
-              })
-            }
-          </div>
-        </div>
-      </div>
-
-      <div class="flex sm:space-x-24">
-        <div>
-          <div class="grid grid-cols-1 gap-6">
-            {
-              posts.map((post: any) => (
-                <PostCard
-                  pubDate={post.data.pubDate.toISOString()}
-                  url={`/blog/${post.id}`}
-                  title={post.data.title}
-                  tags={post.data.tags}
-                  description={post.data.description}
-                />
-              ))
-            }
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</BaseLayout>

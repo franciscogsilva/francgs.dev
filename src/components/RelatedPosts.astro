@@ -16,9 +16,17 @@ interface Props {
   currentCategory?: string;
   allPosts: Post[];
   maxPosts?: number;
+  basePath?: string;
 }
 
-const { currentId, currentTags, currentCategory, allPosts, maxPosts = 3 } =
+const {
+  currentId,
+  currentTags,
+  currentCategory,
+  allPosts,
+  maxPosts = 3,
+  basePath = "/blog",
+} =
   Astro.props;
 
 /**
@@ -61,7 +69,7 @@ const relatedPosts = allPosts
       <h3 class="related-title">Related Articles</h3>
       <div class="related-grid">
         {relatedPosts.map((post) => (
-          <a href={`/blog/${post.id}`} class="related-card group">
+          <a href={`${basePath}/${post.id}`} class="related-card group">
             <span class="related-card-title group-hover:text-secondary transition-colors">
               {post.data.title}
             </span>

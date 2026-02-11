@@ -1,42 +1,13 @@
 ---
-import { getCollection } from "astro:content";
-import PostCard from "../../components/PostCard.astro";
-import PageHeader from "../../components/PageHeader.astro";
-import BaseLayout from "../../layouts/BaseLayout.astro";
+export const prerender = false;
 
-export const prerender = true;
+const cookieLang = Astro.cookies.get("site_lang")?.value;
+const preferredLang =
+  cookieLang === "es" || cookieLang === "en"
+    ? cookieLang
+    : Astro.request.headers.get("accept-language")?.toLowerCase().includes("es")
+      ? "es"
+      : "en";
 
-const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
-  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
-);
-
-const title = "Blog | Francisco Gonzalez - Tech Lead & Senior Developer";
-const description =
-  "Articles about software development, DevOps, system design, Linux, and engineering leadership from a Tech Lead with 9+ years of experience.";
+return Astro.redirect(`/${preferredLang}/blog/`, 302);
 ---
-
-<BaseLayout title={title} description={description}>
-  <PageHeader title={title} />
-
-  <div class="relative">
-    <div
-      class="absolute inset-0 rounded-lg"
-      style="background-color: color-mix(in oklab, black 10%, transparent);"
-    >
-    </div>
-
-    <ul class="relative">
-      {
-        posts.map((post) => (
-          <PostCard
-            pubDate={post.data.pubDate.toISOString()}
-            url={`/blog/${post.id}`}
-            title={post.data.title}
-            tags={post.data.tags}
-            description={post.data.description}
-          />
-        ))
-      }
-    </ul>
-  </div>
-</BaseLayout>

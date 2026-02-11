@@ -117,3 +117,50 @@ jobs:
           pm2 save
           pm2 status
           EOF
+
+  crosspost-missing-only:
+    name: Crosspost Missing Only (${{ matrix.platform }})
+    needs: deploy
+    if: ${{ needs.deploy.result == 'success' }}
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [devto, medium]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Restore crosspost state cache
+        uses: actions/cache@v4
+        with:
+          path: .crosspost/state-${{ matrix.platform }}.json
+          key: crosspost-state-${{ matrix.platform }}-${{ github.run_id }}
+          restore-keys: |
+            crosspost-state-${{ matrix.platform }}-
+
+      - name: Sync only non-migrated posts
+        continue-on-error: true
+        env:
+          DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
+          MEDIUM_TOKEN: ${{ secrets.MEDIUM_TOKEN }}
+          SITE_URL: https://francgs.dev
+          CROSSPOST_STATE_PATH: .crosspost/state-${{ matrix.platform }}.json
+          CROSSPOST_DEVTO_PUBLISHED: "true"
+          CROSSPOST_MEDIUM_STATUS: "public"
+        run: pnpm run crosspost -- --all --platform=${{ matrix.platform }}

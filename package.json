@@ -5,7 +5,13 @@
   "scripts": {
     "astro": "astro",
     "build": "astro check && astro build",
+    "crosspost": "node scripts/crosspost/index.mjs",
+    "crosspost:all": "node scripts/crosspost/index.mjs --all",
+    "crosspost:dry": "node scripts/crosspost/index.mjs --dry-run --all",
     "dev": "astro dev",
+    "seo:export-redirects": "node scripts/seo/export-legacy-redirects.mjs",
+    "seo:report-en-depth": "node scripts/seo/report-en-editorial-depth.mjs",
+    "seo:report-translations": "node scripts/seo/report-translation-coverage.mjs",
     "preview": "astro preview",
     "start": "astro dev"
   },

@@ -1,0 +1,65 @@
+---
+import { getCollection } from "astro:content";
+import PageHeader from "../../../components/PageHeader.astro";
+import PostCard from "../../../components/PostCard.astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+
+export const prerender = true;
+
+const META_BY_LANG = {
+  en: {
+    title: "Blog | Francisco Gonzalez - Tech Lead & Senior Developer",
+    description:
+      "Articles about software development, DevOps, system design, Linux, and engineering leadership.",
+  },
+  es: {
+    title: "Blog en Espanol | Francisco Gonzalez",
+    description:
+      "Articulos sobre desarrollo de software, DevOps, diseno de sistemas, Linux y liderazgo tecnico.",
+  },
+} as const;
+
+export async function getStaticPaths() {
+  return [
+    { params: { lang: "en" }, props: { lang: "en" } },
+    { params: { lang: "es" }, props: { lang: "es" } },
+  ];
+}
+
+const { lang } = Astro.props as { lang: string };
+const locale: "en" | "es" = lang === "es" ? "es" : "en";
+
+const posts = (await getCollection(
+  "blog",
+  ({ data }) => !data.draft && data.lang === locale
+)).sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const title = META_BY_LANG[locale].title;
+const description = META_BY_LANG[locale].description;
+---
+
+<BaseLayout title={title} description={description} lang={locale}>
+  <PageHeader title={title} />
+
+  <div class="relative">
+    <div
+      class="absolute inset-0 rounded-lg"
+      style="background-color: color-mix(in oklab, black 10%, transparent);"
+    >
+    </div>
+
+    <ul class="relative">
+      {
+        posts.map((post) => (
+          <PostCard
+            pubDate={post.data.pubDate.toISOString()}
+            url={`/${locale}/blog/${post.id}`}
+            title={post.data.title}
+            tags={post.data.tags}
+            description={post.data.description}
+          />
+        ))
+      }
+    </ul>
+  </div>
+</BaseLayout>

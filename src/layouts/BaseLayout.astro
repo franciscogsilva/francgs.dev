@@ -7,7 +7,10 @@ import { ClientRouter } from "astro:transitions";
 import Background from "../components/Background.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
-import SEO from "../components/SEO.astro";
+import SEO, {
+  type BreadcrumbEntry,
+  type LanguageAlternateEntry,
+} from "../components/SEO.astro";
 
 interface Props {
   title: string;
@@ -15,8 +18,10 @@ interface Props {
   image?: string;
   articleDate?: string;
   updatedDate?: string;
-  lang?: string;
+  lang?: "en" | "es";
   isLinks?: boolean;
+  breadcrumbs?: BreadcrumbEntry[];
+  alternates?: LanguageAlternateEntry[];
 }
 
 const {
@@ -27,6 +32,8 @@ const {
   updatedDate,
   lang = "en",
   isLinks,
+  breadcrumbs,
+  alternates,
 } = Astro.props;
 ---
 
@@ -39,6 +46,8 @@ const {
       articleDate={articleDate}
       updatedDate={updatedDate}
       lang={lang}
+      breadcrumbs={breadcrumbs}
+      alternates={alternates}
     />
     <script
       is:inline
@@ -52,7 +61,7 @@ const {
       <section
         class=`${!isLinks ? "main-section" : "links-main-section"} dark:text-white mx-auto max-w-3xl px-4 sm:px-6 xl:max-w-5xl xl:px-0`
       >
-        {!isLinks && <Header />}
+        {!isLinks && <Header lang={lang} />}
         <main
           class=`${!isLinks ? "mb-auto" : ""} divide-y divide-gray-200 dark:divide-gray-700`
         >

@@ -7,12 +7,13 @@ import { z } from "astro/zod";
  * Each category maps to a pillar page and a topical cluster.
  */
 const CATEGORIES = [
+  "ai",
   "devops",
+  "engineering-culture",
   "git",
   "linux",
-  "web-development",
-  "engineering-culture",
   "tools",
+  "web-development",
 ] as const;
 
 const blogSchema = z.object({
@@ -29,6 +30,7 @@ const blogSchema = z.object({
     .optional(),
   tags: z.array(z.string()).min(1, "At least one tag is required"),
   category: z.enum(CATEGORIES).optional(),
+  translationKey: z.string().optional(),
   draft: z.boolean().default(false),
   lang: z.enum(["en", "es"]).default("en"),
 });
