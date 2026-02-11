@@ -7,15 +7,21 @@ import { ClientRouter } from "astro:transitions";
 import Background from "../components/Background.astro";
 import Footer from "../components/Footer.astro";
 import Header from "../components/Header.astro";
-import SEO from "../components/SEO.astro";
+import SEO, {
+  type BreadcrumbEntry,
+  type LanguageAlternateEntry,
+} from "../components/SEO.astro";
 
 interface Props {
   title: string;
   description: string;
   image?: string;
   articleDate?: string;
-  lang?: string;
+  updatedDate?: string;
+  lang?: "en" | "es";
   isLinks?: boolean;
+  breadcrumbs?: BreadcrumbEntry[];
+  alternates?: LanguageAlternateEntry[];
 }
 
 const {
@@ -23,8 +29,11 @@ const {
   description,
   image,
   articleDate,
+  updatedDate,
   lang = "en",
   isLinks,
+  breadcrumbs,
+  alternates,
 } = Astro.props;
 ---
 
@@ -35,8 +44,11 @@ const {
       description={description}
       image={image}
       articleDate={articleDate}
+      updatedDate={updatedDate}
+      lang={lang}
+      breadcrumbs={breadcrumbs}
+      alternates={alternates}
     />
-    <meta name="referrer" content="no-referrer-when-downgrade" />
     <script
       is:inline
       async
@@ -44,14 +56,12 @@ const {
       data-website-id="f2869995-c81f-476f-85d8-ef8516b023d6"></script>
     <ClientRouter />
   </head>
-  <!-- #1A1B26 -->
   <body class="w-full">
-    <!-- dark:bg-gray-950 -->
     <Background>
       <section
         class=`${!isLinks ? "main-section" : "links-main-section"} dark:text-white mx-auto max-w-3xl px-4 sm:px-6 xl:max-w-5xl xl:px-0`
       >
-        {!isLinks && <Header />}
+        {!isLinks && <Header lang={lang} />}
         <main
           class=`${!isLinks ? "mb-auto" : ""} divide-y divide-gray-200 dark:divide-gray-700`
         >

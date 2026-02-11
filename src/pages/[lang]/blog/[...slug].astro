@@ -1,0 +1,274 @@
+---
+import { getCollection, render } from "astro:content";
+import Breadcrumb from "../../../components/Breadcrumb.astro";
+import Comments from "../../../components/Comments.astro";
+import CopyCodeButton from "../../../components/CopyCodeButton.astro";
+import PostNavigation from "../../../components/PostNavigation.astro";
+import RelatedPosts from "../../../components/RelatedPosts.astro";
+import ShareButtons from "../../../components/ShareButtons.astro";
+import TableOfContents from "../../../components/TableOfContents.astro";
+import { calculateReadingTime } from "../../../helpers/readingTime";
+import { getTableOfContents } from "../../../helpers/tableOfContents";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+
+const CATEGORY_LABELS: Record<string, string> = {
+  ai: "AI & Machine Learning",
+  devops: "DevOps",
+  "engineering-culture": "Engineering Culture",
+  git: "Git",
+  linux: "Linux",
+  tools: "Tools",
+  "web-development": "Web Development",
+};
+
+const getTranslationKey = (postEntry: any) => {
+  if (postEntry.data.translationKey) {
+    return postEntry.data.translationKey;
+  }
+
+  const numberPrefix = postEntry.id.match(/^(\d+)/)?.[1];
+  return numberPrefix ? `post-${numberPrefix}` : postEntry.id;
+};
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog", ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { lang: post.data.lang, slug: post.id },
+    props: { post, lang: post.data.lang },
+  }));
+}
+
+export const prerender = true;
+
+const { post, lang } = Astro.props;
+const { Content, headings } = await render(post);
+
+const readingTime = calculateReadingTime(post.body ?? "");
+const toc = headings ? getTableOfContents(headings) : [];
+
+const allPublishedPosts = await getCollection("blog", ({ data }) => !data.draft);
+const allPosts = allPublishedPosts
+  .filter((entry) => entry.data.lang === lang)
+  .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+const siteUrl = Astro.site?.toString() ?? "https://francgs.dev";
+const currentIndex = allPosts.findIndex((p) => p.id === post.id);
+const prevPost = currentIndex > 0 ? allPosts[currentIndex - 1] : undefined;
+const nextPost =
+  currentIndex < allPosts.length - 1 ? allPosts[currentIndex + 1] : undefined;
+
+const postTranslationKey = getTranslationKey(post);
+const translations = allPublishedPosts.filter(
+  (candidate) => getTranslationKey(candidate) === postTranslationKey
+);
+
+const alternates: Array<{ lang: string; url: string }> = translations.map(
+  (translation) => ({
+    lang: translation.data.lang,
+    url: `${siteUrl}${translation.data.lang}/blog/${translation.id}/`,
+  })
+);
+
+const xDefaultTarget =
+  translations.find((translation) => translation.data.lang === "en") ?? post;
+
+alternates.push({
+  lang: "x-default",
+  url: `${siteUrl}${xDefaultTarget.data.lang}/blog/${xDefaultTarget.id}/`,
+});
+
+const categorySlug = post.data.category;
+const categoryLabel = categorySlug
+  ? CATEGORY_LABELS[categorySlug] ?? categorySlug
+  : "Blog";
+
+const breadcrumbItems = [
+  { label: "Home", href: `/${lang}` },
+  {
+    label: categoryLabel,
+    href: categorySlug ? `/${lang}/blog/category/${categorySlug}` : `/${lang}/blog`,
+  },
+  { label: post.data.title },
+];
+
+const seoBreadcrumbs = [
+  { name: "Home", url: `${siteUrl}${lang}` },
+  {
+    name: categoryLabel,
+    url: `${siteUrl}${categorySlug ? `${lang}/blog/category/${categorySlug}` : `${lang}/blog`}`,
+  },
+  { name: post.data.title, url: `${siteUrl}${lang}/blog/${post.id}` },
+];
+---
+
+<BaseLayout
+  title={post.data.title}
+  description={post.data.description}
+  image={post.data.image?.url}
+  articleDate={post.data.pubDate.toISOString()}
+  updatedDate={post.data.updatedDate?.toISOString()}
+  lang={post.data.lang}
+  breadcrumbs={seoBreadcrumbs}
+  alternates={alternates}
+>
+  <article class="blog-post">
+    <header
+      class="py-4 flex flex-col items-start space-y-4 border-b border-double border-gray-400 dark:border-gray-700"
+    >
+      <Breadcrumb items={breadcrumbItems} />
+      <h1
+        class="text-3xl font-extrabold leading-normal tracking-normal text-gray-900 dark:text-gray-100 sm:text-4xl md:text-5xl"
+      >
+        {post.data.title}
+      </h1>
+      <div
+        class="w-full flex flex-wrap gap-4 items-center place-content-between"
+      >
+        <div class="-mx-2">
+          {
+            post.data.tags.map((tag: string) => (
+              <a href={`/${lang}/tags/${tag}`}>
+                <span class="inline-block py-1 px-2 mx-2 rounded border border-gray-700 hover:border-accent text-xs font-medium transition-colors duration-200">
+                  {tag}
+                </span>
+              </a>
+            ))
+          }
+        </div>
+        <dl>
+          <div
+            class="flex flex-row items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300"
+          >
+            <dt class="sr-only">Published on</dt>
+            <dd>
+              <time datetime={post.data.pubDate.toISOString()}>
+                {post.data.pubDate.toISOString().slice(0, 10)}
+              </time>
+            </dd>
+            &bull;
+            <span>{readingTime}</span>
+            {
+              post.data.category && (
+                <>
+                  &bull;
+                  <a
+                    href={`/${lang}/blog/category/${post.data.category}`}
+                    class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
+                  >
+                    {categoryLabel}
+                  </a>
+                </>
+              )
+            }
+          </div>
+        </dl>
+      </div>
+    </header>
+  </article>
+
+  <div class="relative">
+    <div
+      class="absolute inset-0 rounded-lg"
+      style="background-color: color-mix(in oklab, black 10%, transparent);"
+    >
+    </div>
+
+    <section
+      class="relative pb-8 divide-y divide-gray-200 xl:divide-y-0 dark:divide-gray-700"
+    >
+      {
+        post.data.image && (
+          <div class="relative flex flex-col items-center">
+            <img
+              class="object-cover md:w-3/4 rounded-lg shadow-lg overflow-hidden my-4 mx-auto"
+              alt={post.data.image.alt}
+              src={post.data.image.url}
+              loading="lazy"
+              decoding="async"
+              width="768"
+              height="432"
+            />
+          </div>
+        )
+      }
+      <div class="flex flex-col">
+        <div class="xl:grid xl:grid-cols-6 xl:gap-x-10">
+          <div
+            class:list={[
+              "pt-10 pb-8 prose dark:prose-dark",
+              toc.length > 0 ? "xl:col-span-4" : "xl:col-span-6",
+            ]}
+            style="max-width: 65ch;"
+          >
+            <Content />
+          </div>
+
+          {
+            toc.length > 0 && (
+              <aside class="hidden xl:block xl:col-span-2 pt-10">
+                <TableOfContents
+                  headings={toc}
+                  articleId={Astro.url.pathname}
+                />
+              </aside>
+            )
+          }
+        </div>
+      </div>
+
+      <div class="full-width-section">
+        <div class="happy-reading">
+          <p>Happy reading! ☕</p>
+        </div>
+        <ShareButtons title={post.data.title} url={Astro.url.toString()} />
+        <RelatedPosts
+          currentId={post.id}
+          currentTags={post.data.tags}
+          currentCategory={post.data.category}
+          allPosts={allPosts}
+          basePath={`/${lang}/blog`}
+        />
+        <PostNavigation
+          prev={prevPost
+            ? {
+                url: `/${lang}/blog/${prevPost.id}`,
+                frontmatter: prevPost.data,
+              }
+            : undefined}
+          next={nextPost
+            ? {
+                url: `/${lang}/blog/${nextPost.id}`,
+                frontmatter: nextPost.data,
+              }
+            : undefined}
+        />
+        <Comments />
+      </div>
+    </section>
+  </div>
+
+  <CopyCodeButton />
+</BaseLayout>
+
+<style>
+  .full-width-section {
+    width: 100%;
+    max-width: 100%;
+    margin-top: 2rem;
+  }
+
+  .happy-reading {
+    text-align: center;
+    padding: 1.5rem 0 0.5rem;
+    margin: 0 auto 0;
+    max-width: 65ch;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .happy-reading p {
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+  }
+</style>

@@ -1,46 +1,13 @@
 ---
-import BlogPost from "../../components/BlogPost.astro";
-import type { MarkdownInstance } from "astro";
-import PageHeader from "../../components/PageHeader.astro";
-import BaseLayout from "../../layouts/BaseLayout.astro";
+export const prerender = false;
 
-const posts = Object.values(
-  import.meta.glob<MarkdownInstance<any>>("../../pages/blog/*.md", {
-    eager: true,
-  }),
-);
+const cookieLang = Astro.cookies.get("site_lang")?.value;
+const preferredLang =
+  cookieLang === "es" || cookieLang === "en"
+    ? cookieLang
+    : Astro.request.headers.get("accept-language")?.toLowerCase().includes("es")
+      ? "es"
+      : "en";
 
-const title = "Francgs Personal blog";
-const description = "Francgs Personal blog";
+return Astro.redirect(`/${preferredLang}/blog/`, 302);
 ---
-
-<BaseLayout title={title} description={description}>
-  <PageHeader title={title} />
-
-  <!-- Content wrapper with semi-transparent background -->
-  <div class="relative">
-    <!-- Semi-transparent dark background overlay -->
-    <div
-      class="absolute inset-0 rounded-lg"
-      style="background-color: color-mix(in oklab, black 10%, transparent);"
-    >
-    </div>
-
-    <!-- Content -->
-    <ul class="relative">
-      {
-        posts
-          .reverse()
-          .map((post) => (
-            <BlogPost
-              pubDate={post.frontmatter.pubDate}
-              url={post.url}
-              title={post.frontmatter.title}
-              tags={post.frontmatter.tags}
-              description={post.frontmatter.description}
-            />
-          ))
-      }
-    </ul>
-  </div>
-</BaseLayout>

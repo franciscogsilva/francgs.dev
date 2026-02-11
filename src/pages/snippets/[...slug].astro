@@ -1,0 +1,69 @@
+---
+import { getCollection, render } from "astro:content";
+import Comments from "../../components/Comments.astro";
+import CopyCodeButton from "../../components/CopyCodeButton.astro";
+import ShareButtons from "../../components/ShareButtons.astro";
+import { calculateReadingTime } from "../../helpers/readingTime";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export async function getStaticPaths() {
+  const snippets = await getCollection("snippets", ({ data }) => !data.draft);
+  return snippets.map((snippet) => ({
+    params: { slug: snippet.id },
+    props: { snippet },
+  }));
+}
+
+export const prerender = true;
+
+const { snippet } = Astro.props;
+const { Content } = await render(snippet);
+const readingTime = calculateReadingTime(snippet.body ?? "");
+---
+
+<BaseLayout
+  title={snippet.data.title}
+  description={snippet.data.description}
+  image={snippet.data.image?.url}
+  articleDate={snippet.data.pubDate.toISOString()}
+>
+  <article class="blog-post">
+    <header
+      class="py-4 flex flex-col items-start space-y-4 border-b border-double border-gray-400 dark:border-gray-700"
+    >
+      <h1
+        class="text-3xl font-extrabold leading-normal tracking-normal text-gray-900 dark:text-gray-100 sm:text-4xl md:text-5xl"
+      >
+        {snippet.data.title}
+      </h1>
+      <div class="flex flex-row items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
+        <time datetime={snippet.data.pubDate.toISOString()}>
+          {snippet.data.pubDate.toISOString().slice(0, 10)}
+        </time>
+        &bull;
+        <span>{readingTime}</span>
+      </div>
+    </header>
+  </article>
+
+  <div class="relative">
+    <div
+      class="absolute inset-0 rounded-lg"
+      style="background-color: color-mix(in oklab, black 10%, transparent);"
+    >
+    </div>
+
+    <section class="relative pb-8">
+      <div class="pt-10 pb-8 prose dark:prose-dark" style="max-width: 65ch;">
+        <Content />
+      </div>
+
+      <div class="w-full mt-8">
+        <ShareButtons title={snippet.data.title} url={Astro.url.toString()} />
+        <Comments />
+      </div>
+    </section>
+  </div>
+
+  <CopyCodeButton />
+</BaseLayout>

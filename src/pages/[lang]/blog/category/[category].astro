@@ -1,0 +1,173 @@
+---
+import { getCollection } from "astro:content";
+import PostCard from "../../../../components/PostCard.astro";
+import BaseLayout from "../../../../layouts/BaseLayout.astro";
+
+export const prerender = true;
+
+const SILO_META: Record<string, { label: string; description: string; icon: string }> = {
+  ai: {
+    label: "AI & Machine Learning",
+    description:
+      "Prompt engineering, LLM integration, RAG pipelines, and AI-assisted development.",
+    icon: "🤖",
+  },
+  devops: {
+    label: "DevOps",
+    description:
+      "Docker, Nginx, CI/CD pipelines, server configuration, and infrastructure automation.",
+    icon: "🚀",
+  },
+  git: {
+    label: "Git",
+    description:
+      "Git workflows, SSH configuration, commit signing, hooks, and multi-account setups.",
+    icon: "🔀",
+  },
+  linux: {
+    label: "Linux",
+    description:
+      "Ubuntu administration, system configuration, disk management, peripherals, and troubleshooting.",
+    icon: "🐧",
+  },
+  "web-development": {
+    label: "Web Development",
+    description:
+      "TypeScript, Laravel, JavaScript APIs, email systems, and frontend patterns.",
+    icon: "🌐",
+  },
+  "engineering-culture": {
+    label: "Engineering Culture",
+    description:
+      "Agile estimation, story points, code reviews, and engineering leadership.",
+    icon: "🏗️",
+  },
+  tools: {
+    label: "Tools",
+    description:
+      "Cursor AI, OBS Studio, terminal customization, and IDE configurations.",
+    icon: "🛠️",
+  },
+};
+
+export async function getStaticPaths() {
+  const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+  const langs: Array<"en" | "es"> = ["en", "es"];
+
+  const paths: Array<any> = [];
+
+  for (const lang of langs) {
+    const postsByLang = allPosts.filter((post) => post.data.lang === lang);
+    const categories = [
+      ...new Set(postsByLang.map((post) => post.data.category).filter((c) => !!c)),
+    ] as string[];
+
+    for (const category of categories) {
+      const posts = postsByLang
+        .filter((post) => post.data.category === category)
+        .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+      paths.push({
+        params: { lang, category },
+        props: { lang, category, posts, allCategories: categories },
+      });
+    }
+  }
+
+  return paths;
+}
+
+const { lang, category, posts, allCategories } = Astro.props as {
+  lang: "en" | "es";
+  category: string;
+  posts: Array<any>;
+  allCategories: string[];
+};
+
+const meta = SILO_META[category] ?? {
+  label: category,
+  description: lang === "es" ? `Articulos sobre ${category}` : `Articles about ${category}`,
+  icon: "📝",
+};
+
+const title = `${meta.label} | Francisco Gonzalez`;
+const description = meta.description;
+---
+
+<BaseLayout title={title} description={description} lang={lang}>
+  <div class="pb-6 pt-6">
+    <div class="flex sm:space-x-24">
+      <div
+        class="hidden h-full max-h-screen min-w-[280px] max-w-[280px] flex-wrap overflow-auto pt-5 sm:flex"
+      >
+        <div class="px-6 py-4 w-full">
+          <h3
+            class="font-bold text-gray-900 dark:text-gray-100 uppercase tracking-wider text-sm mb-4"
+          >
+            {lang === "es" ? "Categorias" : "Categories"}
+          </h3>
+          <div class="flex flex-col space-y-1">
+            <a
+              class="group flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100"
+              href={`/${lang}/blog`}
+            >
+              <span>{lang === "es" ? "Todos los posts" : "All Posts"}</span>
+            </a>
+
+            {
+              allCategories.sort().map((cat) => {
+                const isActive = category === cat;
+                const catMeta = SILO_META[cat];
+                const label = catMeta?.label ?? cat;
+                const icon = catMeta?.icon ?? "📝";
+
+                return (
+                  <a
+                    href={`/${lang}/blog/category/${cat}`}
+                    class={`group flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
+                      isActive
+                        ? "bg-primary/10 text-primary border-l-2 border-primary"
+                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 border-l-2 border-transparent"
+                    }`}
+                  >
+                    <span>{icon} {label}</span>
+                  </a>
+                );
+              })
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="flex-1">
+        <div class="mb-8">
+          <div class="flex items-center gap-3 mb-2">
+            <span class="text-4xl" role="img" aria-label={meta.label}>{meta.icon}</span>
+            <h1
+              class="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:text-4xl sm:leading-10 md:text-5xl md:leading-14"
+            >
+              {meta.label}
+            </h1>
+          </div>
+          <p class="text-base text-gray-600 dark:text-gray-400 max-w-2xl">
+            {meta.description}
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 gap-6">
+          {
+            posts.map((post: any) => (
+              <PostCard
+                pubDate={post.data.pubDate.toISOString()}
+                url={`/${lang}/blog/${post.id}`}
+                title={post.data.title}
+                tags={post.data.tags}
+                description={post.data.description}
+              />
+            ))
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,115 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../../../layouts/BaseLayout.astro";
+
+export const prerender = true;
+
+const SILO_META: Record<string, { label: string; description: string; icon: string }> = {
+  ai: {
+    label: "AI & Machine Learning",
+    description:
+      "Prompt engineering, LLM integration, RAG pipelines, and AI-assisted development.",
+    icon: "🤖",
+  },
+  devops: {
+    label: "DevOps",
+    description:
+      "Docker, Nginx, CI/CD pipelines, server configuration, and infrastructure automation.",
+    icon: "🚀",
+  },
+  git: {
+    label: "Git",
+    description:
+      "Git workflows, SSH configuration, commit signing, hooks, and multi-account setups.",
+    icon: "🔀",
+  },
+  linux: {
+    label: "Linux",
+    description:
+      "Ubuntu administration, system configuration, disk management, peripherals, and troubleshooting.",
+    icon: "🐧",
+  },
+  "web-development": {
+    label: "Web Development",
+    description:
+      "TypeScript, Laravel, JavaScript APIs, email systems, and frontend patterns.",
+    icon: "🌐",
+  },
+  "engineering-culture": {
+    label: "Engineering Culture",
+    description:
+      "Agile estimation, story points, code reviews, and engineering leadership.",
+    icon: "🏗️",
+  },
+  tools: {
+    label: "Tools",
+    description:
+      "Cursor AI, OBS Studio, terminal customization, and IDE configurations.",
+    icon: "🛠️",
+  },
+};
+
+export async function getStaticPaths() {
+  return [
+    { params: { lang: "en" }, props: { lang: "en" } },
+    { params: { lang: "es" }, props: { lang: "es" } },
+  ];
+}
+
+const { lang } = Astro.props as { lang: "en" | "es" };
+
+const posts = await getCollection("blog", ({ data }) => !data.draft && data.lang === lang);
+
+const categories = [
+  ...new Set(posts.map((post) => post.data.category).filter((value) => !!value)),
+] as string[];
+
+const title = lang === "es" ? "Categorias" : "Categories";
+const description =
+  lang === "es"
+    ? "Explora las categorias del blog y navega por SILOs tematicos."
+    : "Explore blog categories and browse the thematic SILO hubs.";
+---
+
+<BaseLayout title={title} description={description} lang={lang}>
+  <div class="max-w-5xl mx-auto mt-10">
+    <h1 class="text-4xl md:text-5xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+      {title}
+    </h1>
+    <p class="text-gray-600 dark:text-gray-400 mb-8">
+      {lang === "es"
+        ? "Cada categoria organiza contenido relacionado para mejorar navegacion y aprendizaje."
+        : "Each category groups related content to improve navigation and topical learning."}
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {
+        categories.sort().map((category) => {
+          const count = posts.filter((post) => post.data.category === category).length;
+          const meta = SILO_META[category] ?? {
+            label: category,
+            description:
+              lang === "es" ? `Articulos sobre ${category}` : `Articles about ${category}`,
+            icon: "📝",
+          };
+
+          return (
+            <a
+              href={`/${lang}/blog/category/${category}`}
+              class="rounded-lg border border-gray-200 dark:border-gray-800 p-4 hover:border-primary/50 transition-colors"
+            >
+              <div class="flex items-center gap-2 mb-2">
+                <span>{meta.icon}</span>
+                <h2 class="font-semibold text-gray-900 dark:text-gray-100">{meta.label}</h2>
+                <span class="text-xs px-2 py-0.5 rounded-full bg-primary/10 text-primary">
+                  {count}
+                </span>
+              </div>
+              <p class="text-sm text-gray-600 dark:text-gray-400">{meta.description}</p>
+            </a>
+          );
+        })
+      }
+    </div>
+  </div>
+</BaseLayout>

@@ -1,14 +1,11 @@
 ---
+import { getCollection } from "astro:content";
 import PostCard from "../components/PostCard.astro";
 import data from "../data/site.json";
-
-import type { MarkdownInstance } from "astro";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const posts = Object.values(
-  import.meta.glob<MarkdownInstance<any>>("../pages/blog/*.md", {
-    eager: true,
-  }),
+const posts = (await getCollection("blog", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime()
 );
 ---
 
@@ -51,17 +48,15 @@ const posts = Object.values(
   </section>
   <div class="grid grid-cols-1 gap-6 mt-12">
     {
-      posts
-        .reverse()
-        .map((post) => (
-          <PostCard
-            pubDate={post.frontmatter.pubDate}
-            url={post.url}
-            title={post.frontmatter.title}
-            tags={post.frontmatter.tags}
-            description={post.frontmatter.description}
-          />
-        ))
+      posts.map((post) => (
+        <PostCard
+          pubDate={post.data.pubDate.toISOString()}
+          url={`/blog/${post.id}`}
+          title={post.data.title}
+          tags={post.data.tags}
+          description={post.data.description}
+        />
+      ))
     }
   </div>
 </BaseLayout>

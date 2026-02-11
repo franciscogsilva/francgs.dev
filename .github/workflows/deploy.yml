@@ -11,7 +11,7 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -54,75 +54,113 @@ jobs:
         run: |
           # Copy dist folder
           rsync -avz --delete \
-            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
+            -e "ssh -i ~/.ssh/deploy_key" \
             dist/ ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:${{ secrets.DEPLOY_PATH }}/dist/
-          
+
           # Copy package.json and pnpm-lock.yaml for dependencies
           rsync -avz \
-            -e "ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no" \
+            -e "ssh -i ~/.ssh/deploy_key" \
             package.json pnpm-lock.yaml \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }}:${{ secrets.DEPLOY_PATH }}/
 
       - name: Create environment file
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
-            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << EOF
-            cd ${{ secrets.DEPLOY_PATH }}
-            
-            # Create .env file with secrets from GitHub
-            cat > .env << 'ENVFILE'
+          ssh -i ~/.ssh/deploy_key \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} \
+            "cat > ${{ secrets.DEPLOY_PATH }}/.env << 'ENVFILE'
           HOST=0.0.0.0
           PORT=3000
           SUPABASE_URL=${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY=${{ secrets.SUPABASE_SERVICE_KEY }}
           WEB3FORMS_ACCESS_KEY=${{ secrets.WEB3FORMS_ACCESS_KEY }}
           SITE_URL=https://francgs.dev
-          ENVFILE
-          EOF
+          ENVFILE"
 
       - name: Install dependencies and restart server
+        env:
+          DEPLOY_PATH: ${{ secrets.DEPLOY_PATH }}
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no \
+          ssh -i ~/.ssh/deploy_key \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
-            # Load environment variables
-            export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
-            [ -s "$HOME/.nvm/nvm.sh" ] && \. "$HOME/.nvm/nvm.sh"
-            [ -s "$HOME/.profile" ] && \. "$HOME/.profile"
-            [ -s "$HOME/.bashrc" ] && \. "$HOME/.bashrc"
-            
-            cd ${{ secrets.DEPLOY_PATH }}
-            
-            # Check if Node/npm/pnpm are installed
-            if ! command -v node &> /dev/null; then
-              echo "Error: Node.js is not installed or not in PATH"
-              exit 1
-            fi
-            
-            if ! command -v pnpm &> /dev/null; then
-              echo "Installing pnpm..."
-              npm install -g pnpm
-            fi
-            
-            # Install production dependencies
-            pnpm install --prod --frozen-lockfile
-            
-            # Restart the app with PM2 (install PM2 if not already installed)
-            if ! command -v pm2 &> /dev/null; then
-              echo "Installing PM2..."
-              npm install -g pm2
-            fi
-            
-            # Stop existing process if running
-            pm2 delete francgs-dev || true
-            
-            # Start the Node.js server with environment variables
-            pm2 start dist/server/entry.mjs --name francgs-dev \
-              --node-args="--env-file=.env" \
-              --update-env
-            
-            # Save PM2 process list
-            pm2 save
-            
-            # Show status
-            pm2 status
+          export PATH=$PATH:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
+          [ -s "$HOME/.nvm/nvm.sh" ] && . "$HOME/.nvm/nvm.sh"
+          [ -s "$HOME/.profile" ] && . "$HOME/.profile"
+          [ -s "$HOME/.bashrc" ] && . "$HOME/.bashrc"
+
+          cd ${{ secrets.DEPLOY_PATH }}
+
+          if ! command -v node &> /dev/null; then
+            echo "Error: Node.js is not installed or not in PATH"
+            exit 1
+          fi
+
+          if ! command -v pnpm &> /dev/null; then
+            echo "Installing pnpm..."
+            npm install -g pnpm
+          fi
+
+          pnpm install --prod --frozen-lockfile
+
+          if ! command -v pm2 &> /dev/null; then
+            echo "Installing PM2..."
+            npm install -g pm2
+          fi
+
+          pm2 delete francgs-dev || true
+
+          # Start with explicit env vars for HOST and PORT
+          HOST=0.0.0.0 PORT=3000 pm2 start dist/server/entry.mjs \
+            --name francgs-dev \
+            --node-args="--env-file=.env" \
+            --update-env
+
+          pm2 save
+          pm2 status
           EOF
+
+  crosspost-missing-only:
+    name: Crosspost Missing Only (${{ matrix.platform }})
+    needs: deploy
+    if: ${{ needs.deploy.result == 'success' }}
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [devto, medium]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 10
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Restore crosspost state cache
+        uses: actions/cache@v4
+        with:
+          path: .crosspost/state-${{ matrix.platform }}.json
+          key: crosspost-state-${{ matrix.platform }}-${{ github.run_id }}
+          restore-keys: |
+            crosspost-state-${{ matrix.platform }}-
+
+      - name: Sync only non-migrated posts
+        continue-on-error: true
+        env:
+          DEVTO_API_KEY: ${{ secrets.DEVTO_API_KEY }}
+          MEDIUM_TOKEN: ${{ secrets.MEDIUM_TOKEN }}
+          SITE_URL: https://francgs.dev
+          CROSSPOST_STATE_PATH: .crosspost/state-${{ matrix.platform }}.json
+          CROSSPOST_DEVTO_PUBLISHED: "true"
+          CROSSPOST_MEDIUM_STATUS: "public"
+        run: pnpm run crosspost -- --all --platform=${{ matrix.platform }}

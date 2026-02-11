@@ -1,9 +1,15 @@
 ---
-import type { MarkdownInstance } from "astro";
+interface PostLink {
+  url: string;
+  frontmatter: {
+    title: string;
+    description?: string;
+  };
+}
 
 export interface Props {
-  prev?: MarkdownInstance<any>;
-  next?: MarkdownInstance<any>;
+  prev?: PostLink;
+  next?: PostLink;
 }
 
 const { prev, next } = Astro.props;
@@ -15,7 +21,7 @@ const { prev, next } = Astro.props;
       <div class="post-nav-container">
         {prev && (
           <a href={prev.url} class="post-nav-link post-nav-prev">
-            <span class="post-nav-label">← Previous post</span>
+            <span class="post-nav-label">&larr; Previous post</span>
             <span class="post-nav-title">{prev.frontmatter.title}</span>
             {prev.frontmatter.description && (
               <span class="post-nav-desc">{prev.frontmatter.description}</span>
@@ -24,7 +30,7 @@ const { prev, next } = Astro.props;
         )}
         {next && (
           <a href={next.url} class="post-nav-link post-nav-next">
-            <span class="post-nav-label">Next post →</span>
+            <span class="post-nav-label">Next post &rarr;</span>
             <span class="post-nav-title">{next.frontmatter.title}</span>
             {next.frontmatter.description && (
               <span class="post-nav-desc">{next.frontmatter.description}</span>

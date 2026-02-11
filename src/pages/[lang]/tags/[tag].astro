@@ -1,0 +1,125 @@
+---
+import { getCollection } from "astro:content";
+import PostCard from "../../../components/PostCard.astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+
+export const prerender = true;
+
+export async function getStaticPaths() {
+  const langs: Array<"en" | "es"> = ["en", "es"];
+  const allPosts = await getCollection("blog", ({ data }) => !data.draft);
+
+  const paths: Array<any> = [];
+
+  for (const lang of langs) {
+    const postsByLang = allPosts.filter((post) => post.data.lang === lang);
+    const tags = [...new Set(postsByLang.map((post) => post.data.tags).flat())];
+
+    for (const tag of tags) {
+      const filteredPosts = postsByLang
+        .filter((post) => post.data.tags.includes(tag))
+        .sort((a, b) => b.data.pubDate.getTime() - a.data.pubDate.getTime());
+
+      paths.push({
+        params: { lang, tag },
+        props: { lang, tag, posts: filteredPosts, allTags: tags, allPosts: postsByLang },
+      });
+    }
+  }
+
+  return paths;
+}
+
+const { lang, tag, posts, allTags, allPosts } = Astro.props as {
+  lang: "en" | "es";
+  tag: string;
+  posts: Array<any>;
+  allTags: string[];
+  allPosts: Array<any>;
+};
+
+const description =
+  lang === "es"
+    ? `Articulos en espanol etiquetados con "${tag}".`
+    : `English articles tagged with "${tag}".`;
+---
+
+<BaseLayout title={`Tag - ${tag}`} description={description} lang={lang}>
+  <div class="pb-6 pt-6">
+    <h1
+      class="text-3xl font-extrabold leading-9 tracking-tight text-gray-900 dark:text-gray-100 sm:hidden sm:text-4xl sm:leading-10 md:text-6xl md:leading-14"
+    >
+      {tag}
+    </h1>
+    <div class="flex sm:space-x-24">
+      <div
+        class="hidden h-full max-h-screen min-w-[280px] max-w-[280px] flex-wrap overflow-auto pt-5 sm:flex"
+      >
+        <div class="px-6 py-4 w-full">
+          <h3
+            class="font-bold text-gray-900 dark:text-gray-100 uppercase tracking-wider text-sm mb-4"
+          >
+            {lang === "es" ? "Todas las etiquetas" : "All Tags"}
+          </h3>
+          <div class="flex flex-col space-y-1">
+            <a
+              class="group flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-colors duration-200 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100"
+              href={`/${lang}/blog`}
+            >
+              <span>{lang === "es" ? "Todos los posts" : "All Posts"}</span>
+            </a>
+
+            {
+              allTags.sort().map((currentTag: string) => {
+                const isActive = tag === currentTag;
+                const count = allPosts.filter((post) =>
+                  post.data.tags?.includes(currentTag)
+                ).length;
+
+                return (
+                  <a
+                    href={`/${lang}/tags/${currentTag}`}
+                    class={`group flex items-center justify-between px-3 py-2 text-sm font-medium rounded-md transition-all duration-200 ${
+                      isActive
+                        ? "bg-primary/10 text-primary border-l-2 border-primary"
+                        : "text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-gray-100 border-l-2 border-transparent"
+                    }`}
+                  >
+                    <span class="capitalize">{currentTag}</span>
+                    <span
+                      class={`text-xs px-2 py-0.5 rounded-full ${
+                        isActive
+                          ? "bg-primary/20 text-primary"
+                          : "bg-gray-100 dark:bg-gray-800 text-gray-500 group-hover:bg-gray-200 dark:group-hover:bg-gray-700"
+                      }`}
+                    >
+                      {count}
+                    </span>
+                  </a>
+                );
+              })
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="flex sm:space-x-24">
+        <div>
+          <div class="grid grid-cols-1 gap-6">
+            {
+              posts.map((post: any) => (
+                <PostCard
+                  pubDate={post.data.pubDate.toISOString()}
+                  url={`/${lang}/blog/${post.id}`}
+                  title={post.data.title}
+                  tags={post.data.tags}
+                  description={post.data.description}
+                />
+              ))
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>
