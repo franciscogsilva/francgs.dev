@@ -14,6 +14,7 @@ Documentación técnica del proyecto organizada por dominios.
   - estrategia de publicacion en Medium usando RSS (sin API)
 - `docs/engineering/crosspost-migration-dummies.md`
   - guia paso a paso (simple) para migracion automatica en cola
+  - incluye workflow dedicado de dry-run para validar sin publicar
 
 ## SEO
 

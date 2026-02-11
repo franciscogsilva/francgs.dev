@@ -57,6 +57,7 @@ jobs:
           SITE_URL: https://francgs.dev
           CROSSPOST_STATE_PATH: .crosspost/state-${{ steps.slot.outputs.platform }}.json
           CROSSPOST_LANGS: en
+          CROSSPOST_PRIORITY_SLUGS: 50-refactor-real-blog-bilingue-rutas-hreflang-y-seo-consistente-en,49-como-construimos-un-sistema-de-sincronizacion-automatizada-devto-medium-en
           CROSSPOST_DEVTO_PUBLISHED: "true"
           CROSSPOST_DEVTO_MAX_RETRIES: "6"
           CROSSPOST_DEVTO_MIN_INTERVAL_MS: "5000"

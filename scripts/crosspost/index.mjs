@@ -36,6 +36,10 @@ const langFilter = (process.env.CROSSPOST_LANGS || "en")
   .split(",")
   .map((value) => value.trim())
   .filter(Boolean);
+const prioritySlugs = (process.env.CROSSPOST_PRIORITY_SLUGS || "")
+  .split(",")
+  .map((value) => value.trim())
+  .filter(Boolean);
 
 const availablePublishers = {
   devto: new DevToPublisher({
@@ -82,6 +86,9 @@ const main = async () => {
   if (maxPosts > 0) {
     console.log(`- maxPosts: ${maxPosts}`);
   }
+  if (prioritySlugs.length > 0) {
+    console.log(`- prioritySlugs: ${prioritySlugs.join(", ")}`);
+  }
 
   const summary = await useCase.execute({
     all,
@@ -89,6 +96,7 @@ const main = async () => {
     changedFiles,
     langFilter,
     maxPosts,
+    prioritySlugs,
   });
 
   console.log("\nCross-post summary:");

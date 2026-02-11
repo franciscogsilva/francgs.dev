@@ -42,6 +42,7 @@ Estas variables se usan en workflows:
 
 - `CROSSPOST_LANGS=en` -> solo ingles
 - `CROSSPOST_MAX_POSTS=1` -> 1 post por run
+- `CROSSPOST_PRIORITY_SLUGS=<slug1,slug2,...>` -> forzar orden de salida para posts importantes
 - `CROSSPOST_DEVTO_MAX_RETRIES=6` -> retries ante 429
 - `CROSSPOST_DEVTO_MIN_INTERVAL_MS=5000` -> espera minima entre publicaciones
 - `CROSSPOST_FAIL_ON_ERROR=false` -> no rompe pipeline
@@ -96,11 +97,58 @@ Simular local sin publicar:
 CROSSPOST_LANGS=en CROSSPOST_MAX_POSTS=1 pnpm run crosspost -- --all --platform=devto --dry-run
 ```
 
+Tambien puedes usar el script corto del `package.json`:
+
+```bash
+pnpm run crosspost:dry
+```
+
 Forzar corrida real local (con keys):
 
 ```bash
 CROSSPOST_LANGS=en CROSSPOST_MAX_POSTS=1 pnpm run crosspost -- --all --platform=devto
 ```
+
+## 8.1) Dry-run en CI (recomendado antes de migrar)
+
+Si queres probar en GitHub Actions sin publicar nada, ejecuta manualmente (`workflow_dispatch`) y cambia temporalmente en el job de crosspost:
+
+```yaml
+env:
+  CROSSPOST_LANGS: en
+  CROSSPOST_MAX_POSTS: "1"
+```
+
+y en el comando agrega `--dry-run`:
+
+```yaml
+run: pnpm run crosspost -- --all --platform=${{ matrix.platform }} --dry-run
+```
+
+Cuando termines la prueba, quitas `--dry-run` y vuelve a publicar normal.
+
+## 8.2) Workflow dedicado de Dry-run (sin tocar deploy)
+
+Tambien tienes workflow listo:
+
+- `.github/workflows/crosspost-dryrun.yml`
+
+Uso:
+
+1. Ir a GitHub Actions.
+2. Elegir **Crosspost Dry Run**.
+3. Click en **Run workflow**.
+4. Completar inputs:
+   - `platform`: `devto`, `medium` o `both`
+   - `langs`: por defecto `en`
+   - `max_posts`: por defecto `3`
+
+Este workflow:
+
+- restaura cache de estado,
+- simula publicaciones (`--dry-run`),
+- no crea posts reales en plataformas,
+- no afecta el deploy de produccion.
 
 ## 9) Troubleshooting rapido
 
@@ -114,6 +162,15 @@ CROSSPOST_LANGS=en CROSSPOST_MAX_POSTS=1 pnpm run crosspost -- --all --platform=
 ### Publica demasiado
 
 - Verifica `CROSSPOST_MAX_POSTS=1` en workflow.
+
+### Quiero sacar primero posts nuevos importantes
+
+- Usa `CROSSPOST_PRIORITY_SLUGS` con slugs en orden deseado.
+- Ejemplo:
+
+```text
+CROSSPOST_PRIORITY_SLUGS=50-refactor-real-blog-bilingue-rutas-hreflang-y-seo-consistente-en,49-como-construimos-un-sistema-de-sincronizacion-automatizada-devto-medium-en
+```
 
 ### Publica en idioma incorrecto
 
@@ -135,6 +192,7 @@ Si Medium API falla o no esta disponible:
 
 - `.github/workflows/deploy.yml`
 - `.github/workflows/crosspost-migration.yml`
+- `.github/workflows/crosspost-dryrun.yml`
 - `scripts/crosspost/index.mjs`
 - `scripts/crosspost/application/usecases/CrossPostArticlesUseCase.mjs`
 - `scripts/crosspost/infrastructure/publishers/DevToPublisher.mjs`

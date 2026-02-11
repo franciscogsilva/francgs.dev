@@ -12,15 +12,33 @@ export class CrossPostArticlesUseCase {
     changedFiles = [],
     langFilter = [],
     maxPosts,
+    prioritySlugs = [],
   }) {
     const allMatchedPosts = await this.postRepository.listPublishedPosts({
       all,
       changedFiles,
       langFilter,
     });
+    const priorityIndex = new Map(prioritySlugs.map((slug, index) => [slug, index]));
+
+    const prioritizedPosts = [...allMatchedPosts].sort((a, b) => {
+      const aPriority = priorityIndex.has(a.slug)
+        ? priorityIndex.get(a.slug)
+        : Number.MAX_SAFE_INTEGER;
+      const bPriority = priorityIndex.has(b.slug)
+        ? priorityIndex.get(b.slug)
+        : Number.MAX_SAFE_INTEGER;
+
+      if (aPriority !== bPriority) {
+        return aPriority - bPriority;
+      }
+
+      return 0;
+    });
+
     const posts = Number.isFinite(maxPosts) && maxPosts > 0
-      ? allMatchedPosts.slice(0, maxPosts)
-      : allMatchedPosts;
+      ? prioritizedPosts.slice(0, maxPosts)
+      : prioritizedPosts;
     const summary = {
       totalPosts: posts.length,
       matchedPosts: allMatchedPosts.length,
