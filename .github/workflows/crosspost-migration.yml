@@ -11,6 +11,7 @@ concurrency:
 
 jobs:
   crosspost-one:
+    if: ${{ vars.CROSSPOST_MIGRATION_ENABLED != 'false' }}
     runs-on: ubuntu-latest
     continue-on-error: true
 

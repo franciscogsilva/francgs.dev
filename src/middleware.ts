@@ -1,4 +1,5 @@
 import { defineMiddleware } from "astro:middleware";
+import type { APIContext } from "astro";
 import { BLOG_SLUG_LANG_MAP } from "./data/blogSlugLangMap";
 
 const ALLOWED_ORIGIN = "https://francgs.dev";
@@ -61,6 +62,14 @@ const resolvePreferredLang = (
   return detectLangFromHeader(acceptLanguageHeader);
 };
 
+const getRequestHeader = (context: APIContext, header: string): string | null => {
+  if (context.isPrerendered) {
+    return null;
+  }
+
+  return context.request.headers.get(header);
+};
+
 /**
  * Security middleware - sets HTTP security headers on all responses
  * and handles CORS for API endpoints.
@@ -68,17 +77,20 @@ const resolvePreferredLang = (
 export const onRequest = defineMiddleware(async (_context, next) => {
   const url = new URL(_context.request.url);
   const normalizedPath = normalizePath(url.pathname);
+  const isPrerendered = _context.isPrerendered;
 
-  const cookieLang = _context.cookies.get(LANG_COOKIE)?.value;
+  const cookieLang = isPrerendered
+    ? undefined
+    : _context.cookies.get(LANG_COOKIE)?.value;
   const preferredLang = resolvePreferredLang(
     cookieLang,
-    _context.request.headers.get("accept-language")
+    getRequestHeader(_context, "accept-language")
   );
 
   const langPrefixMatch = normalizedPath.match(/^\/(en|es)(\/|$)/);
   if (langPrefixMatch) {
     const currentLang = langPrefixMatch[1] as "en" | "es";
-    if (cookieLang !== currentLang) {
+    if (!isPrerendered && cookieLang !== currentLang) {
       _context.cookies.set(LANG_COOKIE, currentLang, {
         path: "/",
         maxAge: 60 * 60 * 24 * 365,
@@ -184,7 +196,7 @@ export const onRequest = defineMiddleware(async (_context, next) => {
 
   // --- CORS for API routes ---
   if (isApi) {
-    const origin = _context.request.headers.get("origin");
+    const origin = getRequestHeader(_context, "origin");
     const isProd = import.meta.env.PROD;
 
     if (
