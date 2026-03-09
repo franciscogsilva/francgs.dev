@@ -1,11 +1,11 @@
 ---
-  title: 'Personal Open code configuration with gentleman agent'
+  title: 'Personal Open code configuration with Asmun agent'
   author: 'Francisco Gonzalez'
-  description: 'Personal Open code configuration with gentleman agent.'
+  description: 'Personal Open code configuration with asmun agent.'
   pubDate: 2026-01-19
   image:
-    url: 'https://assets.francgs.dev/05-open-code-personal-config-with-gentleman.png'
-    alt: 'Personal Open code configuration with gentleman agent'
+    url: 'https://assets.francgs.dev/05-open-code-personal-config-with-asmun.png'
+    alt: 'Personal Open code configuration with asmun agent'
   tags: ["ai", "developer-tools", "productivity"]
 ---
 
