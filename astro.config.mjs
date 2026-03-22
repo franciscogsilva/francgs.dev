@@ -6,13 +6,15 @@ import { remarkCallouts } from "./src/plugins/remark-callouts.mjs";
 import { remarkStripRelatedLinks } from "./src/plugins/remark-strip-related-links.mjs";
 
 import sitemap from "@astrojs/sitemap";
-import node from "@astrojs/node";
+import cloudflare from "@astrojs/cloudflare";
 
 // https://astro.build/config
 export default defineConfig({
-  output: "server", // Server mode for SSR support
-  adapter: node({
-    mode: "standalone",
+  output: "server", // SSR mode — pages with prerender = true are statically generated at build time
+  adapter: cloudflare({
+    platformProxy: {
+      enabled: true, // Enables Cloudflare bindings in dev (wrangler proxy)
+    },
   }),
   vite: {
     plugins: [tailwindcss()],
