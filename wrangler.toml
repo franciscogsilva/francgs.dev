@@ -23,8 +23,9 @@ invocation_logs = true
 name = "francgs-dev"
 routes = [
   { pattern = "francgs.dev", custom_domain = true },
-  { pattern = "www.francgs.dev", custom_domain = true },
 ]
+# www.francgs.dev: configure el redirect www → apex directamente
+# en el DNS de Cloudflare (CNAME www → francgs.dev + proxy activado).
 
 # Runtime secrets — configure via Cloudflare Dashboard or:
 #   wrangler secret put SUPABASE_URL --env production
