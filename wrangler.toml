@@ -1,0 +1,35 @@
+name = "francgs-dev"
+compatibility_date = "2024-12-05"
+compatibility_flags = ["nodejs_compat"]
+
+# The @astrojs/cloudflare adapter outputs the Worker entrypoint at dist/_worker.js/index.js
+# Wrangler picks it up automatically when deploying from the dist directory.
+# See: https://developers.cloudflare.com/workers/frameworks/framework-guides/astro/
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+
+[observability]
+enabled = true
+
+[observability.logs]
+enabled = true
+invocation_logs = true
+
+# ─── Production ────────────────────────────────────────────────────────────────
+[env.production]
+name = "francgs-dev"
+routes = [
+  { pattern = "francgs.dev", custom_domain = true },
+  { pattern = "www.francgs.dev", custom_domain = true },
+]
+
+# Runtime secrets — configure via Cloudflare Dashboard or:
+#   wrangler secret put SUPABASE_URL --env production
+#   wrangler secret put SUPABASE_SERVICE_KEY --env production
+#   wrangler secret put WEB3FORMS_ACCESS_KEY --env production
+
+# ─── Staging ───────────────────────────────────────────────────────────────────
+[env.staging]
+name = "francgs-dev-staging"

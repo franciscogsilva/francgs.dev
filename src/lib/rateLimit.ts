@@ -1,4 +1,3 @@
-import { createHash } from "node:crypto";
 import { supabaseServer } from "./supabase";
 
 interface RateLimitResult {
@@ -10,11 +9,18 @@ const RATE_LIMIT_WINDOW_MS = 60 * 60 * 1000; // 1 hour
 const MAX_REACTIONS_PER_HOUR = 10;
 const HASH_SALT = import.meta.env.SUPABASE_SERVICE_KEY?.slice(0, 16) ?? "fallback-salt";
 
-/** SHA-256 hash with salt for privacy-preserving IP tracking */
-function hashIP(ip: string): string {
-  return createHash("sha256")
-    .update(ip + HASH_SALT)
-    .digest("hex")
+/**
+ * SHA-256 hash with salt for privacy-preserving IP tracking.
+ * Uses Web Crypto API (available on Cloudflare Workers and modern runtimes).
+ */
+async function hashIP(ip: string): Promise<string> {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(ip + HASH_SALT);
+  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("")
     .slice(0, 32); // 32 hex chars is sufficient
 }
 
@@ -23,7 +29,7 @@ export async function checkRateLimit(
   reactionType: string,
   ip: string
 ): Promise<RateLimitResult> {
-  const ipHash = hashIP(ip);
+  const ipHash = await hashIP(ip);
   const oneHourAgo = new Date(Date.now() - RATE_LIMIT_WINDOW_MS).toISOString();
 
   try {
@@ -71,7 +77,7 @@ export async function logReaction(
   reactionType: string,
   ip: string
 ): Promise<void> {
-  const ipHash = hashIP(ip);
+  const ipHash = await hashIP(ip);
 
   await supabaseServer.from("reaction_logs").insert({
     article_id: articleId,
