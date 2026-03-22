@@ -2,10 +2,10 @@ name = "francgs-dev"
 compatibility_date = "2024-12-05"
 compatibility_flags = ["nodejs_compat"]
 
-# @astrojs/cloudflare outputs the Worker entrypoint at dist/_worker.js/index.js
-# The assets directory points to dist so Wrangler serves static files from there.
-# See: https://developers.cloudflare.com/workers/frameworks/framework-guides/astro/
-main = "./dist/_worker.js/index.js"
+# @astrojs/cloudflare outputs dist/_worker.js/ (worker) + dist/ (assets).
+# In CI we move _worker.js/ out to .cloudflare/worker/ before deploying,
+# so assets.directory only contains public static files (no server code exposed).
+main = "./.cloudflare/worker/index.js"
 
 [assets]
 directory = "./dist"

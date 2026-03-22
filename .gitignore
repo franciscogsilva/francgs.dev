@@ -25,4 +25,5 @@ pnpm-debug.log*
 
 # Wrangler / Cloudflare
 .wrangler/
+.cloudflare/
 .dev.vars

@@ -71,6 +71,14 @@ jobs:
       - name: Install dependencies (wrangler)
         run: pnpm install
 
+      - name: Prepare deploy structure
+        run: |
+          # Move the worker entrypoint out of dist/ so assets.directory only contains public files
+          # @astrojs/cloudflare outputs: dist/_worker.js/index.js (worker) + rest of dist (assets)
+          mkdir -p .cloudflare
+          cp -r dist/_worker.js .cloudflare/worker
+          rm -rf dist/_worker.js
+
       - name: Deploy to Cloudflare Workers
         run: pnpm exec wrangler deploy --env production
         env:
