@@ -2,9 +2,10 @@ name = "francgs-dev"
 compatibility_date = "2024-12-05"
 compatibility_flags = ["nodejs_compat"]
 
-# The @astrojs/cloudflare adapter outputs the Worker entrypoint at dist/_worker.js/index.js
-# Wrangler picks it up automatically when deploying from the dist directory.
+# @astrojs/cloudflare outputs the Worker entrypoint at dist/_worker.js/index.js
+# The assets directory points to dist so Wrangler serves static files from there.
 # See: https://developers.cloudflare.com/workers/frameworks/framework-guides/astro/
+main = "./dist/_worker.js/index.js"
 
 [assets]
 directory = "./dist"
