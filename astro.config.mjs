@@ -5,8 +5,8 @@ import remarkDirective from "remark-directive";
 import { remarkCallouts } from "./src/plugins/remark-callouts.mjs";
 import { remarkStripRelatedLinks } from "./src/plugins/remark-strip-related-links.mjs";
 
-import sitemap from "@astrojs/sitemap";
 import cloudflare from "@astrojs/cloudflare";
+import sitemap from "@astrojs/sitemap";
 
 // https://astro.build/config
 export default defineConfig({
